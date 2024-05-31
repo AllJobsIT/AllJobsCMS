@@ -11,7 +11,6 @@ ALLOWED_HOSTS = ["*"]
 
 EMAIL_BACKEND = "django.all_jobs.mail.backends.console.EmailBackend"
 
-
 try:
     from .local import *
 except ImportError:
