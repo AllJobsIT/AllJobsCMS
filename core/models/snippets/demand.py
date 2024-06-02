@@ -2,13 +2,12 @@ import uuid
 from datetime import datetime, timedelta
 
 from django.db import models
-from wagtail import blocks
 from wagtail.admin.panels import FieldPanel
 from wagtail.blocks import StreamBlock
 from wagtail.fields import RichTextField, StreamField
 from wagtail.snippets.blocks import SnippetChooserBlock
 
-from core.models.snippets import Rank, Specialization, Worker
+from core.models.snippets import Rank, Specialization
 from core.models.snippets.steps_in_board import StepsInBoard
 
 

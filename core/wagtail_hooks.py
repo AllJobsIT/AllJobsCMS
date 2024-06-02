@@ -15,7 +15,7 @@ class WorkersSnippetViewSet(SnippetViewSet):
     menu_order = 200
     add_to_settings_menu = False
     add_to_admin_menu = True
-    list_display = ('full_name', )
+    list_display = ('full_name',)
 
 
 @register_snippet
@@ -137,4 +137,3 @@ class DemandTimeLogSnippetViewSet(SnippetViewSet):
     add_to_settings_menu = True
     exclude_from_explorer = False
     list_display = ('demand__display_name',)
-
