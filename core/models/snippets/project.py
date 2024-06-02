@@ -1,7 +1,8 @@
 from django.db import models
+from wagtail.admin.panels import FieldPanel
 from wagtail.fields import RichTextField
 
-from core.models.snippets import Worker
+from core.models.snippets.worker import Worker
 
 
 class Project(models.Model):
@@ -34,24 +35,32 @@ class Project(models.Model):
         blank=True,
     )
     description = RichTextField(
-        max_length=255,
+        max_length=1000,
         verbose_name='Описание проекта',
         blank=True
     )
-    technologies = models.CharField(
-        max_length=255,
+    technologies = models.TextField(
+        max_length=1000,
         verbose_name='Технологии проекта',
         blank=True
     )
-    team = models.CharField(
-        max_length=255,
+    team = models.TextField(
+        max_length=1000,
         verbose_name='Состав команды',
         blank=True
     )
 
-    class Meta:
-        verbose_name = 'Проект'
-        verbose_name_plural = 'Проекты'
+    panels = [
+        FieldPanel("title"),
+        FieldPanel("worker"),
+        FieldPanel("date_start"),
+        FieldPanel("date_end"),
+        FieldPanel("role"),
+        FieldPanel("responsibilities"),
+        FieldPanel("description"),
+        FieldPanel("technologies"),
+        FieldPanel("team"),
+    ]
 
     def __str__(self):
         return self.title

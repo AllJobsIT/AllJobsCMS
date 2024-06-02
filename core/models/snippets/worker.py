@@ -1,26 +1,9 @@
 from django.db import models
+from django.utils.functional import cached_property
 from django_countries.fields import CountryField
-from taggit.managers import TaggableManager
-from taggit.models import TaggedItemBase
 from wagtail.admin.panels import FieldPanel
 
 from core.models.snippets.base import Specialization, Grade, EnglishGrade, Status, Type
-
-
-class StackTags(TaggedItemBase):
-    content_object = models.ForeignKey('core.Worker', on_delete=models.CASCADE, related_name='tagged_items_stack')
-
-
-class SkillsTags(TaggedItemBase):
-    content_object = models.ForeignKey('core.Worker', on_delete=models.CASCADE, related_name='tagged_items_skills')
-
-
-class SkillsTags(TaggedItemBase):
-    content_object = models.ForeignKey('core.Worker', on_delete=models.CASCADE, related_name='tagged_items_skills')
-
-
-class SkillsTags(TaggedItemBase):
-    content_object = models.ForeignKey('core.Worker', on_delete=models.CASCADE, related_name='tagged_items_skills')
 
 
 class Worker(models.Model):
@@ -90,9 +73,8 @@ class Worker(models.Model):
         blank=True,
         null=True
     )
-    stack = TaggableManager(through="core.StackTags", blank=True, verbose_name="Стек", related_name='worker_stack')
-    skills_text = TaggableManager(through="core.SkillsTags", blank=True, verbose_name="Навыки",
-                                  related_name='worker_skills')
+    stack = models.TextField(max_length=1000, blank=True, verbose_name="Стек")
+    skills = models.TextField(max_length=1000, blank=True, verbose_name="Навыки")
     programming_languages = models.TextField(
         max_length=1000,
         verbose_name='Опыт работы с языками',
@@ -103,17 +85,17 @@ class Worker(models.Model):
         verbose_name='Технологии',
         blank=True
     )
-    databases_text = models.TextField(
+    databases = models.TextField(
         max_length=1000,
         verbose_name='Базы данных',
         blank=True
     )
-    software_development_text = models.TextField(
+    software_development = models.TextField(
         max_length=1000,
         verbose_name='Средства разработки ПО',
         blank=True
     )
-    other_technologies_text = models.TextField(
+    other_technologies = models.TextField(
         max_length=1000,
         verbose_name='Другие технологии',
         blank=True,
@@ -194,12 +176,12 @@ class Worker(models.Model):
         FieldPanel("specialization"),
         FieldPanel("grade"),
         FieldPanel("stack"),
-        FieldPanel("skills_text"),
-        FieldPanel("programming_languages_text"),
-        FieldPanel("technologies_text"),
-        FieldPanel("databases_text"),
-        FieldPanel("software_development_text"),
-        FieldPanel("other_technologies_text"),
+        FieldPanel("skills"),
+        FieldPanel("programming_languages"),
+        FieldPanel("technologies"),
+        FieldPanel("databases"),
+        FieldPanel("software_development"),
+        FieldPanel("other_technologies"),
         FieldPanel("about_worker"),
         FieldPanel("experience"),
         FieldPanel("city"),
@@ -217,5 +199,6 @@ class Worker(models.Model):
     def __str__(self):
         return f'{self.name} {self.last_name}'
 
+    @cached_property
     def full_name(self):
         return f'{self.last_name} {self.name} {self.surname}'

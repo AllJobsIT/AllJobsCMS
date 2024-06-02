@@ -2,9 +2,18 @@ import uuid
 from datetime import datetime, timedelta
 
 from django.db import models
-from wagtail.fields import RichTextField
+from wagtail import blocks
+from wagtail.admin.panels import FieldPanel
+from wagtail.blocks import StreamBlock
+from wagtail.fields import RichTextField, StreamField
+from wagtail.snippets.blocks import SnippetChooserBlock
 
 from core.models.snippets import Rank, Specialization, Worker
+from core.models.snippets.steps_in_board import StepsInBoard
+
+
+class WorkersStreamBlock(StreamBlock):
+    worker = SnippetChooserBlock("core.Worker")
 
 
 class Demand(models.Model):
@@ -14,7 +23,7 @@ class Demand(models.Model):
         help_text='Пример: "Kokoc.tech | Java/Middle/2400"',
         blank=True,
     )
-    uuid = models.CharField(
+    uuid = models.UUIDField(
         max_length=50,
         default=uuid.uuid4,
         verbose_name='UUID запроса',
@@ -30,7 +39,7 @@ class Demand(models.Model):
         blank=True,
         null=True
     )
-    stack = models.CharField(
+    stack = models.TextField(
         max_length=2000,
         verbose_name='Стек',
     )
@@ -54,16 +63,14 @@ class Demand(models.Model):
         verbose_name='Срок проекта',
         blank=True
     )
-    # status = models.ForeignKey(
-    #     Board,
-    #     related_name='demands',
-    #     on_delete=models.CASCADE,
-    #     default=Board.get_default_board,
-    #     verbose_name='Статус',
-    # )
-    workers = models.ManyToManyField(
-        Worker,
-        related_name="demands"
+    status = models.ForeignKey(
+        StepsInBoard,
+        on_delete=models.CASCADE,
+        default=StepsInBoard.get_default_board,
+        verbose_name='Статус',
+    )
+    workers = StreamField(
+        WorkersStreamBlock(), null=True, blank=True, use_json_field=True, verbose_name="Работник"
     )
     manager = models.ForeignKey(
         'auth.User',
@@ -96,13 +103,24 @@ class Demand(models.Model):
         verbose_name='Изменено',
     )
 
-    class Meta:
-        verbose_name = 'Запрос'
-        verbose_name_plural = 'Запросы'
-
-        permissions = [
-            ("allow_kanban", "Доступ к канбан"),
-        ]
+    panels = [
+        FieldPanel('display_name'),
+        FieldPanel('uuid'),
+        FieldPanel('company_name'),
+        FieldPanel('specialization'),
+        FieldPanel('stack'),
+        FieldPanel('rate'),
+        FieldPanel('project_name'),
+        FieldPanel('project_description'),
+        FieldPanel('project_term'),
+        FieldPanel('status'),
+        FieldPanel('workers'),
+        FieldPanel('manager'),
+        FieldPanel('rank'),
+        FieldPanel('is_active'),
+        FieldPanel('created_at', read_only=True),
+        FieldPanel('updated_at', read_only=True),
+    ]
 
     def __str__(self):
         return 'Запрос ' + str(self.id)
@@ -115,12 +133,13 @@ class DemandTimeLog(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Запрос',
     )
-    # status = models.ForeignKey(
-    #     Board,
-    #     related_name='timelogs',
-    #     on_delete=models.CASCADE,
-    #     verbose_name='Статус',
-    # )
+    status = models.ForeignKey(
+        StepsInBoard,
+        null=True,
+        related_name='timelogs',
+        on_delete=models.SET_NULL,
+        verbose_name='Статус',
+    )
     status_start = models.DateTimeField(
         auto_now_add=True,
         verbose_name='Начало',
@@ -135,6 +154,14 @@ class DemandTimeLog(models.Model):
         blank=True,
         verbose_name='Суммарная длительность',
     )
+
+    panels = [
+        FieldPanel('demand'),
+        FieldPanel('status'),
+        FieldPanel('status_start', read_only=True),
+        FieldPanel('status_end'),
+        FieldPanel('total_seconds'),
+    ]
 
     # возвращает цвет для лога времени в Канбане в зависимости от количества дней
     def get_timer_color(self):
@@ -194,10 +221,6 @@ class DemandTimeLog(models.Model):
 
         output += '{}м'.format(minutes)
         return output
-
-    class Meta:
-        verbose_name = 'Статистика'
-        verbose_name_plural = 'Статистика'
 
     def __str__(self):
         return str(self.id)

@@ -1,4 +1,5 @@
 from django.db import models
+from wagtail.admin.panels import FieldPanel
 from wagtail.documents.models import Document
 
 from core.models.snippets.demand import Demand
@@ -37,6 +38,17 @@ class Candidate(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    panels = [
+        FieldPanel('name'),
+        FieldPanel('telegram_nickname'),
+        FieldPanel('company_name'),
+        FieldPanel('demand'),
+        FieldPanel('file'),
+        FieldPanel('is_active'),
+        FieldPanel('created_at', read_only=True),
+        FieldPanel('updated_at', read_only=True),
+    ]
 
     class Meta:
         verbose_name = 'Кандидат'

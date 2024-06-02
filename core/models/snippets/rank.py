@@ -1,4 +1,7 @@
 from django.db import models
+from wagtail.admin.panels import FieldPanel
+from wagtail_color_panel.edit_handlers import NativeColorPanel
+from wagtail_color_panel.fields import ColorField
 
 
 class Rank(models.Model):
@@ -6,11 +9,7 @@ class Rank(models.Model):
         max_length=255,
         verbose_name='Название ранга заявки'
     )
-    color = models.CharField(
-        default='#FF0000',
-        verbose_name='Цвет фона заявки',
-        help_text='В Канбане у заявок с этим рангом фон будет указанного цвета',
-    )
+    color = ColorField()
     is_default = models.BooleanField(
         default=False,
         verbose_name='Является рангом по-умолчанию',
@@ -18,9 +17,11 @@ class Rank(models.Model):
         blank=True
     )
 
-    class Meta:
-        verbose_name = 'Ранг заявки'
-        verbose_name_plural = 'Ранги заявок'
+    panels = [
+        FieldPanel("name"),
+        NativeColorPanel("color"),
+        FieldPanel("is_default"),
+    ]
 
     def __str__(self):
         return self.name

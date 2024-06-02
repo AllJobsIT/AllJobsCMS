@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "wagtail.search",
     "wagtail.admin",
     "wagtail",
+    "wagtail_color_panel",
     "modelcluster",
     "taggit",
     "django.contrib.admin",
