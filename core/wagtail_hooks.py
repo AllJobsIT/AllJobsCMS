@@ -4,7 +4,9 @@ from wagtail.snippets.views.snippets import SnippetViewSet
 from core.models.snippets import Worker, Status, Type, Specialization, Grade, EnglishGrade, Project, Rank
 from core.models.snippets.candidate import Candidate
 from core.models.snippets.demand import Demand, DemandTimeLog
+from core.models.snippets.message_settings import MessageSettings
 from core.models.snippets.steps_in_board import StepsInBoard
+from core.models.snippets.vacancy import Vacancy
 
 
 @register_snippet
@@ -137,3 +139,24 @@ class DemandTimeLogSnippetViewSet(SnippetViewSet):
     add_to_settings_menu = True
     exclude_from_explorer = False
     list_display = ('demand__display_name',)
+
+
+@register_snippet
+class VacancySnippetViewSet(SnippetViewSet):
+    model = Vacancy
+    menu_label = 'Vacancies'
+    menu_icon = 'user'
+    menu_order = 200
+    add_to_settings_menu = False
+    exclude_from_explorer = False
+    list_display = ('title', 'get_status_display')
+
+
+@register_snippet
+class MessageSettingsSnippetViewSet(SnippetViewSet):
+    model = MessageSettings
+    menu_label = 'Messages template'
+    menu_icon = 'user'
+    menu_order = 200
+    add_to_settings_menu = True
+    exclude_from_explorer = True
