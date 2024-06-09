@@ -218,4 +218,4 @@ class Worker(ClusterableModel):
 
     @cached_property
     def full_name(self):
-        return f'{self.last_name} {self.name} {self.surname}'
+        return f'{self.last_name} {self.name} {self.surname if self.surname else ""}'
