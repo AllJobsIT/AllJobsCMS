@@ -1,18 +1,42 @@
+from string import Template
+
+import requests
 from django.db import transaction
 from g4f.client import Client
 
+from core.models.snippets.message_settings import MessageSettings
 from core.models.snippets.vacancy import Vacancy
 from core.tasks import KITBaseTask
 from libs.integer import string_to_integer
 from libs.json import json_to_dict
+from libs.rich_text import richtext_to_md2
 
 
 class ProcessVacancy(KITBaseTask):
     DEFAULT_ATTEMPT_PERIOD = 0.1
     name = 'process_vacancy'
-    actions = ['process_vacancy']
+    actions = ['process_vacancy', "send_vacancies"]
 
-    def process_vacancy(self, *args, **kwargs):
+    def send_vacancies(self):
+        all_vacancy = Vacancy.objects.filter(status=2, is_send=False).order_by('-created_at')
+        for vacancy in all_vacancy:
+            template_message = Template(MessageSettings.objects.all().first().text)
+            data = {
+                "title": vacancy.title,
+                "requirements": vacancy.requirements,
+                "responsibilities": vacancy.responsibilities,
+                "cost": vacancy.cost,
+                "location": vacancy.location,
+                "load": vacancy.load,
+                "tags": " ".join([f"#{tag.name}" for tag in vacancy.tags.all()]),
+                "grade": vacancy.grade,
+            }
+            requests.post("http://127.0.0.1:8000/vacancy/",
+                          json={"vacancy_text": richtext_to_md2(template_message.substitute(data))})
+            vacancy.status += 1
+            vacancy.save()
+
+    def process_vacancy(self):
         vacancy_id = self.task.input.get('id')
         instance = Vacancy.objects.get(id=vacancy_id)
         client = Client()
@@ -48,4 +72,5 @@ class ProcessVacancy(KITBaseTask):
             instance.load = ai_response_dict.get('load', None),
             for tag in ai_response_dict['tags']:
                 instance.tags.add(tag)
+            instance.status += 1
         instance.save()

@@ -1,9 +1,10 @@
+from django.contrib.admin import ModelAdmin
+from wagtail.contrib.settings.registry import register_setting
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet
 
-from core.models.snippets import Worker, Status, Type, Specialization, Grade, EnglishGrade, Project, Rank
-from core.models.snippets.candidate import Candidate
-from core.models.snippets.demand import Demand, DemandTimeLog
+from core.models.snippets import Worker, Status, Type, Specialization, Grade, EnglishGrade, Rank
+from core.models.snippets.demand import Demand
 from core.models.snippets.message_settings import MessageSettings
 from core.models.snippets.steps_in_board import StepsInBoard
 from core.models.snippets.vacancy import Vacancy
@@ -18,16 +19,6 @@ class WorkersSnippetViewSet(SnippetViewSet):
     add_to_settings_menu = False
     add_to_admin_menu = True
     list_display = ('full_name',)
-
-
-@register_snippet
-class ProjectSnippetViewSet(SnippetViewSet):
-    model = Project
-    menu_label = 'Project'
-    menu_icon = 'user'
-    menu_order = 200
-    add_to_settings_menu = False
-    list_display = ('title', 'worker')
 
 
 @register_snippet
@@ -97,18 +88,6 @@ class EnglishGradeSnippetViewSet(SnippetViewSet):
 
 
 @register_snippet
-class CandidateSnippetViewSet(SnippetViewSet):
-    model = Candidate
-    menu_label = 'Candidate'
-    menu_icon = 'user'
-    menu_order = 200
-    add_to_settings_menu = False
-    add_to_admin_menu = True
-    exclude_from_explorer = False
-    list_display = ('telegram_nickname',)
-
-
-@register_snippet
 class StepsInBoardSnippetViewSet(SnippetViewSet):
     model = StepsInBoard
     menu_label = 'Steps In Board'
@@ -117,28 +96,6 @@ class StepsInBoardSnippetViewSet(SnippetViewSet):
     add_to_settings_menu = False
     exclude_from_explorer = False
     list_display = ('name',)
-
-
-@register_snippet
-class DemandSnippetViewSet(SnippetViewSet):
-    model = Demand
-    menu_label = 'Demand'
-    menu_icon = 'user'
-    menu_order = 200
-    add_to_settings_menu = False
-    exclude_from_explorer = False
-    list_display = ('display_name',)
-
-
-@register_snippet
-class DemandTimeLogSnippetViewSet(SnippetViewSet):
-    model = DemandTimeLog
-    menu_label = 'Demand Time Log'
-    menu_icon = 'user'
-    menu_order = 200
-    add_to_settings_menu = True
-    exclude_from_explorer = False
-    list_display = ('demand__display_name',)
 
 
 @register_snippet
@@ -151,12 +108,3 @@ class VacancySnippetViewSet(SnippetViewSet):
     exclude_from_explorer = False
     list_display = ('title', 'get_status_display')
 
-
-@register_snippet
-class MessageSettingsSnippetViewSet(SnippetViewSet):
-    model = MessageSettings
-    menu_label = 'Messages template'
-    menu_icon = 'user'
-    menu_order = 200
-    add_to_settings_menu = True
-    exclude_from_explorer = True

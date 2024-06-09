@@ -1,11 +1,12 @@
 from django.utils.safestring import mark_safe
 from wagtail.admin.panels import FieldPanel
+from wagtail.contrib.settings.models import BaseGenericSetting
+from wagtail.contrib.settings.registry import register_setting
 from wagtail.fields import RichTextField
 
-from core.models.snippets.base import BaseSnippet
 
-
-class MessageSettings(BaseSnippet):
+@register_setting
+class MessageSettings(BaseGenericSetting):
     text = RichTextField(max_length=2056,
                          help_text=mark_safe(
                              "Эта настройка отвечает за то, как будет выглядеть сообщение в канале телеграмма для "
@@ -23,3 +24,6 @@ class MessageSettings(BaseSnippet):
     panels = [
         FieldPanel('text'),
     ]
+
+    class Meta:
+        verbose_name = "Шаблон сообщения"

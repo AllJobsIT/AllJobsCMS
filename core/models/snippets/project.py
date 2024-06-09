@@ -1,19 +1,17 @@
 from django.db import models
+from modelcluster.fields import ParentalKey
 from wagtail.admin.panels import FieldPanel
 from wagtail.fields import RichTextField
+from wagtail.models import Orderable
 
 from core.models.snippets.worker import Worker
 
 
-class Project(models.Model):
+class Project(Orderable):
+    worker = ParentalKey(Worker, on_delete=models.CASCADE, related_name='projects')
     title = models.CharField(
         max_length=255,
         verbose_name='Наименование проекта'
-    )
-    worker = models.ForeignKey(
-        Worker,
-        related_name='projects',
-        on_delete=models.CASCADE
     )
     date_start = models.DateField(
         verbose_name='Начало работы',
@@ -35,24 +33,20 @@ class Project(models.Model):
         blank=True,
     )
     description = RichTextField(
-        max_length=1000,
         verbose_name='Описание проекта',
         blank=True
     )
-    technologies = models.TextField(
-        max_length=1000,
+    technologies = RichTextField(
         verbose_name='Технологии проекта',
         blank=True
     )
-    team = models.TextField(
-        max_length=1000,
+    team = RichTextField(
         verbose_name='Состав команды',
         blank=True
     )
 
     panels = [
         FieldPanel("title"),
-        FieldPanel("worker"),
         FieldPanel("date_start"),
         FieldPanel("date_end"),
         FieldPanel("role"),

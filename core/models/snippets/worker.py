@@ -1,29 +1,48 @@
+import uuid
+
 from django.db import models
 from django.utils.functional import cached_property
 from django_countries.fields import CountryField
-from wagtail.admin.panels import FieldPanel
+from modelcluster.models import ClusterableModel
+from wagtail.admin.panels import FieldPanel, InlinePanel
+from wagtail.documents.models import Document
+from wagtail.fields import RichTextField
 
 from core.models.snippets.base import Specialization, Grade, EnglishGrade, Status, Type
 
 
-class Worker(models.Model):
-    code = models.CharField(
-        max_length=255,
-        verbose_name='Код клиента',
-        blank=True
-    )
-    last_name = models.CharField(
-        max_length=255,
-        verbose_name='Фамилия'
+class Worker(ClusterableModel):
+    code = models.UUIDField(
+        verbose_name='Код работника',
+        blank=True,
+        default=uuid.uuid4,
     )
     name = models.CharField(
         max_length=255,
         verbose_name='Имя'
     )
+    last_name = models.CharField(
+        max_length=255,
+        verbose_name='Фамилия'
+    )
     surname = models.CharField(
         max_length=255,
         verbose_name='Отчество',
         blank=True
+    )
+    file = models.ForeignKey(
+        Document,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        verbose_name="Резюме"
+    )
+    telegram_nickname = models.CharField(
+        max_length=255,
+        verbose_name='Telegram nickname',
+        blank=True,
+        null=True
     )
     status = models.ForeignKey(
         Status,
@@ -73,42 +92,37 @@ class Worker(models.Model):
         blank=True,
         null=True
     )
-    stack = models.TextField(max_length=1000, blank=True, verbose_name="Стек")
-    skills = models.TextField(max_length=1000, blank=True, verbose_name="Навыки")
-    programming_languages = models.TextField(
-        max_length=1000,
+    stack = RichTextField(blank=True, verbose_name="Стек")
+    skills = RichTextField(blank=True, verbose_name="Навыки")
+    programming_languages = RichTextField(
         verbose_name='Опыт работы с языками',
         blank=True
     )
-    technologies = models.TextField(
-        max_length=1000,
+    technologies = RichTextField(
         verbose_name='Технологии',
         blank=True
     )
-    databases = models.TextField(
-        max_length=1000,
+    databases = RichTextField(
         verbose_name='Базы данных',
         blank=True
     )
-    software_development = models.TextField(
-        max_length=1000,
+    software_development = RichTextField(
         verbose_name='Средства разработки ПО',
         blank=True
     )
-    other_technologies = models.TextField(
-        max_length=1000,
+    other_technologies = RichTextField(
         verbose_name='Другие технологии',
         blank=True,
     )
-    about_worker = models.TextField(
-        max_length=1000,
+    about_worker = RichTextField(
         verbose_name='О себе',
         blank=True
     )
-    experience = models.IntegerField(
+    experience = models.FloatField(
         verbose_name='Стаж',
         blank=True,
-        null=True
+        null=True,
+        default=0.0
     )
     city = models.CharField(
         max_length=255,
@@ -126,13 +140,11 @@ class Worker(models.Model):
         blank=True,
         null=True,
     )
-    education = models.TextField(
-        max_length=1000,
+    education = RichTextField(
         verbose_name='Образование',
         blank=True
     )
-    certificates = models.TextField(
-        max_length=1000,
+    certificates = RichTextField(
         verbose_name='Сертификаты',
         blank=True
     )
@@ -146,13 +158,11 @@ class Worker(models.Model):
         verbose_name='Контакт сотрудника',
         blank=True
     )
-    example_of_work = models.TextField(
-        max_length=1000,
+    example_of_work = RichTextField(
         verbose_name='Пример работ',
         blank=True
     )
-    comment = models.TextField(
-        max_length=1000,
+    comment = RichTextField(
         verbose_name='Комментарий',
         blank=True
     )
@@ -161,12 +171,16 @@ class Worker(models.Model):
         verbose_name='Публиковать',
         blank=True
     )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     panels = [
-        FieldPanel("code"),
+        FieldPanel("code", read_only=True),
         FieldPanel("last_name"),
         FieldPanel("name"),
         FieldPanel("surname"),
+        FieldPanel("file"),
+        FieldPanel("telegram_nickname"),
         FieldPanel("status"),
         FieldPanel("status_date"),
         FieldPanel("type"),
@@ -194,6 +208,9 @@ class Worker(models.Model):
         FieldPanel("example_of_work"),
         FieldPanel("comment"),
         FieldPanel("is_published"),
+        InlinePanel(
+            'projects', label="Projects"
+        )
     ]
 
     def __str__(self):

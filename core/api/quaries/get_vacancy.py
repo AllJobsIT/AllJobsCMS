@@ -11,7 +11,7 @@ class VacancyNode(DjangoObjectType):
     class Meta:
         model = Vacancy
         only_fields = ['title', 'requirements', 'responsibilities', 'cost', 'location',
-                       'load', 'grade', 'full_vacancy_text_from_tg_chat']
+                       'load', 'full_vacancy_text_from_tg_chat']
 
     def resolve_tags(self: Vacancy, info):
         return self.tags.all().name

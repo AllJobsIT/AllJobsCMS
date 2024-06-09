@@ -35,4 +35,4 @@ class StepsInBoard(BaseSnippet):
 
     @classmethod
     def get_default_board(cls):
-        return cls.objects.get(is_default=True)
+        return cls.objects.filter(is_default=True).first()

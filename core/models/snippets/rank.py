@@ -1,10 +1,11 @@
 from django.db import models
 from wagtail.admin.panels import FieldPanel
+from wagtail.models import Orderable
 from wagtail_color_panel.edit_handlers import NativeColorPanel
 from wagtail_color_panel.fields import ColorField
 
 
-class Rank(models.Model):
+class Rank(Orderable):
     name = models.CharField(
         max_length=255,
         verbose_name='Название ранга заявки'
@@ -25,10 +26,3 @@ class Rank(models.Model):
 
     def __str__(self):
         return self.name
-
-    @classmethod
-    def get_default_rank(cls):
-        try:
-            return cls.objects.get(is_default=True)
-        except Rank.DoesNotExist:
-            return None
