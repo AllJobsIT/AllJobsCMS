@@ -15,6 +15,7 @@ import os
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
+LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 
 INTERNAL_IPS = ("127.0.0.1", "localhost")
 
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     "wagtail_color_panel",
     "modelcluster",
     "taggit",
+    'botmanager',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -132,14 +134,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATICFILES_FINDERS = [
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-]
-
-STATICFILES_DIRS = [
-    os.path.join(PROJECT_DIR, "static"),
-]
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = "/static/"
@@ -188,4 +182,21 @@ WAGTAILDOCS_EXTENSIONS = ['csv', 'docx', 'key', 'odt', 'pdf', 'pptx', 'rtf', 'tx
 
 GRAPHENE = {
     'SCHEMA': 'core.api.schema',
+}
+
+# Bot manager
+
+BOTMANAGER_CONFIG = {
+    'tasks': {
+        'core.tasks.ProcessVacancy': 1,
+    },
+    'logs': {
+        'dir': LOGS_DIR,
+        'logs_life_hours': 7 * 24,
+        'task_logs_separated': True,
+        'success_tasks_life_hours': 2,
+        'level': 'INFO',
+        'mail_admins': False,
+        'sentry_enabled': False
+    }
 }

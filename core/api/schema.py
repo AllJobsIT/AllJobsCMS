@@ -1,14 +1,22 @@
 import graphene
 
-from core.api.quaries import VacancyMutation
+from core.api.quaries import VacancyMutation, VacancyQuery
+
+
+class Mutation(
+    graphene.ObjectType,
+    VacancyMutation
+):
+    class Meta:
+        description = "Main Mutation"
 
 
 class Query(
     graphene.ObjectType,
-    VacancyMutation
+    VacancyQuery
 ):
     class Meta:
         description = "Main Query"
 
 
-schema = graphene.Schema(query=Query)
+schema = graphene.Schema(query=Query, mutation=Mutation)

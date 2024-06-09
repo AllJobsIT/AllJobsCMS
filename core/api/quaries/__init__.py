@@ -1,1 +1,1 @@
-from .get_vacancy import VacancyMutation
+from .get_vacancy import VacancyMutation, VacancyQuery
