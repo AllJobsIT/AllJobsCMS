@@ -1,0 +1,69 @@
+{% extends "wagtailadmin/home.html" %}
+{% load wagtailadmin_tags i18n %}
+
+{% block branding_welcome %}Welcome to the Admin Homepage for {{ site_name }}{% endblock %}
+
+
+{% block extra_css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jkanban@1/dist/jkanban.min.css">
+    <style>
+        .kanban-wrapper {
+            width: 100%;
+            overflow-x: auto; /* add horizontal scrolling for wide boards */
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .kanban-item {
+            color: var(--w-color-text-link-default);;
+        }
+
+        .kanban-board {
+            background: var(--w-color-surface-page);;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    {{ block.super }}
+    <div class="kanban-wrapper listing">
+        <div id="kanban-mount"></div>
+    </div>
+{% endblock %}
+
+
+{% block extra_js %}
+    {{ block.super }}
+    <script src="https://cdn.jsdelivr.net/npm/jkanban@1/dist/jkanban.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var options = {
+                boards: [
+                    {
+                        id: 'column-0',
+                        title: 'Column A',
+                        item: [{id: 'item-1', title: 'Item 1'}, {id: 'item-2', title: 'Item 2'}, {
+                            id: 'item-1',
+                            title: 'Item 3'
+                        }]
+                    }
+                    ,
+                    {
+                        id: 'column-1',
+                        title: 'Column B',
+                        item: [{id: 'item-4', title: 'Item 4'}, {id: 'item-5', title: 'Item 5'}, {
+                            id: 'item-5',
+                            title: 'Item 6'
+                        }]
+                    }
+                ]
+            };
+
+            // build the kanban board with supplied options
+            // see: https://github.com/riktar/jkanban#var-kanban--new-jkanbanoptions
+            var kanban = new jKanban(Object.assign({}, options, {element: '#kanban-mount'}));
+        });
+    </script>
+{% endblock %}
