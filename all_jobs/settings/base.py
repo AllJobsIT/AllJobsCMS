@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'graphene_django',
     'debug_toolbar',
     "core",
+    "wagtailmarkdown",
 ]
 
 MIDDLEWARE = [
@@ -190,7 +191,8 @@ GRAPHENE = {
 
 BOTMANAGER_CONFIG = {
     'tasks': {
-        'core.tasks.ProcessVacancy': 1,
+        'core.tasks.vacancy_task.ProcessVacancy': 1,
+        'core.tasks.vacancy_task.SendVacancy': 1,
     },
     'logs': {
         'dir': LOGS_DIR,
@@ -202,3 +204,23 @@ BOTMANAGER_CONFIG = {
         'sentry_enabled': False
     }
 }
+
+# WAGTAILMARKDOWN = {
+#     "autodownload_fontawesome": False,
+#     "allowed_tags": [
+#         "strong", "em", "p", "br", "ul", "ol", "li", "a",
+#         "blockquote", "code", "pre", "h1", "h2", "h3", "h4", "h5", "h6",
+#         "img", "table", "thead", "tbody", "th", "td", "tr"
+#     ],
+#     "allowed_styles": [],
+#     "allowed_attributes": {
+#         "a": ["href", "title"],
+#         "img": ["src", "alt", "title"],
+#         "i": ["aria-hidden"],
+#     },
+#     "allowed_settings_mode": "extend",
+#     "extensions": [],
+#     "extension_configs": {},
+#     "extensions_settings_mode": "extend",
+#     "tab_length": 4,
+# }

@@ -1,11 +1,10 @@
-from django.contrib.admin import ModelAdmin
-from wagtail.contrib.settings.registry import register_setting
+from django.templatetags.static import static
+from django.utils.html import format_html
+from wagtail import hooks
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet
 
 from core.models.snippets import Worker, Status, Type, Specialization, Grade, EnglishGrade, Rank
-from core.models.snippets.demand import Demand
-from core.models.snippets.message_settings import MessageSettings
 from core.models.snippets.steps_in_board import StepsInBoard
 from core.models.snippets.vacancy import Vacancy
 
@@ -107,4 +106,3 @@ class VacancySnippetViewSet(SnippetViewSet):
     add_to_settings_menu = False
     exclude_from_explorer = False
     list_display = ('title', 'get_status_display')
-

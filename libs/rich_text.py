@@ -7,4 +7,4 @@ def richtext_to_md2(richtext_field):
     converter = html2text.HTML2Text()
     converter.body_width = 0  # Ширина строки, 0 для отключения переносов строк
     markdown_content = converter.handle(html_content)
-    return markdown_content.replace(';', '\n')
+    return markdown_content

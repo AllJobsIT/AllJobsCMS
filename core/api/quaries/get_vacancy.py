@@ -7,10 +7,13 @@ from core.tasks.vacancy_task import ProcessVacancy
 
 class VacancyNode(DjangoObjectType):
     tags = graphene.List(graphene.String)
+    requirements = graphene.List(graphene.String)
+    responsibilities = graphene.List(graphene.String)
+    stack = graphene.List(graphene.String)
 
     class Meta:
         model = Vacancy
-        only_fields = ['title', 'requirements', 'responsibilities', 'cost', 'location',
+        only_fields = ['title', 'cost', 'location',
                        'load', 'full_vacancy_text_from_tg_chat']
 
     def resolve_tags(self: Vacancy, info):

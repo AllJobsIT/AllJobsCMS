@@ -3,7 +3,7 @@ from datetime import datetime
 from botmanager.basetask import TaskTemporarilyException, BotManagerBaseTask
 
 
-class KITBaseTask(BotManagerBaseTask):
+class AllJobsBaseTask(BotManagerBaseTask):
     TemporarilyException = TaskTemporarilyException
 
     def get_log_file_name(self):

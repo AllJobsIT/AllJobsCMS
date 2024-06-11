@@ -6,13 +6,15 @@ from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
+from wagtail import blocks
 from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.blocks import StreamBlock
-from wagtail.fields import StreamField, RichTextField
+from wagtail.fields import StreamField
 from wagtail.snippets.blocks import SnippetChooserBlock
 
 from core.middleware import get_current_request
 from core.models.snippets.demand import Demand
+from core.tasks.vacancy_task import SendVacancy
 
 
 class VacancyTags(TaggedItemBase):
@@ -28,6 +30,18 @@ class GradeStreamBlock(StreamBlock):
 
 class SpecializationStreamBlock(StreamBlock):
     specialization = SnippetChooserBlock("core.Specialization")
+
+
+class StackStreamField(StreamBlock):
+    stack_item = blocks.CharBlock(label="Элемент стэка")
+
+
+class RequirementsStreamField(StreamBlock):
+    requirements_item = blocks.CharBlock(label="Элемент требования")
+
+
+class ResponsibilitiesStreamField(StreamBlock):
+    responsibilities_item = blocks.CharBlock(label="Элемент обязанности")
 
 
 class Vacancy(ClusterableModel):
@@ -48,13 +62,15 @@ class Vacancy(ClusterableModel):
     specialization = StreamField(
         SpecializationStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name="Специализация"
     )
-    stack = RichTextField(
-        verbose_name="Стэк вакансии", blank=True, null=True
+    stack = StreamField(
+        StackStreamField(), blank=True, null=True, use_json_field=True, verbose_name="Стэк"
     )
-    requirements = RichTextField(verbose_name="Требования к кандидату", blank=True, null=True,
-                                 help_text="; = новая строка")
-    responsibilities = RichTextField(verbose_name="Обязанности кандидата", blank=True, null=True,
-                                     help_text="; = новая строка")
+    requirements = StreamField(
+        RequirementsStreamField(), blank=True, null=True, use_json_field=True, verbose_name="Требования к кандидату"
+    )
+    responsibilities = StreamField(
+        ResponsibilitiesStreamField(), blank=True, null=True, use_json_field=True, verbose_name="Обязанности кандидата"
+    )
     cost = models.IntegerField(verbose_name="Рейт вакансии", blank=True, null=True)
     location = CountryField(verbose_name="Локация вакансии", blank=True, null=True)
     load = models.CharField(verbose_name="Загрузка вакансии", max_length=255, blank=True, null=True)
@@ -106,6 +122,9 @@ class Vacancy(ClusterableModel):
         return f"{self.title} from {self.channel if self.channel else 'Manager'}"
 
     def save(self, **kwargs):
+        if self.status == 2:
+            SendVacancy.create(input={'id': self.id})
+            self.status += 1
         if self.status == 4:
             request = get_current_request()
             demand = Demand.objects.create(
