@@ -1,4 +1,5 @@
 {% extends "wagtailadmin/home.html" %}
+{% load static %}
 {% load wagtailadmin_tags i18n %}
 
 {% block branding_welcome %}Welcome to the Admin Homepage for {{ site_name }}{% endblock %}
@@ -7,20 +8,30 @@
 {% block extra_css %}
     {{ block.super }}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jkanban@1/dist/jkanban.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <style>
-        .kanban-wrapper {
-            width: 100%;
-            overflow-x: auto; /* add horizontal scrolling for wide boards */
-            margin-top: 1rem;
-            margin-bottom: 1rem;
+
+        .file-upload-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--w-color-text-label);;
         }
 
-        .kanban-item {
-            color: var(--w-color-text-link-default);;
+        .file-input, .submit-btn {
+            margin-bottom: 25px;
         }
 
-        .kanban-board {
-            background: var(--w-color-surface-page);;
+        .submit-btn:last-child {
+            margin-bottom: 0;
+        }
+
+        .modal-dialog-centered {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
     </style>
 {% endblock %}
@@ -28,42 +39,48 @@
 
 {% block content %}
     {{ block.super }}
-    <div class="kanban-wrapper listing">
-        <div id="kanban-mount"></div>
+    <div class="container">
+        <div class="mb-3 file-upload-container">
+            <h1 class="font-weight-bold">Парсер резюме</h1>
+            <label for="formFile" class="form-label">Выберите файл резюме</label>
+            <input class="form-control file-input" type="file" id="formFile">
+            <!-- Скрытая кнопка отправки -->
+            <button id="submitBtn" class="btn btn-primary submit-btn btn-success" style="display: none;"
+                    data-toggle="modal" data-target="#successModal">Отправить
+            </button>
+        </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+         role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Резюме успешно загружено</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" data-target="#successModal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 
 
 {% block extra_js %}
     {{ block.super }}
-    <script src="https://cdn.jsdelivr.net/npm/jkanban@1/dist/jkanban.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var options = {
-                boards: [
-                    {
-                        id: 'column-0',
-                        title: 'Column A',
-                        item: [{id: 'item-1', title: 'Item 1'}, {id: 'item-2', title: 'Item 2'}, {
-                            id: 'item-1',
-                            title: 'Item 3'
-                        }]
-                    }
-                    ,
-                    {
-                        id: 'column-1',
-                        title: 'Column B',
-                        item: [{id: 'item-4', title: 'Item 4'}, {id: 'item-5', title: 'Item 5'}, {
-                            id: 'item-5',
-                            title: 'Item 6'
-                        }]
-                    }
-                ]
-            };
-
-            // build the kanban board with supplied options
-            // see: https://github.com/riktar/jkanban#var-kanban--new-jkanbanoptions
-            var kanban = new jKanban(Object.assign({}, options, {element: '#kanban-mount'}));
-        });
-    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="{% static 'js/index.js' %}"></script>
 {% endblock %}

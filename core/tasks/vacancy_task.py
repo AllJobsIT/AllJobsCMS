@@ -1,13 +1,12 @@
 import json
-
-from jinja2 import Template
+import os
 
 import requests
 from django.apps import apps
 from django.db import transaction
-from g4f.client import Client
+from openai import Client
 
-from core.models.snippets import Grade, Specialization
+from core.models.snippets.base import Grade, Specialization
 from core.models.snippets.message_settings import MessageSettings
 from core.tasks import AllJobsBaseTask
 from libs.json import json_to_dict
@@ -55,7 +54,7 @@ class SendVacancy(AllJobsBaseTask):
             ]
         )
         result_message = response.choices[0].message.content
-        requests.post("http://127.0.0.1:8000/vacancy/",
+        requests.post(os.environ.get("VACANCY_API_URI"),
                       json={"vacancy_text": result_message})
         # vacancy.status += 1
         vacancy.save()
@@ -80,7 +79,7 @@ class ProcessVacancy(AllJobsBaseTask):
 
     def process_vacancy(self):
         vacancy_id = self.task.input.get('id')
-        instance = Vacancy.objects.get(id=vacancy_id)
+        instance = apps.get_model("core.Vacancy").objects.get(id=vacancy_id)
         client = Client()
         response = client.chat.completions.create(
             model="gpt-4o",

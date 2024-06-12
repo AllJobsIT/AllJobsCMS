@@ -100,8 +100,8 @@ DATABASES = {
         'NAME': os.environ.get('POSTGRES_NAME'),
         'USER': os.environ.get('POSTGRES_USER'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-        'HOST': 'localhost',
-        'PORT': 5432,
+        'HOST': os.environ.get('POSTGRES_HOST'),
+        'PORT': os.environ.get('POSTGRES_PORT'),
     }
 }
 
@@ -193,6 +193,7 @@ BOTMANAGER_CONFIG = {
     'tasks': {
         'core.tasks.vacancy_task.ProcessVacancy': 1,
         'core.tasks.vacancy_task.SendVacancy': 1,
+        'core.tasks.worker_task.ProcessWorker': 1,
     },
     'logs': {
         'dir': LOGS_DIR,
@@ -205,22 +206,3 @@ BOTMANAGER_CONFIG = {
     }
 }
 
-# WAGTAILMARKDOWN = {
-#     "autodownload_fontawesome": False,
-#     "allowed_tags": [
-#         "strong", "em", "p", "br", "ul", "ol", "li", "a",
-#         "blockquote", "code", "pre", "h1", "h2", "h3", "h4", "h5", "h6",
-#         "img", "table", "thead", "tbody", "th", "td", "tr"
-#     ],
-#     "allowed_styles": [],
-#     "allowed_attributes": {
-#         "a": ["href", "title"],
-#         "img": ["src", "alt", "title"],
-#         "i": ["aria-hidden"],
-#     },
-#     "allowed_settings_mode": "extend",
-#     "extensions": [],
-#     "extension_configs": {},
-#     "extensions_settings_mode": "extend",
-#     "tab_length": 4,
-# }

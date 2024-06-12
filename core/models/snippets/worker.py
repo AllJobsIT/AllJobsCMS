@@ -1,14 +1,87 @@
 import uuid
 
 from django.db import models
-from django.utils.functional import cached_property
 from django_countries.fields import CountryField
 from modelcluster.models import ClusterableModel
+from wagtail import blocks
 from wagtail.admin.panels import FieldPanel, InlinePanel
+from wagtail.blocks import StreamBlock, StructBlock
 from wagtail.documents.models import Document
-from wagtail.fields import RichTextField
+from wagtail.fields import RichTextField, StreamField
+from wagtail.snippets.blocks import SnippetChooserBlock
 
-from core.models.snippets.base import Specialization, Grade, EnglishGrade, Status, Type
+from core.models.snippets.base import Status, Type
+
+
+class EnglishGradeStructBlock(StructBlock):
+    language = blocks.CharBlock(label="Язык")
+    grade = blocks.CharBlock(label="Знание языка")
+
+
+class EnglishGradeStreamBlock(StreamBlock):
+    language = EnglishGradeStructBlock(label="Элемент языка")
+
+
+class StackStreamBlock(StreamBlock):
+    stack_item = blocks.CharBlock(label="Элемент стэка")
+
+
+class SkillStreamBlock(StreamBlock):
+    skill_item = blocks.CharBlock(label="Элемент навыка")
+
+
+class ProgrammingLanguageStreamBlock(StreamBlock):
+    language_item = blocks.CharBlock(label="Язык программирования")
+
+
+class TechnologiesStreamBlock(StreamBlock):
+    technology_item = blocks.CharBlock(label="Элемент технологии")
+
+
+class DatabasesStreamBlock(StreamBlock):
+    database_item = blocks.CharBlock(label="Элемент базы данных")
+
+
+class SoftwareDevelopmentStreamBlock(StreamBlock):
+    software_development_item = blocks.CharBlock(label="Элемент средства разработки")
+
+
+class OtherTechnologiesStreamBlock(StreamBlock):
+    other_technology_item = blocks.CharBlock(label="Элемент другой технологии")
+
+
+class CertificatesStreamBlock(StreamBlock):
+    certificate_item = blocks.CharBlock(label="Элемент сертификата")
+
+
+class ExampleOfWorkStreamBlock(StreamBlock):
+    example_of_work_item = blocks.URLBlock(label="Элемент примера работы")
+
+
+class ContactsStructBlock(StructBlock):
+    name = blocks.CharBlock(label="Тип контакта")
+    value = blocks.URLBlock(label="Значение")
+
+
+class ContactsStreamBlock(StreamBlock):
+    contact = ContactsStructBlock(label="Элемент контакта")
+
+
+class LinksStructBlock(StructBlock):
+    type = blocks.CharBlock(label="Тип ссылки")
+    link = blocks.URLBlock(label="Ссылка")
+
+
+class LinksStreamBlock(StreamBlock):
+    link = LinksStructBlock(label="Элемент ссылки")
+
+
+class SpecializationStreamBlock(StreamBlock):
+    specialization = SnippetChooserBlock("core.Specialization")
+
+
+class GradeStreamBlock(StreamBlock):
+    grade = SnippetChooserBlock("core.Grade")
 
 
 class Worker(ClusterableModel):
@@ -19,16 +92,19 @@ class Worker(ClusterableModel):
     )
     name = models.CharField(
         max_length=255,
-        verbose_name='Имя'
+        verbose_name='Имя',
+        null=True
     )
     last_name = models.CharField(
         max_length=255,
-        verbose_name='Фамилия'
+        verbose_name='Фамилия',
+        null=True
     )
     surname = models.CharField(
         max_length=255,
         verbose_name='Отчество',
-        blank=True
+        blank=True,
+        null=True
     )
     file = models.ForeignKey(
         Document,
@@ -67,6 +143,7 @@ class Worker(ClusterableModel):
         max_length=255,
         verbose_name='Работодатель сотрудника',
         blank=True,
+        null=True
     )
     sales_rate = models.IntegerField(
         verbose_name='Рейт продажи',
@@ -78,45 +155,42 @@ class Worker(ClusterableModel):
         blank=True,
         null=True,
     )
-    specialization = models.ForeignKey(
-        Specialization,
-        on_delete=models.SET_NULL,
-        verbose_name='Специализация',
-        blank=True,
-        null=True
+    specialization = StreamField(
+        SpecializationStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name="Специализация"
     )
-    grade = models.ForeignKey(
-        Grade,
-        on_delete=models.SET_NULL,
-        verbose_name='Грейд',
-        blank=True,
-        null=True
+    grade = StreamField(
+        GradeStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name="Грейд"
     )
-    stack = RichTextField(blank=True, verbose_name="Стек")
-    skills = RichTextField(blank=True, verbose_name="Навыки")
-    programming_languages = RichTextField(
-        verbose_name='Опыт работы с языками',
-        blank=True
+    stack = StreamField(
+        StackStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name="Стэк"
     )
-    technologies = RichTextField(
-        verbose_name='Технологии',
-        blank=True
+    skills = StreamField(
+        SkillStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name="Навыки"
     )
-    databases = RichTextField(
-        verbose_name='Базы данных',
-        blank=True
+    programming_languages = StreamField(
+        ProgrammingLanguageStreamBlock(), blank=True, null=True, use_json_field=True,
+        verbose_name="Опыт работы с языками"
     )
-    software_development = RichTextField(
-        verbose_name='Средства разработки ПО',
-        blank=True
+    technologies = StreamField(
+        TechnologiesStreamBlock(), blank=True, null=True, use_json_field=True,
+        verbose_name="Технологии"
     )
-    other_technologies = RichTextField(
-        verbose_name='Другие технологии',
-        blank=True,
+    databases = StreamField(
+        DatabasesStreamBlock(), blank=True, null=True, use_json_field=True,
+        verbose_name="Базы данных"
+    )
+    software_development = StreamField(
+        SoftwareDevelopmentStreamBlock(), blank=True, null=True, use_json_field=True,
+        verbose_name="Средства разработки ПО"
+    )
+    other_technologies = StreamField(
+        OtherTechnologiesStreamBlock(), blank=True, null=True, use_json_field=True,
+        verbose_name="Другие технологии"
     )
     about_worker = RichTextField(
         verbose_name='О себе',
-        blank=True
+        blank=True,
+        null=True
     )
     experience = models.FloatField(
         verbose_name='Стаж',
@@ -127,44 +201,49 @@ class Worker(ClusterableModel):
     city = models.CharField(
         max_length=255,
         verbose_name='Город проживания',
-        blank=True
+        blank=True,
+        null=True
     )
     citizenship = CountryField(
         verbose_name='Гражданство',
-        blank=True
-    )
-    english_grade = models.ForeignKey(
-        EnglishGrade,
-        on_delete=models.SET_NULL,
-        verbose_name='Английский язык',
         blank=True,
-        null=True,
+        null=True
+    )
+    english_grade = StreamField(
+        EnglishGradeStreamBlock(), blank=True, null=True, use_json_field=True,
+        verbose_name="Языки"
     )
     education = RichTextField(
         verbose_name='Образование',
-        blank=True
+        blank=True,
+        null=True
     )
-    certificates = RichTextField(
-        verbose_name='Сертификаты',
-        blank=True
+    certificates = StreamField(
+        CertificatesStreamBlock(), blank=True, null=True, use_json_field=True,
+        verbose_name="Сертификаты"
     )
     employer_contact = models.CharField(
         max_length=255,
         verbose_name='Контакт работодателя',
-        blank=True
+        blank=True,
+        null=True
     )
-    worker_contact = models.CharField(
-        max_length=255,
-        verbose_name='Контакт сотрудника',
-        blank=True
+    worker_contact = StreamField(
+        ContactsStreamBlock(), blank=True, null=True, use_json_field=True,
+        verbose_name="Контакты сотрудника"
     )
-    example_of_work = RichTextField(
-        verbose_name='Пример работ',
-        blank=True
+    example_of_work = StreamField(
+        ExampleOfWorkStreamBlock(), blank=True, null=True, use_json_field=True,
+        verbose_name="Пример работ"
+    )
+    links = StreamField(
+        LinksStreamBlock(), blank=True, null=True, use_json_field=True,
+        verbose_name="Ссылки"
     )
     comment = RichTextField(
         verbose_name='Комментарий',
-        blank=True
+        blank=True,
+        null=True
     )
     is_published = models.BooleanField(
         default=True,
@@ -206,6 +285,9 @@ class Worker(ClusterableModel):
         FieldPanel("employer_contact"),
         FieldPanel("worker_contact"),
         FieldPanel("example_of_work"),
+        InlinePanel(
+            'work_experiences', label="Work Experience"
+        ),
         FieldPanel("comment"),
         FieldPanel("is_published"),
         InlinePanel(
@@ -216,6 +298,8 @@ class Worker(ClusterableModel):
     def __str__(self):
         return f'{self.name} {self.last_name}'
 
-    @cached_property
     def full_name(self):
         return f'{self.last_name} {self.name} {self.surname if self.surname else ""}'
+
+    full_name.admin_order_field = "Полное имя"
+    full_name.short_description = "Полное имя"
