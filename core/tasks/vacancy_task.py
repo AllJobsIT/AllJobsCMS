@@ -1,4 +1,5 @@
 import json
+import os
 
 import requests
 from django.apps import apps
@@ -53,7 +54,7 @@ class SendVacancy(AllJobsBaseTask):
             ]
         )
         result_message = response.choices[0].message.content
-        requests.post("http://127.0.0.1:8000/vacancy/",
+        requests.post(os.environ.get("VACANCY_API_URI"),
                       json={"vacancy_text": result_message})
         # vacancy.status += 1
         vacancy.save()
