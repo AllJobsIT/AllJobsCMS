@@ -1,10 +1,9 @@
-from django.templatetags.static import static
-from django.utils.html import format_html
-from wagtail import hooks
+from wagtail.admin.filters import WagtailFilterSet
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet
 
-from core.models.snippets import Worker, Status, Type, Specialization, Grade, EnglishGrade, Rank
+from core.models.snippets import Worker, Status, Type, Rank
+from core.models.snippets.base import Specialization, Grade
 from core.models.snippets.steps_in_board import StepsInBoard
 from core.models.snippets.vacancy import Vacancy
 
@@ -17,7 +16,7 @@ class WorkersSnippetViewSet(SnippetViewSet):
     menu_order = 200
     add_to_settings_menu = False
     add_to_admin_menu = True
-    list_display = ('full_name',)
+    list_display = ('full_name', 'employer', 'purchase_rate', 'specialization', 'grade', 'experience', 'city', 'telegram_nickname')
 
 
 @register_snippet
@@ -43,7 +42,7 @@ class TypeSnippetViewSet(SnippetViewSet):
 
 
 @register_snippet
-class TypeSnippetViewSet(SnippetViewSet):
+class RankSnippetViewSet(SnippetViewSet):
     model = Rank
     menu_label = 'Rank'
     menu_icon = 'user'
@@ -76,17 +75,6 @@ class GradeSnippetViewSet(SnippetViewSet):
 
 
 @register_snippet
-class EnglishGradeSnippetViewSet(SnippetViewSet):
-    model = EnglishGrade
-    menu_label = 'English Grade'
-    menu_icon = 'user'
-    menu_order = 200
-    add_to_settings_menu = False
-    exclude_from_explorer = False
-    list_display = ('title',)
-
-
-@register_snippet
 class StepsInBoardSnippetViewSet(SnippetViewSet):
     model = StepsInBoard
     menu_label = 'Steps In Board'
@@ -105,4 +93,5 @@ class VacancySnippetViewSet(SnippetViewSet):
     menu_order = 200
     add_to_settings_menu = False
     exclude_from_explorer = False
-    list_display = ('title', 'get_status_display')
+    list_filter = ['status']
+    list_display = ('title', 'created_at', 'specialization', 'grades', 'cost', 'get_status', 'stack', "uuid")

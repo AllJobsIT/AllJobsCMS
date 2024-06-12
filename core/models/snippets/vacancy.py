@@ -7,6 +7,7 @@ from modelcluster.models import ClusterableModel
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 from wagtail import blocks
+from wagtail.admin.filters import WagtailFilterSet
 from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.blocks import StreamBlock
 from wagtail.fields import StreamField
@@ -133,3 +134,9 @@ class Vacancy(ClusterableModel):
             )
             demand.save()
         super().save()
+
+    def get_status(self):
+        return self.get_status_display()
+
+    get_status.admin_order_field = "Статус"
+    get_status.short_description = "Статус"

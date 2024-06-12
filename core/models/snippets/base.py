@@ -59,14 +59,3 @@ class Grade(models.Model):
 
     def __str__(self):
         return self.title
-
-
-class EnglishGrade(models.Model):
-    title = models.CharField(max_length=255)
-
-    class Meta:
-        verbose_name = 'Грейд английского языка'
-        verbose_name_plural = 'Грейды английского языка'
-
-    def __str__(self):
-        return self.title

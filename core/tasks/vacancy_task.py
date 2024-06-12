@@ -1,13 +1,11 @@
 import json
 
-from jinja2 import Template
-
 import requests
 from django.apps import apps
 from django.db import transaction
 from g4f.client import Client
 
-from core.models.snippets import Grade, Specialization
+from core.models.snippets.base import Grade, Specialization
 from core.models.snippets.message_settings import MessageSettings
 from core.tasks import AllJobsBaseTask
 from libs.json import json_to_dict
@@ -80,7 +78,7 @@ class ProcessVacancy(AllJobsBaseTask):
 
     def process_vacancy(self):
         vacancy_id = self.task.input.get('id')
-        instance = Vacancy.objects.get(id=vacancy_id)
+        instance = apps.get_model("core.Vacancy").objects.get(id=vacancy_id)
         client = Client()
         response = client.chat.completions.create(
             model="gpt-4o",
