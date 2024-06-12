@@ -15,7 +15,9 @@ import os
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
+LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 
+INTERNAL_IPS = ("127.0.0.1", "localhost")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -24,8 +26,11 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 # Application definition
 
 INSTALLED_APPS = [
+    "web",
+    "django_countries",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
+    "wagtail.contrib.settings",
     "wagtail.embeds",
     "wagtail.sites",
     "wagtail.users",
@@ -35,16 +40,20 @@ INSTALLED_APPS = [
     "wagtail.search",
     "wagtail.admin",
     "wagtail",
+    "wagtail_color_panel",
     "modelcluster",
     "taggit",
+    'botmanager',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'graphene_django',
+    'debug_toolbar',
     "core",
-    "web",
+    "wagtailmarkdown",
 ]
 
 MIDDLEWARE = [
@@ -56,6 +65,8 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "core.middleware.CurrentUserMiddleware",
 ]
 
 ROOT_URLCONF = "all_jobs.urls"
@@ -80,7 +91,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "all_jobs.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
@@ -90,11 +100,10 @@ DATABASES = {
         'NAME': os.environ.get('POSTGRES_NAME'),
         'USER': os.environ.get('POSTGRES_USER'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-        'HOST': 'localhost',
-        'PORT': 5432,
+        'HOST': os.environ.get('POSTGRES_HOST'),
+        'PORT': os.environ.get('POSTGRES_PORT'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -114,7 +123,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -126,18 +134,9 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATICFILES_FINDERS = [
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-]
-
-STATICFILES_DIRS = [
-    os.path.join(PROJECT_DIR, "static"),
-]
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = "/static/"
@@ -160,7 +159,6 @@ STORAGES = {
     },
 }
 
-
 # Wagtail settings
 
 WAGTAIL_SITE_NAME = "all_jobs"
@@ -182,3 +180,29 @@ WAGTAILADMIN_BASE_URL = "http://example.com"
 # if untrusted users are allowed to upload files -
 # see https://docs.wagtail.org/en/stable/advanced_topics/deploying.html#user-uploaded-files
 WAGTAILDOCS_EXTENSIONS = ['csv', 'docx', 'key', 'odt', 'pdf', 'pptx', 'rtf', 'txt', 'xlsx', 'zip']
+
+# Graphene
+
+GRAPHENE = {
+    'SCHEMA': 'core.api.schema',
+}
+
+# Bot manager
+
+BOTMANAGER_CONFIG = {
+    'tasks': {
+        'core.tasks.vacancy_task.ProcessVacancy': 1,
+        'core.tasks.vacancy_task.SendVacancy': 1,
+        'core.tasks.worker_task.ProcessWorker': 1,
+    },
+    'logs': {
+        'dir': LOGS_DIR,
+        'logs_life_hours': 7 * 24,
+        'task_logs_separated': True,
+        'success_tasks_life_hours': 2,
+        'level': 'INFO',
+        'mail_admins': False,
+        'sentry_enabled': False
+    }
+}
+

@@ -12,11 +12,6 @@ services:
       - POSTGRES_PASSWORD=postgres
     ports:
       - "5432:5432"
-#    healthcheck:
-#      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-#      interval: 5s
-#      timeout: 5s
-#      retries: 5
   dev:
     build:
       context: ./
@@ -26,33 +21,34 @@ services:
       - -c
       - |
         python manage.py migrate
-        python manage.py runserver 0.0.0.0:8000
+        python manage.py runserver 0.0.0.0:8001
     stdin_open: true
     tty: true
     volumes:
       - .:/usr/src/app
     ports:
-      - "8000:8000"
+      - "8001:8001"
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    environment:
-      - POSTGRES_NAME=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+    env_file:
+      - .env
     depends_on:
       - db
-      - devjs
-  devjs:
+  bot_manager:
     build:
       context: ./
-      dockerfile: ./deploy/docker/Dockerfile.devjs
-    command: npm run watch
+      dockerfile: ./deploy/docker/Dockerfile.dev
+    command: python manage.py bot_manager
     stdin_open: true
     tty: true
+    user: "${UID}:${GID}"
     volumes:
-      - .:/app
-      - /app/node_modules
-    environment:
-      - npm_config_cache=/app/.npm
+      - .:/usr/src/app
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - dev
 volumes:
   all_jobs_pg_data:
+  redis_data:
