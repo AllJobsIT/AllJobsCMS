@@ -51,4 +51,3 @@ services:
       - dev
 volumes:
   all_jobs_pg_data:
-  redis_data:

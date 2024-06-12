@@ -80,37 +80,40 @@ class ProcessVacancy(AllJobsBaseTask):
     def process_vacancy(self):
         vacancy_id = self.task.input.get('id')
         instance = apps.get_model("core.Vacancy").objects.get(id=vacancy_id)
-        client = Client()
-        response = client.chat.completions.create(
-            model="gpt-4o",
-            messages=[
-                {"role": "system",
-                 "content": "Ты продвинутый анализатор текста"
-                 },
-                {"role": "user",
-                 "content": self.get_prompt(instance.full_vacancy_text_from_tg_chat)}
-            ]
-        )
-        ai_response_content = response.choices[0].message.content
-        ai_response_dict = json_to_dict(ai_response_content)
-        with transaction.atomic():
-            instance.title = ai_response_dict.get('title', None)
-            instance.requirements = [{"type": "requirements_item", "value": item} for item in
-                                     ai_response_dict.get("requirements", None)]
-            instance.responsibilities = [{"type": "responsibilities_item", "value": item} for item in
-                                         ai_response_dict.get("responsibilities", None)]
-            instance.stack = [{"type": "stack_item", "value": item} for item in
-                              ai_response_dict.get("stack", None)]
-            instance.cost = ai_response_dict.get('cost', None)
-            instance.location = ai_response_dict.get('location', None)
-            instance.load = ai_response_dict.get('load', None)
-            grades = Grade.objects.filter(title__in=ai_response_dict.get("grades", None))
-            if grades:
-                instance.grades = [{"type": "grade", "value": item.id} for item in grades]
-            specializations = Specialization.objects.filter(title__in=ai_response_dict.get("specialization", None))
-            if specializations:
-                instance.specialization = [{"type": "specialization", "value": item.id} for item in specializations]
-            for tag in ai_response_dict['tags']:
-                instance.tags.add(tag)
-            instance.status += 1
+        try:
+            client = Client()
+            response = client.chat.completions.create(
+                model="gpt-4",
+                messages=[
+                    {"role": "system",
+                     "content": "Ты продвинутый анализатор текста"
+                     },
+                    {"role": "user",
+                     "content": self.get_prompt(instance.full_vacancy_text_from_tg_chat)}
+                ]
+            )
+            ai_response_content = response.choices[0].message.content
+            ai_response_dict = json_to_dict(ai_response_content)
+            with transaction.atomic():
+                instance.title = ai_response_dict.get('title', None)
+                instance.requirements = [{"type": "requirements_item", "value": item} for item in
+                                         ai_response_dict.get("requirements", None)]
+                instance.responsibilities = [{"type": "responsibilities_item", "value": item} for item in
+                                             ai_response_dict.get("responsibilities", None)]
+                instance.stack = [{"type": "stack_item", "value": item} for item in
+                                  ai_response_dict.get("stack", None)]
+                instance.cost = ai_response_dict.get('cost', None)
+                instance.location = ai_response_dict.get('location', None)
+                instance.load = ai_response_dict.get('load', None)
+                grades = Grade.objects.filter(title__in=ai_response_dict.get("grades", None))
+                if grades:
+                    instance.grades = [{"type": "grade", "value": item.id} for item in grades]
+                specializations = Specialization.objects.filter(title__in=ai_response_dict.get("specialization", None))
+                if specializations:
+                    instance.specialization = [{"type": "specialization", "value": item.id} for item in specializations]
+                for tag in ai_response_dict['tags']:
+                    instance.tags.add(tag)
+                instance.status += 1
+        except BaseException as e:
+            instance.status = -1
         instance.save()

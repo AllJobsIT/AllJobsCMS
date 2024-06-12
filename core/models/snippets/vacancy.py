@@ -47,6 +47,7 @@ class ResponsibilitiesStreamField(StreamBlock):
 
 class Vacancy(ClusterableModel):
     STATUSES = (
+        (-1, "Обработка с помощью ИИ не удалась"),
         (0, "Обработка с помощью ИИ"),
         (1, "Модерация"),
         (2, "Готов к отправке"),
