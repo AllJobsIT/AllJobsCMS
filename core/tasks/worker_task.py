@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.db import transaction
-from g4f.client import Client
+from openai import Client
 
 from core.models.snippets import Worker, WorkExperience
 from core.models.snippets.base import Grade, Specialization

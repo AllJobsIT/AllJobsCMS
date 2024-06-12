@@ -4,7 +4,7 @@ import os
 import requests
 from django.apps import apps
 from django.db import transaction
-from g4f.client import Client
+from openai import Client
 
 from core.models.snippets.base import Grade, Specialization
 from core.models.snippets.message_settings import MessageSettings
