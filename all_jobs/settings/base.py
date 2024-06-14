@@ -17,6 +17,7 @@ PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 
+SECRET_KEY = "django-insecure-e^9g)t7o=djaaz9g*)vmy1pivnzqc%-i_a&)_j9165n++$152("
 ALLOWED_HOSTS = ["*"]
 INTERNAL_IPS = ("127.0.0.1", "localhost")
 
