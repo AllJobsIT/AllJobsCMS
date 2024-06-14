@@ -29,7 +29,6 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:8001', 'http://admin.kostaff.ru', 'http://127.0.0.1:8001'
 )
 
-CSRF_COOKIE_DOMAIN = 'admin.kostaff.ru'
 
 CSRF_TRUSTED_ORIGINS = CORS_ORIGIN_WHITELIST
 
