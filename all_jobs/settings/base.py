@@ -21,6 +21,18 @@ SECRET_KEY = "django-insecure-e^9g)t7o=djaaz9g*)vmy1pivnzqc%-i_a&)_j9165n++$152(
 ALLOWED_HOSTS = ["*"]
 INTERNAL_IPS = ("127.0.0.1", "localhost")
 
+CSRF_USE_SESSIONS = False
+
+CORS_ORIGIN_ALLOW_ALL = False
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:8001', 'http://admin.kostaff.ru', 'http://127.0.0.1:8001',"
+)
+
+CSRF_COOKIE_DOMAIN = 'admin.kostaff.ru'
+
+CSRF_TRUSTED_ORIGINS = CORS_ORIGIN_WHITELIST
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
