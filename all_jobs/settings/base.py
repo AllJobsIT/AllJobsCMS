@@ -26,7 +26,7 @@ CSRF_USE_SESSIONS = False
 CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ORIGIN_WHITELIST = (
-    'http://localhost:8001', 'http://admin.kostaff.ru', 'http://127.0.0.1:8001',"
+    'http://localhost:8001', 'http://admin.kostaff.ru', 'http://127.0.0.1:8001'
 )
 
 CSRF_COOKIE_DOMAIN = 'admin.kostaff.ru'
