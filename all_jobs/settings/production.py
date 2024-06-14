@@ -1,6 +1,6 @@
 DEBUG = False
 
 try:
-    from .local import *
+    from .base import *
 except ImportError:
     pass

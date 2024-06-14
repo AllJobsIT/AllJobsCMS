@@ -17,6 +17,7 @@ PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 
+ALLOWED_HOSTS = ["*"]
 INTERNAL_IPS = ("127.0.0.1", "localhost")
 
 # Quick-start development settings - unsuitable for production
