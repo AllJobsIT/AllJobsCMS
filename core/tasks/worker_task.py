@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 from django.db import transaction
@@ -68,7 +69,7 @@ class ProcessWorker(AllJobsBaseTask):
         data = load_document(instance.file.file.path)
         client = Client()
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4o",
             messages=[
                 {"role": "system",
                  "content": "Ты продвинутый анализатор текста"

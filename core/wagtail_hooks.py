@@ -92,6 +92,7 @@ class VacancySnippetViewSet(SnippetViewSet):
     menu_icon = 'user'
     menu_order = 200
     add_to_settings_menu = False
+    add_to_admin_menu = True
     exclude_from_explorer = False
     list_filter = ['status']
     list_display = ('title', 'created_at', 'specialization', 'grades', 'cost', 'get_status', 'stack', "uuid")

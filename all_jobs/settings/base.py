@@ -29,7 +29,6 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:8001', 'http://admin.kostaff.ru', 'http://127.0.0.1:8001', 'https://admin.kostaff.ru'
 )
 
-
 CSRF_TRUSTED_ORIGINS = CORS_ORIGIN_WHITELIST
 
 # Quick-start development settings - unsuitable for production
@@ -40,6 +39,7 @@ CSRF_TRUSTED_ORIGINS = CORS_ORIGIN_WHITELIST
 
 INSTALLED_APPS = [
     "web",
+    'botmanager',
     "django_countries",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
@@ -56,7 +56,6 @@ INSTALLED_APPS = [
     "wagtail_color_panel",
     "modelcluster",
     "taggit",
-    'botmanager',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -139,7 +138,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "ru-RU"
 
 TIME_ZONE = "UTC"
 
@@ -218,4 +217,3 @@ BOTMANAGER_CONFIG = {
         'sentry_enabled': False
     }
 }
-

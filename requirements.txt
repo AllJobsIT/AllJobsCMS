@@ -1,4 +1,5 @@
 aiohttp==3.9.5
+aiohttp-socks==0.8.4
 aiosignal==1.3.1
 altair==5.3.0
 aniso8601==9.0.1
@@ -14,9 +15,13 @@ bcrypt==4.1.3
 beautifulsoup4==4.12.3
 bleach==4.1.0
 blinker==1.8.2
+bottle==0.12.25
 Brotli==1.1.0
+browser-cookie3==0.19.1
 build==1.2.1
 cachetools==5.3.3
+cairocffi==1.7.0
+CairoSVG==2.7.1
 certifi==2024.6.2
 cffi==1.16.0
 chardet==5.2.0
@@ -26,6 +31,8 @@ chromadb==0.5.0
 click==8.1.7
 coloredlogs==15.0.1
 cryptography==42.0.8
+cssselect2==0.7.0
+curl_cffi==0.6.4
 dataclasses-json==0.6.7
 deepdiff==7.0.1
 defusedxml==0.7.1
@@ -43,6 +50,7 @@ django-treebeard==4.7.1
 djangorestframework==3.15.1
 dnspython==2.6.1
 draftjs-exporter==5.0.0
+duckduckgo_search==6.1.6
 email_validator==2.1.1
 emoji==2.12.1
 envparse==0.2.0
@@ -52,6 +60,7 @@ fastapi==0.111.0
 fastapi-cli==0.0.4
 filelock==3.14.0
 filetype==1.2.0
+Flask==3.0.3
 flatbuffers==24.3.25
 frozenlist==1.4.1
 fsspec==2024.6.0
@@ -76,6 +85,8 @@ humanfriendly==10.0
 idna==3.7
 importlib_metadata==7.1.0
 importlib_resources==6.4.0
+itsdangerous==2.2.0
+jeepney==0.8.0
 Jinja2==3.1.4
 joblib==1.4.2
 jsonfield==3.1.0
@@ -93,7 +104,9 @@ langchain-core==0.2.5
 langchain-text-splitters==0.2.1
 langdetect==1.0.9
 langsmith==0.1.76
+loguru==0.7.2
 lxml==5.2.2
+lz4==4.3.3
 Markdown==3.6
 markdown-it-py==3.0.0
 MarkupSafe==2.1.5
@@ -134,9 +147,12 @@ pdf2image==1.17.0
 pdfminer.six==20231228
 pillow==10.3.0
 pillow_heif==0.16.0
+platformdirs==4.2.2
+plyer==2.1.0
 posthog==3.5.0
 promise==2.3
 protobuf==4.25.3
+proxy-tools==0.1.0
 psutil==5.8.0
 psycopg2-binary==2.9.9
 pyarrow==16.1.0
@@ -144,15 +160,18 @@ pyasn1==0.6.0
 pyasn1_modules==0.4.0
 pycparser==2.22
 pycryptodome==3.20.0
+pycryptodomex==3.20.0
 pydantic==2.7.3
 pydantic-settings==2.2.1
 pydantic_core==2.18.4
 pydeck==0.9.1
+PyExecJS==1.5.1
 Pygments==2.18.0
 pypandoc==1.13
 pypdf==4.2.0
 PyPika==0.48.9
 pyproject_hooks==1.1.0
+pyreqwest_impersonate==0.4.7
 python-dateutil==2.9.0.post0
 python-docx==1.1.2
 python-dotenv==1.0.1
@@ -160,7 +179,9 @@ python-iso639==2024.4.27
 python-magic==0.4.27
 python-multipart==0.0.9
 python-pptx==0.6.23
+python-socks==2.4.4
 pytz==2024.1
+pywebview==5.1
 PyYAML==6.0.1
 rapidfuzz==3.9.3
 referencing==0.35.1
@@ -186,6 +207,7 @@ telepath==0.3.1
 tenacity==8.3.0
 text-unidecode==1.3
 tiktoken==0.7.0
+tinycss2==1.3.0
 tokenizers==0.19.1
 toml==0.10.2
 tomli==2.0.1
@@ -211,6 +233,7 @@ watchfiles==0.22.0
 webencodings==0.5.1
 websocket-client==1.8.0
 websockets==12.0
+Werkzeug==3.0.3
 Willow==1.8.0
 wrapt==1.16.0
 xlrd==2.0.1
