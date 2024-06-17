@@ -19,7 +19,7 @@ services:
     command: bash -c "python manage.py migrate wagtailcore &&
       python manage.py migrate wagtailimages &&
       python manage.py migrate botmanager &&
-      python manage.py migrate
+      python manage.py migrate"
     stdin_open: true
     tty: true
     volumes:
