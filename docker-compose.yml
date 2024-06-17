@@ -39,7 +39,6 @@ services:
     command: python manage.py bot_manager
     stdin_open: true
     tty: true
-    user: "${UID}:${GID}"
     volumes:
       - .:/usr/src/app
     env_file:
