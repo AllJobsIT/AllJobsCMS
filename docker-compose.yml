@@ -36,7 +36,7 @@ services:
     build:
       context: ./
       dockerfile: ./deploy/docker/Dockerfile.dev
-    command: python manage.py bot_manager
+    command: bash -c "python manage.py bot_manager"
     stdin_open: true
     tty: true
     volumes:
@@ -48,3 +48,4 @@ services:
       - dev
 volumes:
   all_jobs_pg_data:
+
