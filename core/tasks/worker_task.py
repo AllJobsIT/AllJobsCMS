@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 
 from django.db import transaction
-from g4f.Provider import Bing
+from g4f.Provider import Blackbox
 from g4f.client import Client
 
 from core.models.snippets import Worker, WorkExperience
@@ -71,7 +71,7 @@ class ProcessWorker(AllJobsBaseTask):
         client = Client(api_key=os.getenv("OPENAI_API_KEY"))
         response = client.chat.completions.create(
             model="gpt-4o",
-            provider=Bing,
+            provider=Blackbox,
             messages=[
                 {"role": "system",
                  "content": "Ты продвинутый анализатор текста"
