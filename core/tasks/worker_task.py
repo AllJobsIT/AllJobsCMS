@@ -2,7 +2,8 @@ import os
 from datetime import datetime
 
 from django.db import transaction
-from openai import Client
+from g4f.Provider import Bing
+from g4f.client import Client
 
 from core.models.snippets import Worker, WorkExperience
 from core.models.snippets.base import Grade, Specialization
@@ -55,7 +56,7 @@ class ProcessWorker(AllJobsBaseTask):
         }
         """
         prompt = (
-            "Выдели из содержимого этого файла, только следующую информацию и оформи эти данные в JSON, "
+            "Выдели из содержимого этого текста, только следующую информацию и оформи эти данные в JSON, "
             f"где данные в скобках это ключи для JSON с, если каких-то значений не хватает, то заполни их null, если же"
             f" отсутствуют данные там, где должен был быть список, то оставь пустой список. Следуй "
             f"строго по шаблону, без лишних слов:\n"
@@ -67,9 +68,10 @@ class ProcessWorker(AllJobsBaseTask):
         worker_id = self.task.input.get("id")
         instance = Worker.objects.get(id=worker_id)
         data = load_document(instance.file.file.path)
-        client = Client()
+        client = Client(api_key=os.getenv("OPENAI_API_KEY"))
         response = client.chat.completions.create(
             model="gpt-4o",
+            provider=Bing,
             messages=[
                 {"role": "system",
                  "content": "Ты продвинутый анализатор текста"
