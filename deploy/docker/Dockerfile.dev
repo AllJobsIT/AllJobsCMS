@@ -2,7 +2,8 @@
 
 FROM python:3.10.8 as final
 
-RUN useradd wagtail
+RUN addgroup --gid 1001 --system app && \
+  adduser --no-create-home --shell /bin/false --disabled-password --uid 1001 --system --group app
 
 EXPOSE 8001
 
@@ -20,12 +21,8 @@ RUN pip install -r /requirements.txt
 
 WORKDIR /app
 
-RUN chown wagtail:wagtail /app
+RUN chown -R app:app /app && pip install --upgrade pip
 
-COPY --chown=wagtail:wagtail . .
-
-USER wagtail
+COPY . .
 
 RUN python manage.py collectstatic --noinput --clear
-
-CMD set -xe; python manage.py makemigrations; python manage.py migrate --noinput; gunicorn all_jobs.wsgi:application -b :8001

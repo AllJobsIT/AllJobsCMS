@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 
 from django.db import transaction
-from g4f.client import Client
+from openai import Client
 
 from core.models.snippets import Worker, WorkExperience
 from core.models.snippets.base import Grade, Specialization
@@ -69,7 +69,7 @@ class ProcessWorker(AllJobsBaseTask):
         data = load_document(instance.file.file.path)
         client = Client(api_key=os.getenv("OPENAI_API_KEY"))
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4o",
             messages=[
                 {"role": "system",
                  "content": "Ты продвинутый анализатор текста"

@@ -18,6 +18,8 @@ services:
       dockerfile: ./deploy/docker/Dockerfile.dev
     stdin_open: true
     tty: true
+    command: bash -c "python manage.py makemigrations && python manage.py migrate --noinput &&
+      gunicorn all_jobs.wsgi:application --bind 0.0.0.0:8001 --workers=5"
     volumes:
       - .:/usr/src/app
     ports:
