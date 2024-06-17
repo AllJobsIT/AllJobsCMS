@@ -1,24 +1,31 @@
 # syntax=docker/dockerfile:1
 
 FROM python:3.10.8 as final
+
+RUN useradd wagtail
+
+EXPOSE 8001
+
+ENV PYTHONUNBUFFERED=1 \
+    PORT=8001
+
 RUN apt-get update && \
-  apt-get install -y build-essential libpq-dev gettext npm ffmpeg && \
-  apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
-  rm -rf /var/lib/apt/lists/* && \
-  addgroup --gid 1001 --system app && \
-  adduser --no-create-home --shell /bin/false --disabled-password --uid 1001 --system --group app
+  apt-get install -y build-essential libpq-dev gettext ffmpeg
+RUN rm -rf /var/lib/apt/lists/*
 
-WORKDIR /usr/src/app
-ADD ./requirements.txt ./requirements.txt
-RUN chown -R app:app ./ && pip install --upgrade pip && pip install -r requirements.txt
+RUN pip install "gunicorn==20.0.4"
 
+COPY requirements.txt /
+RUN pip install -r /requirements.txt
 
+WORKDIR /app
 
-ENV TZ=Europe/Moscow
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN chown wagtail:wagtail /app
 
+COPY --chown=wagtail:wagtail . .
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+USER wagtail
 
-COPY . .
+RUN python manage.py collectstatic --noinput --clear
+
+CMD set -xe; python manage.py makemigrations; python manage.py migrate --noinput; gunicorn all_jobs.wsgi:application -b :8001
