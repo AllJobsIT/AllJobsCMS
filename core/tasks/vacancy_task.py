@@ -1,7 +1,7 @@
 import json
 import os
 
-from aiogram.utils.formatting import Bold, Italic, Text
+from aiogram.utils.formatting import Bold, Italic, Text, HashTag
 from django.apps import apps
 from django.db import transaction
 from openai import Client
@@ -39,6 +39,8 @@ class SendVacancy(AllJobsBaseTask):
                 list_texts.append(Bold(line.replace("**", "")))
             elif "*" in line:
                 list_texts.append(Italic(line.replace("*", "")))
+            elif "#" in line:
+                list_texts.append(HashTag(line.replace("#", " ")))
             else:
                 list_texts.append(line)
             list_texts.append("\n")
