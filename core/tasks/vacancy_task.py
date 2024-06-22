@@ -1,7 +1,7 @@
 import json
 import os
 
-import requests
+from aiogram.utils.formatting import Bold, Italic, Text
 from django.apps import apps
 from django.db import transaction
 from openai import Client
@@ -9,6 +9,7 @@ from openai import Client
 from core.models.snippets.base import Grade, Specialization
 from core.models.snippets.message_settings import MessageSettings
 from core.tasks import AllJobsBaseTask
+from libs.bot import create_bot, create_dispatcher, loop
 from libs.json import json_to_dict
 
 
@@ -26,7 +27,26 @@ class SendVacancy(AllJobsBaseTask):
         )
         return prompt
 
+    def init_bot(self):
+        self.bot = create_bot()
+        self.dp = create_dispatcher(self.bot, loop)
+        self.channel = os.getenv('CHANNEL')
+
+    def analize_text(self, text):
+        list_texts = []
+        for line in text.splitlines():
+            if "**" in line:
+                list_texts.append(Bold(line.replace("**", "")))
+            elif "*" in line:
+                list_texts.append(Italic(line.replace("*", "")))
+            else:
+                list_texts.append(line)
+            list_texts.append("\n")
+
+        return Text(*list_texts)
+
     def send_vacancy(self):
+        self.init_bot()
         vacancy_id = self.task.input.get('id')
         vacancy = apps.get_model("core.Vacancy").objects.get(id=vacancy_id)
         template_message = MessageSettings.objects.all().first().text
@@ -54,9 +74,9 @@ class SendVacancy(AllJobsBaseTask):
             ]
         )
         result_message = response.choices[0].message.content
-        requests.post(os.environ.get("VACANCY_API_URI"),
-                      json={"vacancy_text": result_message})
-        # vacancy.status += 1
+        new_text = self.analize_text(result_message)
+        loop.run_until_complete(self.bot.send_message(self.channel, new_text.as_markdown()))
+        print(f'Sent vacancy {new_text}')
         vacancy.save()
 
 
