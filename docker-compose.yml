@@ -12,6 +12,8 @@ services:
       - POSTGRES_PASSWORD=postgres
     ports:
       - "5432:5432"
+    networks:
+      - admin_network
   dev:
     build:
       context: ./
@@ -30,6 +32,8 @@ services:
       - .env
     depends_on:
       - db
+    networks:
+      - admin_network
   bot_manager:
     build:
       context: ./
@@ -46,10 +50,13 @@ services:
       - dev
     networks:
       - admin_vacancy_network
+      - admin_network
 volumes:
   all_jobs_pg_data:
   all_jobs_admin_data:
 networks:
   admin_vacancy_network:
     external: true
+  admin_network:
+    internal: true
 
