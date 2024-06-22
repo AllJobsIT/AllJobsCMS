@@ -21,7 +21,7 @@ services:
     command: bash -c "python manage.py makemigrations && python manage.py migrate --noinput &&
       gunicorn all_jobs.wsgi:application --bind 0.0.0.0:8001 --workers=5"
     volumes:
-      - all_jobs_admin_data:/usr/src/app
+      - all_jobs_admin_data:/app
     ports:
       - "8001:8001"
     extra_hosts:
@@ -38,7 +38,7 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - all_jobs_admin_data:/usr/src/app
+      - all_jobs_admin_data:/app
     env_file:
       - .env
     depends_on:
