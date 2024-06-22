@@ -1,5 +1,6 @@
 import json
 import os
+import re
 
 from aiogram.utils.formatting import Bold, Italic, Text, HashTag
 from django.apps import apps
@@ -34,15 +35,19 @@ class SendVacancy(AllJobsBaseTask):
 
     def analize_text(self, text):
         list_texts = []
+        hashtag_pattern = re.compile(r'#(\w+)')
         for line in text.splitlines():
             if "**" in line:
                 list_texts.append(Bold(line.replace("**", "")))
             elif "*" in line:
                 list_texts.append(Italic(line.replace("*", "")))
             elif "#" in line:
-                list_texts.append(HashTag(line.replace("#", " ")))
-            else:
-                list_texts.append(line)
+                hashtags = hashtag_pattern.findall(line)
+                if hashtags:
+                    for tag in hashtags:
+                        list_texts.append(HashTag(f"{tag} "))
+                else:
+                    list_texts.append(line)
             list_texts.append("\n")
 
         return Text(*list_texts)
