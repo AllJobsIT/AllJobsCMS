@@ -110,7 +110,11 @@ class ProcessVacancy(AllJobsBaseTask):
 
     def process_vacancy(self):
         vacancy_id = self.task.input.get('id')
-        instance = apps.get_model("core.Vacancy").objects.get(id=vacancy_id)
+        try:
+            instance = apps.get_model("core.Vacancy").objects.get(id=vacancy_id)
+        except apps.get_model("core.Vacancy").DoesNotExist:
+            self.task.delete()
+            return
         try:
             client = Client()
             response = client.chat.completions.create(

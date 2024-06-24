@@ -125,11 +125,9 @@ class Vacancy(ClusterableModel):
 
     def save(self, **kwargs):
         super().save(**kwargs)
-        if self.status == 0 and self.full_vacancy_text_from_tg_chat is not None and not self.channel:
-            for task in Task.objects.filter(name="process_vacancy"):
-                if task.input.get('id') == self.id:
-                    return
+        if self.status == 0 and self.full_vacancy_text_from_tg_chat:
             ProcessVacancy.create(input={'id': self.id})
+            return
         if self.status == 2:
             SendVacancy.create(input={'id': self.id})
             self.status += 1
