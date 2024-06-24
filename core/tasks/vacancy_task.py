@@ -144,7 +144,8 @@ class ProcessVacancy(AllJobsBaseTask):
                     instance.specialization = [{"type": "specialization", "value": item.id} for item in specializations]
                 for tag in ai_response_dict['tags']:
                     instance.tags.add(tag)
-                instance.status += 1
+                instance.status = 1
+                instance.save()
         except BaseException as e:
             instance.status = -1
         instance.save()

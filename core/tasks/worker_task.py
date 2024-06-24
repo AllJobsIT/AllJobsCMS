@@ -136,7 +136,8 @@ class ProcessWorker(AllJobsBaseTask):
                 specializations = Specialization.objects.filter(title__in=result_dict.get("specialization", None))
                 if specializations:
                     instance.specialization = [{"type": "specialization", "value": item.id} for item in specializations]
-                instance.process_status += 1
+                instance.process_status = 1
+                instance.save()
         except BaseException as err:
             instance.process_status = -1
         instance.save()
