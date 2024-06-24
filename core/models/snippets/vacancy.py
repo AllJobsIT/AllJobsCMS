@@ -1,13 +1,14 @@
 import uuid
 
+from botmanager.models import Task
 from django.db import models
+from django.db.models.fields.json import KT
 from django_countries.fields import CountryField
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 from wagtail import blocks
-from wagtail.admin.filters import WagtailFilterSet
 from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.blocks import StreamBlock
 from wagtail.fields import StreamField
@@ -15,7 +16,7 @@ from wagtail.snippets.blocks import SnippetChooserBlock
 
 from core.middleware import get_current_request
 from core.models.snippets.demand import Demand
-from core.tasks.vacancy_task import SendVacancy
+from core.tasks.vacancy_task import SendVacancy, ProcessVacancy
 
 
 class VacancyTags(TaggedItemBase):
@@ -124,6 +125,12 @@ class Vacancy(ClusterableModel):
         return f"{self.title} from {self.channel if self.channel else 'Manager'}"
 
     def save(self, **kwargs):
+        super().save(**kwargs)
+        if self.status == 0 and self.full_vacancy_text_from_tg_chat is not None:
+            for task in Task.objects.filter(name="process_vacancy"):
+                if task.input.get('id') == self.id:
+                    return
+            ProcessVacancy.create(input={'id': self.id})
         if self.status == 2:
             SendVacancy.create(input={'id': self.id})
             self.status += 1
@@ -134,7 +141,6 @@ class Vacancy(ClusterableModel):
                 manager=request.user
             )
             demand.save()
-        super().save()
 
     def get_status(self):
         return self.get_status_display()

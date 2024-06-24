@@ -66,69 +66,73 @@ class ProcessWorker(AllJobsBaseTask):
     def process_worker(self):
         worker_id = self.task.input.get("id")
         instance = Worker.objects.get(id=worker_id)
-        data = load_document(instance.file.file.path)
-        client = Client(api_key=os.getenv("OPENAI_API_KEY"))
-        response = client.chat.completions.create(
-            model="gpt-4o",
-            messages=[
-                {"role": "system",
-                 "content": "Ты продвинутый анализатор текста"
-                 },
-                {"role": "user",
-                 "content": self.get_prompt(data[0].page_content)}
-            ]
-        )
-        result = response.choices[0].message.content
-        result_dict = json_to_dict(json_message=result)
-        with transaction.atomic():
-            instance.name = result_dict.get('name', None)
-            instance.last_name = result_dict.get('last_name', None)
-            instance.surname = result_dict.get('surname', None)
-            instance.telegram_nickname = result_dict.get('telegram_nickname', None)
-            instance.employer = result_dict.get('employer', None)
-            instance.stack = [{"type": "stack_item", "value": item} for item in
-                              result_dict.get("stack", None)]
-            instance.skills = [{"type": "skill_item", "value": item} for item in
-                               result_dict.get("skills", None)]
-            instance.programming_languages = [{"type": "language_item", "value": item} for item in
-                                              result_dict.get("programming_languages", None)]
-            instance.technologies = [{"type": "technology_item", "value": item} for item in
-                                     result_dict.get("technologies", None)]
-            instance.databases = [{"type": "database_item", "value": item} for item in
-                                  result_dict.get("databases", None)]
-            instance.software_development = [{"type": "software_development_item", "value": item} for item in
-                                             result_dict.get("software_development", None)]
-            instance.other_technologies = [{"type": "other_technology_item", "value": item} for item in
-                                           result_dict.get("other_technologies", None)]
-            instance.about_worker = result_dict.get('about_me', None)
-            instance.experience = result_dict.get('experience', None)
-            instance.city = result_dict.get('city', None)
-            instance.citizenship = result_dict.get("citizenship", None)
-            instance.english_grade = [{"type": "language", "value": {"grade": value, "language": key}} for item in
-                                      result_dict.get('english_grade', []) for key, value in item.items()]
-            instance.education = result_dict.get('education', None)
-            instance.certificates = [{"type": "certificate_item", "value": item} for item in
-                                     result_dict.get("certificates", None)]
-            instance.employer_contact = result_dict.get('employer_contact', None)
-            instance.worker_contact = [{"type": "contact", "value": {"value": value, "name": key}} for item in
-                                       result_dict.get('worker_contact', []) for key, value in item.items()]
-            instance.example_of_work = [{"type": "example_of_work_item", "value": item} for item in
-                                        result_dict.get("example_of_work", None)]
-            for item in result_dict.get("work_experience", []):
-                item.update({"worker": instance})
-                if item["end_year"]:
-                    item.update({"end_year": datetime.strptime(str(item["end_year"]), "%Y")})
-                if item["start_year"]:
-                    item.update({"start_year": datetime.strptime(str(item["start_year"]), "%Y")})
-                exp = WorkExperience(**item)
-                exp.save()
-            instance.work_experience = result_dict.get("work_experience")
-            instance.links = [{"type": "link", "value": {"link": value, "type": key}} for item in
-                              result_dict.get('links', []) for key, value in item.items()]
-            grade = Grade.objects.filter(title__in=result_dict.get("grade", None))
-            if grade:
-                instance.grades = [{"type": "grade", "value": item.id} for item in grade]
-            specializations = Specialization.objects.filter(title__in=result_dict.get("specialization", None))
-            if specializations:
-                instance.specialization = [{"type": "specialization", "value": item.id} for item in specializations]
+        try:
+            data = load_document(instance.file.file.path)
+            client = Client(api_key=os.getenv("OPENAI_API_KEY"))
+            response = client.chat.completions.create(
+                model="gpt-4o",
+                messages=[
+                    {"role": "system",
+                     "content": "Ты продвинутый анализатор текста"
+                     },
+                    {"role": "user",
+                     "content": self.get_prompt(data[0].page_content)}
+                ]
+            )
+            result = response.choices[0].message.content
+            result_dict = json_to_dict(json_message=result)
+            with transaction.atomic():
+                instance.name = result_dict.get('name', None)
+                instance.last_name = result_dict.get('last_name', None)
+                instance.surname = result_dict.get('surname', None)
+                instance.telegram_nickname = result_dict.get('telegram_nickname', None)
+                instance.employer = result_dict.get('employer', None)
+                instance.stack = [{"type": "stack_item", "value": item} for item in
+                                  result_dict.get("stack", None)]
+                instance.skills = [{"type": "skill_item", "value": item} for item in
+                                   result_dict.get("skills", None)]
+                instance.programming_languages = [{"type": "language_item", "value": item} for item in
+                                                  result_dict.get("programming_languages", None)]
+                instance.technologies = [{"type": "technology_item", "value": item} for item in
+                                         result_dict.get("technologies", None)]
+                instance.databases = [{"type": "database_item", "value": item} for item in
+                                      result_dict.get("databases", None)]
+                instance.software_development = [{"type": "software_development_item", "value": item} for item in
+                                                 result_dict.get("software_development", None)]
+                instance.other_technologies = [{"type": "other_technology_item", "value": item} for item in
+                                               result_dict.get("other_technologies", None)]
+                instance.about_worker = result_dict.get('about_me', None)
+                instance.experience = result_dict.get('experience', None)
+                instance.city = result_dict.get('city', None)
+                instance.citizenship = result_dict.get("citizenship", None)
+                instance.english_grade = [{"type": "language", "value": {"grade": value, "language": key}} for item in
+                                          result_dict.get('english_grade', []) for key, value in item.items()]
+                instance.education = result_dict.get('education', None)
+                instance.certificates = [{"type": "certificate_item", "value": item} for item in
+                                         result_dict.get("certificates", None)]
+                instance.employer_contact = result_dict.get('employer_contact', None)
+                instance.worker_contact = [{"type": "contact", "value": {"value": value, "name": key}} for item in
+                                           result_dict.get('worker_contact', []) for key, value in item.items()]
+                instance.example_of_work = [{"type": "example_of_work_item", "value": item} for item in
+                                            result_dict.get("example_of_work", None)]
+                for item in result_dict.get("work_experience", []):
+                    item.update({"worker": instance})
+                    if item["end_year"]:
+                        item.update({"end_year": datetime.strptime(str(item["end_year"]), "%Y")})
+                    if item["start_year"]:
+                        item.update({"start_year": datetime.strptime(str(item["start_year"]), "%Y")})
+                    exp = WorkExperience(**item)
+                    exp.save()
+                instance.work_experience = result_dict.get("work_experience")
+                instance.links = [{"type": "link", "value": {"link": value, "type": key}} for item in
+                                  result_dict.get('links', []) for key, value in item.items()]
+                grade = Grade.objects.filter(title__in=result_dict.get("grade", None))
+                if grade:
+                    instance.grades = [{"type": "grade", "value": item.id} for item in grade]
+                specializations = Specialization.objects.filter(title__in=result_dict.get("specialization", None))
+                if specializations:
+                    instance.specialization = [{"type": "specialization", "value": item.id} for item in specializations]
+                instance.status += 1
+        except BaseException as err:
+            instance.status = -1
         instance.save()

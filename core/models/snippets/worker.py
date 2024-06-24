@@ -85,6 +85,13 @@ class GradeStreamBlock(StreamBlock):
 
 
 class Worker(ClusterableModel):
+    STATUSES = (
+        (-1, "Обработка с помощью ИИ не удалась"),
+        (0, "Обработка с помощью ИИ"),
+        (1, "Модерация"),
+        (2, "Загружен"),
+        (3, "В архиве"),
+    )
     code = models.UUIDField(
         verbose_name='Код работника',
         blank=True,
@@ -250,6 +257,7 @@ class Worker(ClusterableModel):
         verbose_name='Публиковать',
         blank=True
     )
+    process_status = models.IntegerField(choices=STATUSES, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -258,6 +266,7 @@ class Worker(ClusterableModel):
         FieldPanel("last_name"),
         FieldPanel("name"),
         FieldPanel("surname"),
+        FieldPanel("process_status"),
         FieldPanel("file"),
         FieldPanel("telegram_nickname"),
         FieldPanel("status"),
