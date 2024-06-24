@@ -310,5 +310,11 @@ class Worker(ClusterableModel):
     def full_name(self):
         return f'{self.last_name} {self.name} {self.surname if self.surname else ""}'
 
+    def get_status(self):
+        return self.get_process_status_display()
+
     full_name.admin_order_field = "Полное имя"
     full_name.short_description = "Полное имя"
+
+    get_status.admin_order_field = "Статус"
+    get_status.short_description = "Статус"

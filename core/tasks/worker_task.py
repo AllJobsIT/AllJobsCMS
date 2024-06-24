@@ -65,7 +65,11 @@ class ProcessWorker(AllJobsBaseTask):
 
     def process_worker(self):
         worker_id = self.task.input.get("id")
-        instance = Worker.objects.get(id=worker_id)
+        try:
+            instance = Worker.objects.get(id=worker_id)
+        except Worker.DoesNotExist:
+            self.task.delete()
+            return
         try:
             data = load_document(instance.file.file.path)
             client = Client(api_key=os.getenv("OPENAI_API_KEY"))
@@ -132,7 +136,7 @@ class ProcessWorker(AllJobsBaseTask):
                 specializations = Specialization.objects.filter(title__in=result_dict.get("specialization", None))
                 if specializations:
                     instance.specialization = [{"type": "specialization", "value": item.id} for item in specializations]
-                instance.status += 1
+                instance.process_status += 1
         except BaseException as err:
-            instance.status = -1
+            instance.process_status = -1
         instance.save()

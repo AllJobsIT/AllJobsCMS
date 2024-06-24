@@ -3,12 +3,9 @@ import os
 
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
-from aiogram.fsm.storage.redis import RedisStorage
 from dotenv import load_dotenv
-from redis import Redis
 
 load_dotenv()
-
 
 loop = asyncio.get_event_loop()
 

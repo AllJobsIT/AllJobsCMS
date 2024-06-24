@@ -1,4 +1,3 @@
-from wagtail.admin.filters import WagtailFilterSet
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet
 
@@ -16,7 +15,9 @@ class WorkersSnippetViewSet(SnippetViewSet):
     menu_order = 200
     add_to_settings_menu = False
     add_to_admin_menu = True
-    list_display = ('full_name', 'employer', 'purchase_rate', 'specialization', 'grade', 'experience', 'city', 'telegram_nickname')
+    list_display = (
+        'full_name', 'employer', 'purchase_rate', 'specialization', 'grade', 'experience', 'city', 'telegram_nickname',
+        "get_status")
 
 
 @register_snippet

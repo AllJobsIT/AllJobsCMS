@@ -55,7 +55,11 @@ class SendVacancy(AllJobsBaseTask):
     def send_vacancy(self):
         self.init_bot()
         vacancy_id = self.task.input.get('id')
-        vacancy = apps.get_model("core.Vacancy").objects.get(id=vacancy_id)
+        try:
+            vacancy = apps.get_model("core.Vacancy").objects.get(id=vacancy_id)
+        except apps.get_model("core.Vacancy").DoesNotExist:
+            self.task.delete()
+            return
         template_message = MessageSettings.objects.all().first().text
         data = {
             "title": vacancy.title,

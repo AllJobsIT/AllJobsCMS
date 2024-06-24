@@ -2,7 +2,6 @@ import uuid
 
 from botmanager.models import Task
 from django.db import models
-from django.db.models.fields.json import KT
 from django_countries.fields import CountryField
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
