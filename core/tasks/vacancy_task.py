@@ -16,7 +16,7 @@ from libs.json import json_to_dict
 
 class SendVacancy(AllJobsBaseTask):
     DEFAULT_ATTEMPT_PERIOD = 1
-    name = 'process_vacancy'
+    name = 'send_vacancy'
     actions = ['send_vacancy']
 
     def get_prompt(self, text, data):
