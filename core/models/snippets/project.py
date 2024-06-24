@@ -13,6 +13,8 @@ class WorkExperience(Orderable):
     worker = ParentalKey(Worker, on_delete=models.CASCADE, related_name='work_experiences')
     company_name = models.CharField(
         max_length=255,
+        blank=True,
+        null=True,
         verbose_name='Название компании'
     )
     start_year = models.DateField(
@@ -33,11 +35,13 @@ class WorkExperience(Orderable):
     position = models.CharField(
         max_length=255,
         verbose_name='Позиция',
-        blank=True
+        blank=True,
+        null=True,
     )
     description = RichTextField(
         verbose_name='Описание проекта',
-        blank=True
+        blank=True,
+        null=True,
     )
 
     panels = [
