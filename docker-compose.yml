@@ -9,7 +9,7 @@ services:
     environment:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PASSWORD=CosFp3KcnRoy=#t8@^1!
     ports:
       - "5432:5432"
   dev:
