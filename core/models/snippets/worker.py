@@ -60,7 +60,7 @@ class ExampleOfWorkStreamBlock(StreamBlock):
 
 class ContactsStructBlock(StructBlock):
     name = blocks.CharBlock(label="Тип контакта")
-    value = blocks.URLBlock(label="Значение")
+    value = blocks.CharBlock(label="Значение")
 
 
 class ContactsStreamBlock(StreamBlock):
@@ -263,10 +263,10 @@ class Worker(ClusterableModel):
 
     panels = [
         FieldPanel("code", read_only=True),
+        FieldPanel("process_status"),
         FieldPanel("last_name"),
         FieldPanel("name"),
         FieldPanel("surname"),
-        FieldPanel("process_status"),
         FieldPanel("file"),
         FieldPanel("telegram_nickname"),
         FieldPanel("status"),

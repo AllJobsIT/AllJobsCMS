@@ -102,9 +102,9 @@ class Vacancy(ClusterableModel):
 
     panels = [
         FieldPanel("title"),
+        FieldPanel("status"),
         FieldPanel("specialization"),
         FieldPanel("stack"),
-        FieldPanel("status"),
         FieldPanel("requirements"),
         FieldPanel("responsibilities"),
         FieldPanel("cost"),
@@ -126,11 +126,16 @@ class Vacancy(ClusterableModel):
     def save(self, **kwargs):
         super().save(**kwargs)
         if self.status == 0 and self.full_vacancy_text_from_tg_chat:
+            for task in Task.objects.filter(name="process_vacancy"):
+                if task.input.get("id", None) == self.id:
+                    return
             ProcessVacancy.create(input={'id': self.id})
             return
         if self.status == 2:
+            for task in Task.objects.filter(name="send_vacancy"):
+                if task.input.get("id", None) == self.id:
+                    return
             SendVacancy.create(input={'id': self.id})
-            self.status += 1
         if self.status == 4:
             request = get_current_request()
             demand = Demand.objects.create(

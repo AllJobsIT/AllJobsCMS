@@ -21,9 +21,10 @@ class SendVacancy(AllJobsBaseTask):
 
     def get_prompt(self, text, data):
         prompt = (
-            f"На вход есть шаблон сообщения. Нужно оформить текст по шаблону из переменных в формате JSON.\n"
-            f"Необходимо учесть, что в итоговом тексте должен быть только текст, сгенерированный по шаблону с "
-            f"использованием ТОЛЬКО ТЕХ переменных, что есть в шаблоне. Шаблон текста: {text}\n\n"
+            "На вход есть шаблон сообщения в формате jinja2. Нужно оформить текст по шаблону из переменных в формате JSON.\n"
+            "В ответе ТОЛЬКО итоговый текст. Если какая то из переменных не указана, то пропусти ее. Если есть "
+            "перечисление списка, то каждый элемент списка с новой строки."
+            f"Шаблон текста: {text}\n\n"
             f"Переменные в формате JSON: {data}"
         )
         return prompt
@@ -48,6 +49,8 @@ class SendVacancy(AllJobsBaseTask):
                         list_texts.append(HashTag(f"{tag} "))
                 else:
                     list_texts.append(line)
+            else:
+                list_texts.append(line)
             list_texts.append("\n")
 
         return Text(*list_texts)
@@ -56,38 +59,42 @@ class SendVacancy(AllJobsBaseTask):
         self.init_bot()
         vacancy_id = self.task.input.get('id')
         try:
-            vacancy = apps.get_model("core.Vacancy").objects.get(id=vacancy_id)
+            vacancy = apps.get_model("core.Vacancy").objects.get(id=vacancy_id, status=2)
         except apps.get_model("core.Vacancy").DoesNotExist:
             self.task.delete()
             return
-        template_message = MessageSettings.objects.all().first().text
-        data = {
-            "title": vacancy.title,
-            "requirements": [item.value for item in vacancy.requirements],
-            "responsibilities": [item.value for item in vacancy.responsibilities],
-            "stack": [item.value for item in vacancy.stack],
-            "cost": vacancy.cost,
-            "location": vacancy.location.name,
-            "load": vacancy.load,
-            "tags": " ".join([f"#{tag.name}" for tag in vacancy.tags.all()]),
-            "grades": [item.value.title for item in vacancy.grades],
-        }
-        json_data = json.dumps(data)
-        client = Client()
-        response = client.chat.completions.create(
-            model="gpt-4",
-            messages=[
-                {"role": "system",
-                 "content": "Ты продвинутый генератор текста"
-                 },
-                {"role": "user",
-                 "content": self.get_prompt(template_message, json_data)},
-            ]
-        )
-        result_message = response.choices[0].message.content
-        new_text = self.analize_text(result_message)
-        loop.run_until_complete(self.bot.send_message(self.channel, new_text.as_markdown()))
-        print(f'Sent vacancy {new_text}')
+        try:
+            template_message = MessageSettings.objects.all().first().text
+            data = {
+                "title": vacancy.title,
+                "requirements": [item.value for item in vacancy.requirements],
+                "responsibilities": [item.value for item in vacancy.responsibilities],
+                "stack": [item.value for item in vacancy.stack],
+                "cost": vacancy.cost,
+                "location": vacancy.location.name,
+                "load": vacancy.load,
+                "tags": " ".join([f"#{tag.name}" for tag in vacancy.tags.all()]),
+                "grades": [item.value.title for item in vacancy.grades],
+            }
+            json_data = json.dumps(data)
+            client = Client()
+            response = client.chat.completions.create(
+                model="gpt-4",
+                messages=[
+                    {"role": "system",
+                     "content": "Ты продвинутый генератор текста"
+                     },
+                    {"role": "user",
+                     "content": self.get_prompt(template_message, json_data)},
+                ]
+            )
+            result_message = response.choices[0].message.content
+            new_text = self.analize_text(result_message)
+            loop.run_until_complete(self.bot.send_message(self.channel, new_text.as_markdown()))
+            print(f'Sent vacancy {new_text}')
+            vacancy.status = 3
+        except BaseException as err:
+            vacancy.status = 2
         vacancy.save()
 
 
@@ -140,10 +147,13 @@ class ProcessVacancy(AllJobsBaseTask):
                 instance.cost = ai_response_dict.get('cost', None)
                 instance.location = ai_response_dict.get('location', None)
                 instance.load = ai_response_dict.get('load', None)
-                grades = Grade.objects.filter(title__in=ai_response_dict.get("grades", None))
+                grades = ai_response_dict.get("grades") if ai_response_dict.get("grades") else []
+                grades = Grade.objects.filter(title__in=grades)
                 if grades:
                     instance.grades = [{"type": "grade", "value": item.id} for item in grades]
-                specializations = Specialization.objects.filter(title__in=ai_response_dict.get("specialization", None))
+                specializations = ai_response_dict.get('specialization', []) if ai_response_dict.get(
+                    "specialization") else []
+                specializations = Specialization.objects.filter(title__in=specializations)
                 if specializations:
                     instance.specialization = [{"type": "specialization", "value": item.id} for item in specializations]
                 for tag in ai_response_dict['tags']:
@@ -151,5 +161,6 @@ class ProcessVacancy(AllJobsBaseTask):
                 instance.status = 1
                 instance.save()
         except BaseException as e:
+            print(e)
             instance.status = -1
         instance.save()
