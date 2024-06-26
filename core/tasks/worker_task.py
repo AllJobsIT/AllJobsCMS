@@ -145,4 +145,5 @@ class ProcessWorker(AllJobsBaseTask):
                 instance.process_status = 1
         except BaseException as err:
             instance.process_status = -1
+            raise Exception(f"Error: {err}")
         instance.save()

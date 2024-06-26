@@ -94,6 +94,7 @@ class SendVacancy(AllJobsBaseTask):
             vacancy.status = 4
         except BaseException as err:
             vacancy.status = 3
+            raise Exception(f"Error: {err}")
         vacancy.save()
 
 
@@ -174,6 +175,6 @@ class ProcessVacancy(AllJobsBaseTask):
                     instance.tags.add(tag)
                 instance.status = 2
         except BaseException as e:
-            print(e)
             instance.status = -1
+            raise Exception(f"Error: {e}")
         instance.save()
