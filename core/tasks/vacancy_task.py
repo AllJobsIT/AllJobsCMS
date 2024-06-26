@@ -79,7 +79,7 @@ class SendVacancy(AllJobsBaseTask):
             json_data = json.dumps(data)
             client = Client()
             response = client.chat.completions.create(
-                model="gpt-4",
+                model="gpt-4o",
                 messages=[
                     {"role": "system",
                      "content": "Ты продвинутый генератор текста"
@@ -92,9 +92,9 @@ class SendVacancy(AllJobsBaseTask):
             new_text = self.analize_text(result_message)
             loop.run_until_complete(self.bot.send_message(self.channel, new_text.as_markdown()))
             print(f'Sent vacancy {new_text}')
-            vacancy.status = 3
+            vacancy.status = 4
         except BaseException as err:
-            vacancy.status = 2
+            vacancy.status = 3
         vacancy.save()
 
 
@@ -158,7 +158,7 @@ class ProcessVacancy(AllJobsBaseTask):
                     instance.specialization = [{"type": "specialization", "value": item.id} for item in specializations]
                 for tag in ai_response_dict['tags']:
                     instance.tags.add(tag)
-                instance.status = 1
+                instance.status = 2
                 instance.save()
         except BaseException as e:
             print(e)

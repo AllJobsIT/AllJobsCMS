@@ -30,11 +30,10 @@ class CreateVacancyMutation(graphene.Mutation):
     @classmethod
     def mutate(cls, root, info, full_vacancy_text, channel):
         try:
-            vacancy = Vacancy.objects.create(
+            Vacancy.objects.create(
                 full_vacancy_text_from_tg_chat=full_vacancy_text,
                 channel=channel
             )
-            ProcessVacancy.create(input={'id': vacancy.id})
             create = True
         except BaseException as err:
             print(err)

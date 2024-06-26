@@ -48,13 +48,14 @@ class ResponsibilitiesStreamField(StreamBlock):
 class Vacancy(ClusterableModel):
     STATUSES = (
         (-1, "Обработка с помощью ИИ не удалась"),
-        (0, "Обработка с помощью ИИ"),
-        (1, "Модерация"),
-        (2, "Готов к отправке"),
-        (3, "Отправлен"),
-        (4, "Найден исполнитель"),
-        (5, "В исполнении"),
-        (6, "В архиве"),
+        (0, "Ожидает одобрения"),
+        (1, "Обработка с помощью ИИ"),
+        (2, "Модерация"),
+        (3, "Готов к отправке"),
+        (4, "Отправлен"),
+        (5, "Найден исполнитель"),
+        (6, "В исполнении"),
+        (7, "В архиве"),
     )
     uuid = models.UUIDField(
         default=uuid.uuid4,
@@ -125,13 +126,13 @@ class Vacancy(ClusterableModel):
 
     def save(self, **kwargs):
         super().save(**kwargs)
-        if self.status == 0 and self.full_vacancy_text_from_tg_chat:
+        if self.status == 1 and self.full_vacancy_text_from_tg_chat:
             for task in Task.objects.filter(name="process_vacancy"):
                 if task.input.get("id", None) == self.id:
                     return
             ProcessVacancy.create(input={'id': self.id})
             return
-        if self.status == 2:
+        if self.status == 3:
             for task in Task.objects.filter(name="send_vacancy"):
                 if task.input.get("id", None) == self.id:
                     return
