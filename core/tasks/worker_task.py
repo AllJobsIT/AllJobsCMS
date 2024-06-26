@@ -37,6 +37,7 @@ class ProcessWorker(AllJobsBaseTask):
             "city": "Город",
             "citizenship": Гражданство в виде кода страны, например RU,
             "english_grade": [{Язык: уровень владения. Подходит как уровень владения, так и числовое представление}],
+             например будут валидны варианты как {RU: B2}, так и {RU: родной},
             "education": Образование,
             "certificates": [Сертификаты],
             "employer_contact": Контакт работодателя,
@@ -46,6 +47,7 @@ class ProcessWorker(AllJobsBaseTask):
                 "company_name": Название компании,
                 "start_year": Начало работы год числом,
                 "end_year": Окончание работы год числом. Если работает по сей день, то текущий год,
+                "duration": Срок работы в виде float числа, например 4.2,
                 "position": Позиция в компании,
                 "description": Описание,
             }],
@@ -62,6 +64,30 @@ class ProcessWorker(AllJobsBaseTask):
             f"Шаблон:\n{template}\n\nСодержимое файла: {file_data}"
         )
         return prompt
+
+    def _get_items(self, data, key, item_type):
+        return [{"type": item_type, "value": item} for item in data.get(key, [])]
+
+    def _get_nested_items(self, data, key, item_type):
+        return [{"type": item_type, "value": {"value": value, "name": k}} for item in data.get(key, []) for k, value in
+                item.items()]
+
+    def _get_language_grade_items(self, data, key):
+        return [{"type": "language", "value": {"grade": value, "language": k}} for item in data.get(key, []) for
+                k, value in item.items()]
+
+    def _get_filtered_items(self, model, titles, item_type):
+        items = model.objects.filter(title__in=titles)
+        return [{"type": item_type, "value": item.id} for item in items]
+
+    def _update_work_experience(self, work_experience, instance):
+        for item in work_experience:
+            item.update({"worker": instance})
+            if item.get("end_year"):
+                item["end_year"] = datetime.strptime(str(item["end_year"]), "%Y")
+            if item.get("start_year"):
+                item["start_year"] = datetime.strptime(str(item["start_year"]), "%Y")
+            WorkExperience(**item).save()
 
     def process_worker(self):
         worker_id = self.task.input.get("id")
@@ -86,58 +112,37 @@ class ProcessWorker(AllJobsBaseTask):
             result = response.choices[0].message.content
             result_dict = json_to_dict(json_message=result)
             with transaction.atomic():
-                instance.name = result_dict.get('name', None)
-                instance.last_name = result_dict.get('last_name', None)
-                instance.surname = result_dict.get('surname', None)
-                instance.telegram_nickname = result_dict.get('telegram_nickname', None)
-                instance.employer = result_dict.get('employer', None)
-                instance.stack = [{"type": "stack_item", "value": item} for item in
-                                  result_dict.get("stack", None)]
-                instance.skills = [{"type": "skill_item", "value": item} for item in
-                                   result_dict.get("skills", None)]
-                instance.programming_languages = [{"type": "language_item", "value": item} for item in
-                                                  result_dict.get("programming_languages", None)]
-                instance.technologies = [{"type": "technology_item", "value": item} for item in
-                                         result_dict.get("technologies", None)]
-                instance.databases = [{"type": "database_item", "value": item} for item in
-                                      result_dict.get("databases", None)]
-                instance.software_development = [{"type": "software_development_item", "value": item} for item in
-                                                 result_dict.get("software_development", None)]
-                instance.other_technologies = [{"type": "other_technology_item", "value": item} for item in
-                                               result_dict.get("other_technologies", None)]
-                instance.about_worker = result_dict.get('about_me', None)
-                instance.experience = result_dict.get('experience', None)
-                instance.city = result_dict.get('city', None)
-                instance.citizenship = result_dict.get("citizenship", None)
-                instance.english_grade = [{"type": "language", "value": {"grade": value, "language": key}} for item in
-                                          result_dict.get('english_grade', []) for key, value in item.items()]
-                instance.education = result_dict.get('education', None)
-                instance.certificates = [{"type": "certificate_item", "value": item} for item in
-                                         result_dict.get("certificates", None)]
-                instance.employer_contact = result_dict.get('employer_contact', None)
-                instance.worker_contact = [{"type": "contact", "value": {"value": value, "name": key}} for item in
-                                           result_dict.get('worker_contact', []) for key, value in item.items()]
-                instance.example_of_work = [{"type": "example_of_work_item", "value": item} for item in
-                                            result_dict.get("example_of_work", None)]
-                for item in result_dict.get("work_experience", []):
-                    item.update({"worker": instance})
-                    if item["end_year"]:
-                        item.update({"end_year": datetime.strptime(str(item["end_year"]), "%Y")})
-                    if item["start_year"]:
-                        item.update({"start_year": datetime.strptime(str(item["start_year"]), "%Y")})
-                    exp = WorkExperience(**item)
-                    exp.save()
-                instance.work_experience = result_dict.get("work_experience")
-                instance.links = [{"type": "link", "value": {"link": value, "type": key}} for item in
-                                  result_dict.get('links', []) for key, value in item.items()]
-                grade = Grade.objects.filter(title__in=result_dict.get("grade", None))
-                if grade:
-                    instance.grades = [{"type": "grade", "value": item.id} for item in grade]
-                specializations = Specialization.objects.filter(title__in=result_dict.get("specialization", None))
-                if specializations:
-                    instance.specialization = [{"type": "specialization", "value": item.id} for item in specializations]
+                instance.name = result_dict.get('name')
+                instance.last_name = result_dict.get('last_name')
+                instance.surname = result_dict.get('surname')
+                instance.telegram_nickname = result_dict.get('telegram_nickname')
+                instance.employer = result_dict.get('employer')
+                instance.stack = self._get_items(result_dict, "stack", "stack_item")
+                instance.skills = self._get_items(result_dict, "skills", "skill_item")
+                instance.programming_languages = self._get_items(result_dict, "programming_languages", "language_item")
+                instance.technologies = self._get_items(result_dict, "technologies", "technology_item")
+                instance.databases = self._get_items(result_dict, "databases", "database_item")
+                instance.software_development = self._get_items(result_dict, "software_development",
+                                                                "software_development_item")
+                instance.other_technologies = self._get_items(result_dict, "other_technologies",
+                                                              "other_technology_item")
+                instance.about_worker = result_dict.get('about_me')
+                instance.experience = result_dict.get('experience')
+                instance.city = result_dict.get('city')
+                instance.citizenship = result_dict.get("citizenship")
+                instance.english_grade = self._get_language_grade_items(result_dict, 'english_grade')
+                instance.education = result_dict.get('education')
+                instance.certificates = self._get_items(result_dict, "certificates", "certificate_item")
+                instance.employer_contact = result_dict.get('employer_contact')
+                instance.worker_contact = self._get_nested_items(result_dict, 'worker_contact', 'contact')
+                instance.example_of_work = self._get_items(result_dict, "example_of_work", "example_of_work_item")
+                self._update_work_experience(result_dict.get("work_experience", []), instance)
+                instance.links = self._get_nested_items(result_dict, 'links', 'link')
+                instance.grades = self._get_filtered_items(Grade, result_dict.get("grade", []), "grade")
+                instance.specialization = self._get_filtered_items(Specialization,
+                                                                   result_dict.get("specialization", []),
+                                                                   "specialization")
                 instance.process_status = 1
-                instance.save()
         except BaseException as err:
             instance.process_status = -1
         instance.save()

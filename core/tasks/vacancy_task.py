@@ -105,15 +105,23 @@ class ProcessVacancy(AllJobsBaseTask):
 
     def get_prompt(self, text):
         prompt = (
-            "Выдели из содержимого этого текста только следующую информацию: заголовок (title) - специализация ("
+            "Выдели из содержимого этого текста только следующую информацию: заголовок (title) - специализация в виде массива строк ("
             "specialization) - технический стэк в виде массива строк (stack) - "
             "требования в виде массива строк (requirements) - обязанности в виде массива строк (responsibilities) - "
-            "стоимость/рейт числом (cost) - локация, в формате числового кода страны (location) - "
+            "стоимость/рейт числом, но если в исходном тексте цена указана строкой, то ставь 0 (cost) - "
+            "локация, в формате числового кода страны (location) - "
             "загрузка/нагрузка (load) - тэги в виде массива строк (tags) - грейд/грейды в виде массива строк (grades)."
             "Оформи эти данные в JSON, где данные в скобках это ключи для JSON с, если каких-то значений не хватает, "
             f"то заполни их null. следуй строго по шаблону. Сам текст: {text}"
         )
         return prompt
+
+    def _get_items(self, data, key, item_type):
+        return [{"type": item_type, "value": item} for item in data.get(key, [])]
+
+    def _get_filtered_items(self, model, titles, item_type):
+        items = model.objects.filter(title__in=titles)
+        return [{"type": item_type, "value": item.id} for item in items]
 
     def process_vacancy(self):
         vacancy_id = self.task.input.get('id')
@@ -138,28 +146,21 @@ class ProcessVacancy(AllJobsBaseTask):
             ai_response_dict = json_to_dict(ai_response_content)
             with transaction.atomic():
                 instance.title = ai_response_dict.get('title', None)
-                instance.requirements = [{"type": "requirements_item", "value": item} for item in
-                                         ai_response_dict.get("requirements", None)]
-                instance.responsibilities = [{"type": "responsibilities_item", "value": item} for item in
-                                             ai_response_dict.get("responsibilities", None)]
-                instance.stack = [{"type": "stack_item", "value": item} for item in
-                                  ai_response_dict.get("stack", None)]
+                instance.requirements = self._get_items(ai_response_dict, "requirements", "requirements_item")
+                instance.responsibilities = self._get_items(ai_response_dict, "responsibilities",
+                                                            "responsibilities_item")
+                instance.stack = self._get_items(ai_response_dict, "stack", "stack_item")
                 instance.cost = ai_response_dict.get('cost', None)
                 instance.location = ai_response_dict.get('location', None)
                 instance.load = ai_response_dict.get('load', None)
-                grades = ai_response_dict.get("grades") if ai_response_dict.get("grades") else []
-                grades = Grade.objects.filter(title__in=grades)
-                if grades:
-                    instance.grades = [{"type": "grade", "value": item.id} for item in grades]
-                specializations = ai_response_dict.get('specialization', []) if ai_response_dict.get(
-                    "specialization") else []
-                specializations = Specialization.objects.filter(title__in=specializations)
-                if specializations:
-                    instance.specialization = [{"type": "specialization", "value": item.id} for item in specializations]
+                grades = ai_response_dict.get("grades", [])
+                instance.grades = self._get_filtered_items(Grade, grades, "grade")
+
+                specializations = ai_response_dict.get("specialization", [])
+                instance.specialization = self._get_filtered_items(Specialization, specializations, "specialization")
                 for tag in ai_response_dict['tags']:
                     instance.tags.add(tag)
                 instance.status = 2
-                instance.save()
         except BaseException as e:
             print(e)
             instance.status = -1
