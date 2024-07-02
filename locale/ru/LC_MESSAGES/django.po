@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-02 13:35+0000\n"
+"POT-Creation-Date: 2024-07-02 13:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,9 +25,29 @@ msgid ""
 "Может быть только {max_instances} экземпляр(ов) сниппета {self.__str__()}."
 msgstr ""
 
+#: core/models/snippets/worker.py:85 core/wagtail_hooks.py:78
+msgid "Specialization"
+msgstr "Специализации"
+
+#: core/models/snippets/worker.py:89 core/wagtail_hooks.py:88
+msgid "Grade"
+msgstr "Грейды"
+
+#: core/models/snippets/worker.py:265
+msgid "Process status"
+msgstr "Статус кандидата"
+
+#: core/models/snippets/worker.py:311
+msgid "Work Experience"
+msgstr "Опыт работы"
+
+#: core/models/snippets/worker.py:317
+msgid "Projects"
+msgstr "Проекты"
+
 #: core/wagtail_hooks.py:20
-msgid "Worker"
-msgstr "Кандидат"
+msgid "Workers"
+msgstr "Кандидаты"
 
 #: core/wagtail_hooks.py:34
 msgid "Vacancies"
@@ -44,14 +64,6 @@ msgstr "Тип"
 #: core/wagtail_hooks.py:68
 msgid "Rank"
 msgstr "Ранг заявки"
-
-#: core/wagtail_hooks.py:78
-msgid "Specialization"
-msgstr "Специализации"
-
-#: core/wagtail_hooks.py:88
-msgid "Grade"
-msgstr "Грейды"
 
 #: core/wagtail_hooks.py:98
 msgid "Steps In Board"

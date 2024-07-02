@@ -8,8 +8,6 @@ from core.models.snippets.worker import Worker, TechnologiesStreamBlock
 
 
 class WorkExperience(Orderable):
-    # компании (company_name) — год начала (start_year) — год конец (end_year) — срок работы (duration) — "
-    #             f"должность (position) — описание (description)
     worker = ParentalKey(Worker, on_delete=models.CASCADE, related_name='work_experiences')
     company_name = models.CharField(
         max_length=255,

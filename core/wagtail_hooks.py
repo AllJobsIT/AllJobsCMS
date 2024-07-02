@@ -17,7 +17,7 @@ from core.models.snippets.vacancy import Vacancy
 @register_snippet
 class WorkersSnippetViewSet(SnippetViewSet):
     model = Worker
-    menu_label = _('Worker')
+    menu_label = _('Workers')
     menu_icon = 'user'
     menu_order = 200
     add_to_settings_menu = False
@@ -133,4 +133,3 @@ def register_snippet_listing_buttons(snippet, user, next):
                 icon_name="draft"
             ),
         ]
-

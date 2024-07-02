@@ -10,6 +10,7 @@ from wagtail.blocks import StreamBlock, StructBlock
 from wagtail.documents.models import Document
 from wagtail.fields import RichTextField, StreamField
 from wagtail.snippets.blocks import SnippetChooserBlock
+from django.utils.translation import gettext_lazy as _
 
 from core.models.snippets.base import Status, Type
 
@@ -81,11 +82,11 @@ class LinksStreamBlock(StreamBlock):
 
 
 class SpecializationStreamBlock(StreamBlock):
-    specialization = SnippetChooserBlock("core.Specialization")
+    specialization = SnippetChooserBlock("core.Specialization", label=_("Specialization"))
 
 
 class GradeStreamBlock(StreamBlock):
-    grade = SnippetChooserBlock("core.Grade")
+    grade = SnippetChooserBlock("core.Grade", label=_("Grade"))
 
 
 class Worker(ClusterableModel):
@@ -127,7 +128,7 @@ class Worker(ClusterableModel):
     )
     telegram_nickname = models.CharField(
         max_length=255,
-        verbose_name='Telegram nickname',
+        verbose_name='Никнейм TG',
         blank=True,
         null=True
     )
@@ -261,7 +262,7 @@ class Worker(ClusterableModel):
         verbose_name='Публиковать',
         blank=True
     )
-    process_status = models.IntegerField(choices=STATUSES, default=0)
+    process_status = models.IntegerField(choices=STATUSES, default=0, verbose_name=_("Process status"))
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -307,13 +308,13 @@ class Worker(ClusterableModel):
 
     work_experience_panels = [
         InlinePanel(
-            'work_experiences', label="Work Experience"
+            'work_experiences', label=_("Work Experience")
         ),
     ]
 
     projects_panels = [
         InlinePanel(
-            'projects', label="Projects"
+            'projects', label=_("Projects")
         )
     ]
 
