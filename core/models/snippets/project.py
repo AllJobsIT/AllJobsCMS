@@ -1,10 +1,10 @@
 from django.db import models
 from modelcluster.fields import ParentalKey
 from wagtail.admin.panels import FieldPanel
-from wagtail.fields import RichTextField
+from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Orderable
 
-from core.models.snippets.worker import Worker
+from core.models.snippets.worker import Worker, TechnologiesStreamBlock
 
 
 class WorkExperience(Orderable):
@@ -43,6 +43,10 @@ class WorkExperience(Orderable):
         blank=True,
         null=True,
     )
+    technologies = StreamField(
+        TechnologiesStreamBlock(), blank=True, null=True, use_json_field=True,
+        verbose_name="Технологии"
+    )
 
     panels = [
         FieldPanel("company_name"),
@@ -51,6 +55,7 @@ class WorkExperience(Orderable):
         FieldPanel("duration"),
         FieldPanel("position"),
         FieldPanel("description"),
+        FieldPanel("technologies"),
     ]
 
     def __str__(self):

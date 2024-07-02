@@ -148,5 +148,12 @@ class Vacancy(ClusterableModel):
     def get_status(self):
         return self.get_status_display()
 
+    def get_stack_display(self):
+        # Возвращает строковое представление грейда
+        return ", ".join([str(item.value) for item in self.stack])[:80] + '...'
+
+    get_stack_display.admin_order_field = "Стэк"
+    get_stack_display.short_description = "Стэк"
+
     get_status.admin_order_field = "Статус"
     get_status.short_description = "Статус"

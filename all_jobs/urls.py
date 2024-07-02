@@ -6,11 +6,16 @@ from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
+from core import views
+
 urlpatterns = [
     path("django-admin/", admin.site.urls),
     path("admin/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
     path("api/", include("core.api.urls")),
+    path('download/docx/<int:worker_id>/', views.download_docx, name='download_docx'),
+    path('download/pdf/<int:worker_id>/', views.download_pdf, name='download_pdf'),
+    path("test/<int:worker_id>/", views.test, name='test_worker')
 ]
 
 if settings.DEBUG:

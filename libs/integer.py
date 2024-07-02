@@ -19,3 +19,12 @@ def string_to_integer(string_value):
         # Обработка ошибки преобразования
         print(f"Ошибка преобразования строки в Integer: {e}")
         return None
+
+
+def format_years(number):
+    if number % 10 == 1 and number % 100 != 11:
+        return f"{number} год"
+    elif 2 <= number % 10 <= 4 and not (10 <= number % 100 <= 20):
+        return f"{number} года"
+    else:
+        return f"{number} лет"

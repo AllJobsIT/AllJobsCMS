@@ -1,16 +1,20 @@
 import uuid
 
 from django.db import models
+from django.utils.safestring import mark_safe
 from django_countries.fields import CountryField
 from modelcluster.models import ClusterableModel
 from wagtail import blocks
-from wagtail.admin.panels import FieldPanel, InlinePanel
+from wagtail.admin.panels import FieldPanel, InlinePanel, TabbedInterface, ObjectList
 from wagtail.blocks import StreamBlock, StructBlock
 from wagtail.documents.models import Document
 from wagtail.fields import RichTextField, StreamField
 from wagtail.snippets.blocks import SnippetChooserBlock
 
 from core.models.snippets.base import Status, Type
+
+
+# from core.views import generate_docx
 
 
 class EnglishGradeStructBlock(StructBlock):
@@ -261,7 +265,7 @@ class Worker(ClusterableModel):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    panels = [
+    personal_panels = [
         FieldPanel("code", read_only=True),
         FieldPanel("process_status"),
         FieldPanel("last_name"),
@@ -275,15 +279,6 @@ class Worker(ClusterableModel):
         FieldPanel("employer"),
         FieldPanel("sales_rate"),
         FieldPanel("purchase_rate"),
-        FieldPanel("specialization"),
-        FieldPanel("grade"),
-        FieldPanel("stack"),
-        FieldPanel("skills"),
-        FieldPanel("programming_languages"),
-        FieldPanel("technologies"),
-        FieldPanel("databases"),
-        FieldPanel("software_development"),
-        FieldPanel("other_technologies"),
         FieldPanel("about_worker"),
         FieldPanel("experience"),
         FieldPanel("city"),
@@ -294,15 +289,40 @@ class Worker(ClusterableModel):
         FieldPanel("employer_contact"),
         FieldPanel("worker_contact"),
         FieldPanel("example_of_work"),
+        FieldPanel("comment"),
+        FieldPanel("is_published"),
+    ]
+
+    skills_panels = [
+        FieldPanel("specialization"),
+        FieldPanel("grade"),
+        FieldPanel("stack"),
+        FieldPanel("skills"),
+        FieldPanel("programming_languages"),
+        FieldPanel("technologies"),
+        FieldPanel("databases"),
+        FieldPanel("software_development"),
+        FieldPanel("other_technologies"),
+    ]
+
+    work_experience_panels = [
         InlinePanel(
             'work_experiences', label="Work Experience"
         ),
-        FieldPanel("comment"),
-        FieldPanel("is_published"),
+    ]
+
+    projects_panels = [
         InlinePanel(
             'projects', label="Projects"
         )
     ]
+
+    edit_handler = TabbedInterface([
+        ObjectList(personal_panels, heading='Личные данные'),
+        ObjectList(skills_panels, heading='Навыки и стэк'),
+        ObjectList(projects_panels, heading='Проекты работника'),
+        ObjectList(work_experience_panels, heading='Опыт работы'),
+    ])
 
     def __str__(self):
         return f'{self.name} {self.last_name}'
@@ -312,6 +332,24 @@ class Worker(ClusterableModel):
 
     def get_status(self):
         return self.get_process_status_display()
+
+    def get_grade_display(self):
+        # Возвращает строковое представление грейда
+        return ", ".join([str(item.value) for item in self.grade])
+
+    def get_specialization(self):
+        return ", ".join([item.value.title for item in self.specialization])
+
+    def get_telegram_nickname(self):
+        return mark_safe(
+            f"<a href='https://t.me/{self.telegram_nickname}'>{self.telegram_nickname}</a>"
+            if self.telegram_nickname and self.telegram_nickname != 'null' else "")
+
+    get_telegram_nickname.admin_order_field = "Telegram"
+    get_telegram_nickname.short_description = "Telegram"
+
+    get_grade_display.admin_order_field = "Грейд"
+    get_grade_display.short_description = "Грейд"
 
     full_name.admin_order_field = "Полное имя"
     full_name.short_description = "Полное имя"

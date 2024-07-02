@@ -1,0 +1,5 @@
+@media screen and (min-width: 50em) {
+    .listing td, .listing th {
+        padding: calc(0.2em* var(--w-density-factor)) 1em;
+    }
+}

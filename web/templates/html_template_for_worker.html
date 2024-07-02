@@ -1,0 +1,134 @@
+{% load wagtailcore_tags %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Резюме</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        .colorfull_text {
+            color: #660000
+        }
+
+        .table_background {
+            background-color: #000000;
+        }
+    </style>
+</head>
+<body>
+
+<h1 class="colorfull_text">{% if worker.full_name %}{{ worker.full_name }}{% else %}-{% endif %}</h1>
+<p class="colorfull_text" style="text-align: center;">
+    {% if worker.get_specialization %}{{ worker.get_specialization }}{% else %}-{% endif %}</p>
+<p class="colorfull_text" style="text-align: center;"><b>Грейд:</b>
+    {% if grade %}{{ grade }}{% else %}-{% endif %}
+</p>
+<p class="colorfull_text" style="text-align: center;"><b>Стаж:</b>
+    {% if experience %}{{ experience }}{% else %}-{% endif %}
+</p>
+
+<h2>Навыки и стэк</h2>
+<table>
+    <tr>
+        <td class="colorfull_text">Языки разработки</td>
+        <td>{% if programming_languages %}{{ programming_languages }}{% else %}-{% endif %}</td>
+    </tr>
+    <tr>
+        <td class="colorfull_text">Стэк</td>
+        <td>{% if stack %}{{ stack }}{% else %}-{% endif %}</td>
+    </tr>
+    <tr>
+        <td class="colorfull_text">Навыки</td>
+        <td>{% if skills %}{{ skills }}{% else %}-{% endif %}</td>
+    </tr>
+    <tr>
+        <td class="colorfull_text">Технологии</td>
+        <td>{% if technologies %}{{ technologies }}{% else %}-{% endif %}</td>
+    </tr>
+    <tr>
+        <td class="colorfull_text">Базы данных</td>
+        <td>{% if databases %}{{ databases }}{% else %}-{% endif %}</td>
+    </tr>
+    <tr>
+        <td class="colorfull_text">Средства разработки ПО</td>
+        <td>{% if software_development %}{{ software_development }}{% else %}-{% endif %}</td>
+    </tr>
+    <tr>
+        <td class="colorfull_text">Другие технологии</td>
+        <td>{% if other_technologies %}{{ other_technologies }}{% else %}-{% endif %}</td>
+    </tr>
+</table>
+
+<h2>Личная информация</h2>
+<table>
+    {% for language in languages %}
+        <tr>
+            <td class="colorfull_text">{{ language.name }}</td>
+            <td>{% if language.grade %}{{ language.grade }}{% else %}-{% endif %}</td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <td class="colorfull_text">Образование</td>
+        <td>{% if worker.education|richtext %}{{ worker.education|richtext }}{% else %}-{% endif %}</td>
+    </tr>
+    <tr>
+        <td class="colorfull_text">Сертификаты</td>
+        <td>{% if certificates %}{{ certificates }}{% else %}-{% endif %}</td>
+    </tr>
+    <tr>
+        <td class="colorfull_text">Гражданство</td>
+        <td>{% if worker.citizenship %}{{ worker.citizenship.name }}{% else %}-{% endif %}</td>
+    </tr>
+    <tr>
+        <td class="colorfull_text">Место проживания</td>
+        <td>{% if worker.city %}{{ worker.city }}{% else %}-{% endif %}</td>
+    </tr>
+</table>
+
+<h2>Опыт</h2>
+{% for job in jobs %}
+    <h3 style="text-align: center;">{{ job.company_name }} ({{ job.start_year }} -
+        {{ job.end_year }})</h3>
+    <table>
+        <tr>
+            <td class="table_background">Роль в проекте</td>
+            <td>{% if job.position %}{{ job.position }}{% else %}-{% endif %}</td>
+        </tr>
+        <tr>
+            <td class="table_background">Описание проекта</td>
+            <td>{% if job.description|richtext %}{{ job.description|richtext }}{% else %}-{% endif %}</td>
+        </tr>
+        <tr>
+            <td class="table_background">Применяемые технологии</td>
+            <td>
+                {% if job.technologies %}
+                    {% for tech in job.technologies %}
+                        {{ tech.value }},
+                    {% endfor %}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+{% endfor %}
+
+</body>
+
+</html>

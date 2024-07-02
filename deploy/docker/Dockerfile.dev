@@ -12,6 +12,8 @@ ENV PYTHONUNBUFFERED=1 \
 
 RUN apt-get update && \
   apt-get install -y build-essential libpq-dev gettext ffmpeg
+RUN apt-get --no-install-recommends install libreoffice -y
+RUN apt-get install -y libreoffice-java-common
 RUN rm -rf /var/lib/apt/lists/*
 
 RUN pip install "gunicorn==20.0.4"
