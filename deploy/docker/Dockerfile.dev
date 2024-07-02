@@ -28,6 +28,7 @@ RUN chown -R app:app /app && pip install --upgrade pip
 COPY . .
 
 RUN python manage.py collectstatic --noinput --clear
+RUN python manage.py compilemessages -l ru
 
 # Создайте директорию для медиафайлов, если она не существует
 RUN mkdir -p /app/media && chown -R app:app /app/media
