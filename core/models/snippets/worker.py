@@ -2,6 +2,7 @@ import uuid
 
 from django.db import models
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
 from modelcluster.models import ClusterableModel
 from wagtail import blocks
@@ -10,7 +11,6 @@ from wagtail.blocks import StreamBlock, StructBlock
 from wagtail.documents.models import Document
 from wagtail.fields import RichTextField, StreamField
 from wagtail.snippets.blocks import SnippetChooserBlock
-from django.utils.translation import gettext_lazy as _
 
 from core.models.snippets.base import Status, Type
 
@@ -273,7 +273,6 @@ class Worker(ClusterableModel):
         FieldPanel("name"),
         FieldPanel("surname"),
         FieldPanel("file"),
-        FieldPanel("telegram_nickname"),
         FieldPanel("status"),
         FieldPanel("status_date"),
         FieldPanel("type"),
@@ -285,11 +284,6 @@ class Worker(ClusterableModel):
         FieldPanel("city"),
         FieldPanel("citizenship"),
         FieldPanel("english_grade"),
-        FieldPanel("education"),
-        FieldPanel("certificates"),
-        FieldPanel("employer_contact"),
-        FieldPanel("worker_contact"),
-        FieldPanel("example_of_work"),
         FieldPanel("comment"),
         FieldPanel("is_published"),
     ]
@@ -318,8 +312,18 @@ class Worker(ClusterableModel):
         )
     ]
 
+    about_worker_panels = [
+        FieldPanel("telegram_nickname"),
+        FieldPanel("employer_contact"),
+        FieldPanel("worker_contact"),
+        FieldPanel("education"),
+        FieldPanel("certificates"),
+        FieldPanel("example_of_work"),
+    ]
+
     edit_handler = TabbedInterface([
         ObjectList(personal_panels, heading='Личные данные'),
+        ObjectList(about_worker_panels, heading='О кандидате'),
         ObjectList(skills_panels, heading='Навыки и стэк'),
         ObjectList(projects_panels, heading='Проекты работника'),
         ObjectList(work_experience_panels, heading='Опыт работы'),
