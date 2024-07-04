@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-02 13:44+0000\n"
+"POT-Creation-Date: 2024-07-04 12:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,28 +20,104 @@ msgstr ""
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
+#: core/choices/vacancy.py:6 core/choices/worker.py:6
+msgid "Обработка с помощью ИИ не удалась"
+msgstr ""
+
+#: core/choices/vacancy.py:7
+msgid "Ожидает одобрения"
+msgstr ""
+
+#: core/choices/vacancy.py:8 core/choices/worker.py:7
+msgid "Обработка с помощью ИИ"
+msgstr ""
+
+#: core/choices/vacancy.py:9 core/choices/worker.py:8
+msgid "Модерация"
+msgstr ""
+
+#: core/choices/vacancy.py:10
+msgid "Готов к публикации"
+msgstr ""
+
+#: core/choices/vacancy.py:11
+msgid "Опубликован"
+msgstr ""
+
+#: core/choices/vacancy.py:12
+msgid "Найден исполнитель"
+msgstr ""
+
+#: core/choices/vacancy.py:13
+msgid "В работе"
+msgstr ""
+
+#: core/choices/vacancy.py:14 core/choices/worker.py:18
+msgid "В архиве"
+msgstr ""
+
+#: core/choices/worker.py:9
+msgid "Ожидает вакансии"
+msgstr ""
+
+#: core/choices/worker.py:10
+msgid "Подали на запрос"
+msgstr ""
+
+#: core/choices/worker.py:11
+msgid "Отказ после собеса"
+msgstr ""
+
+#: core/choices/worker.py:12
+msgid "Отказ по резюме"
+msgstr ""
+
+#: core/choices/worker.py:13
+msgid "Позвали на собес"
+msgstr ""
+
+#: core/choices/worker.py:14
+msgid "Ожидаем ОС"
+msgstr ""
+
+#: core/choices/worker.py:15
+msgid "Согласован выход"
+msgstr ""
+
+#: core/choices/worker.py:16
+msgid "Не активен"
+msgstr ""
+
+#: core/choices/worker.py:17
+msgid "Работает на проекте"
+msgstr ""
+
 #: core/models/snippets/base.py:17
 msgid ""
 "Может быть только {max_instances} экземпляр(ов) сниппета {self.__str__()}."
 msgstr ""
 
-#: core/models/snippets/worker.py:85 core/wagtail_hooks.py:78
+#: core/models/snippets/vacancy.py:113
+msgid "Request"
+msgstr "Запрос"
+
+#: core/models/snippets/worker.py:86 core/wagtail_hooks.py:78
 msgid "Specialization"
 msgstr "Специализации"
 
-#: core/models/snippets/worker.py:89 core/wagtail_hooks.py:88
+#: core/models/snippets/worker.py:90 core/wagtail_hooks.py:88
 msgid "Grade"
 msgstr "Грейды"
 
-#: core/models/snippets/worker.py:265
+#: core/models/snippets/worker.py:260
 msgid "Process status"
 msgstr "Системный статус кандидата"
 
-#: core/models/snippets/worker.py:311
+#: core/models/snippets/worker.py:300
 msgid "Work Experience"
 msgstr "Опыт работы"
 
-#: core/models/snippets/worker.py:317
+#: core/models/snippets/worker.py:306
 msgid "Projects"
 msgstr "Проекты"
 
