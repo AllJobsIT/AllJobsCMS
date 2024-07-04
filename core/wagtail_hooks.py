@@ -112,7 +112,7 @@ def register_snippet_listing_buttons(snippet, user, next):
     if isinstance(snippet, Worker):
         docx_url = reverse('download_docx', args=[snippet.id])
         pdf_url = reverse('download_pdf', args=[snippet.id])
-        test_url = reverse('test_worker', args=[snippet.id])
+        view_url = reverse('view_template', args=[snippet.id])
         return [
             SnippetListingButton(
                 _('Download DOCX'),
@@ -128,10 +128,9 @@ def register_snippet_listing_buttons(snippet, user, next):
             ),
             SnippetListingButton(
                 _('Check template'),
-                test_url,
+                view_url,
                 priority=70,
-                icon_name="draft"
+                icon_name="draft",
             ),
         ]
     return []
-

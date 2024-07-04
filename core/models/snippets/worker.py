@@ -12,7 +12,7 @@ from wagtail.documents.models import Document
 from wagtail.fields import RichTextField, StreamField
 from wagtail.snippets.blocks import SnippetChooserBlock
 
-from core.choices.worker import WorkerStatusChoice
+from core.choices.worker import WorkerProcessStatusChoice
 from core.models.snippets.base import Status, Type
 
 
@@ -129,7 +129,7 @@ class Worker(ClusterableModel):
     status = models.ForeignKey(
         Status,
         on_delete=models.SET_NULL,
-        verbose_name='Статус',
+        verbose_name='Статус кандидата',
         blank=True,
         null=True
     )
@@ -256,7 +256,7 @@ class Worker(ClusterableModel):
         verbose_name='Публиковать',
         blank=True
     )
-    process_status = models.IntegerField(choices=WorkerStatusChoice, default=WorkerStatusChoice.PROCESS,
+    process_status = models.IntegerField(choices=WorkerProcessStatusChoice, default=WorkerProcessStatusChoice.PROCESS,
                                          verbose_name=_("Process status"))
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

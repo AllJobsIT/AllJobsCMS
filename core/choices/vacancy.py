@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
-class VacancyStatusChoices(models.IntegerChoices):
+class VacancyProcessStatusChoices(models.IntegerChoices):
     PROCESS_ERROR = -1, _("Обработка с помощью ИИ не удалась")
     AWAITING_APPROVE = 0, _("Ожидает одобрения")
     PROCESS = 1, _("Обработка с помощью ИИ")

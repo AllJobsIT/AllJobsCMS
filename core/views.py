@@ -187,6 +187,6 @@ def download_pdf(request, worker_id):
     return response
 
 
-def test(request, worker_id):
+def view_template(request, worker_id):
     context = get_worker_context(worker_id)
     return render(request, 'html_template_for_worker.html', context=context)

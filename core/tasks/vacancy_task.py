@@ -7,7 +7,7 @@ from django.apps import apps
 from django.db import transaction
 from openai import Client
 
-from core.choices.vacancy import VacancyStatusChoices
+from core.choices.vacancy import VacancyProcessStatusChoices
 from core.models.snippets.base import Grade, Specialization
 from core.models.snippets.message_settings import MessageSettings
 from core.tasks import AllJobsBaseTask
@@ -174,8 +174,8 @@ class ProcessVacancy(AllJobsBaseTask):
                 instance.specialization = self._get_filtered_items(Specialization, specializations, "specialization")
                 for tag in ai_response_dict['tags']:
                     instance.tags.add(tag)
-                instance.status = VacancyStatusChoices.MODERATION
+                instance.status = VacancyProcessStatusChoices.MODERATION
         except BaseException as e:
-            instance.status = VacancyStatusChoices.PROCESS_ERROR
+            instance.status = VacancyProcessStatusChoices.PROCESS_ERROR
             raise Exception(f"Error: {e}")
         instance.save()

@@ -15,7 +15,7 @@ urlpatterns = [
     path("api/", include("core.api.urls")),
     path('download/docx/<int:worker_id>/', views.download_docx, name='download_docx'),
     path('download/pdf/<int:worker_id>/', views.download_pdf, name='download_pdf'),
-    path("test/<int:worker_id>/", views.test, name='test_worker')
+    path("view_template/<int:worker_id>/", views.view_template, name='view_template')
 ]
 
 if settings.DEBUG:

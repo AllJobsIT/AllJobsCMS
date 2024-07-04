@@ -4,7 +4,7 @@ from datetime import datetime
 from django.db import transaction
 from openai import Client
 
-from core.choices.worker import WorkerStatusChoice
+from core.choices.worker import WorkerProcessStatusChoice
 from core.models.snippets import Worker, WorkExperience
 from core.models.snippets.base import Grade, Specialization
 from core.tasks import AllJobsBaseTask
@@ -144,8 +144,8 @@ class ProcessWorker(AllJobsBaseTask):
                 instance.specialization = self._get_filtered_items(Specialization,
                                                                    result_dict.get("specialization", []),
                                                                    "specialization")
-                instance.process_status = WorkerStatusChoice.MODERATION
+                instance.process_status = WorkerProcessStatusChoice.MODERATION
         except BaseException as err:
-            instance.process_status = WorkerStatusChoice.PROCESS_ERROR
+            instance.process_status = WorkerProcessStatusChoice.PROCESS_ERROR
             raise Exception(f"Error: {err}")
         instance.save()

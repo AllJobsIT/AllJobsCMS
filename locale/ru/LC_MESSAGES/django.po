@@ -35,7 +35,7 @@ msgstr "Грейды"
 
 #: core/models/snippets/worker.py:265
 msgid "Process status"
-msgstr "Статус кандидата"
+msgstr "Системный статус кандидата"
 
 #: core/models/snippets/worker.py:311
 msgid "Work Experience"

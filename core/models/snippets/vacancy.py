@@ -13,7 +13,7 @@ from wagtail.blocks import StreamBlock
 from wagtail.fields import StreamField
 from wagtail.snippets.blocks import SnippetChooserBlock
 
-from core.choices.vacancy import VacancyStatusChoices
+from core.choices.vacancy import VacancyProcessStatusChoices
 from core.middleware import get_current_request
 from core.models.snippets.demand import Demand
 from core.tasks.vacancy_task import SendVacancy, ProcessVacancy
@@ -72,7 +72,7 @@ class Vacancy(ClusterableModel):
     grades = StreamField(
         GradeStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name="Грейды"
     )
-    status = models.IntegerField(choices=VacancyStatusChoices, default=VacancyStatusChoices.AWAITING_APPROVE)
+    status = models.IntegerField(choices=VacancyProcessStatusChoices, default=VacancyProcessStatusChoices.AWAITING_APPROVE)
     is_active = models.BooleanField(
         default=True,
         verbose_name='Активный',
@@ -116,18 +116,18 @@ class Vacancy(ClusterableModel):
 
     def save(self, **kwargs):
         super().save(**kwargs)
-        if self.status == VacancyStatusChoices.PROCESS and self.full_vacancy_text_from_tg_chat:
+        if self.status == VacancyProcessStatusChoices.PROCESS and self.full_vacancy_text_from_tg_chat:
             for task in Task.objects.filter(name="process_vacancy"):
                 if task.input.get("id", None) == self.id:
                     return
             ProcessVacancy.create(input={'id': self.id})
             return
-        if self.status == VacancyStatusChoices.READY_TO_PUBLIC:
+        if self.status == VacancyProcessStatusChoices.READY_TO_PUBLIC:
             for task in Task.objects.filter(name="send_vacancy"):
                 if task.input.get("id", None) == self.id:
                     return
             SendVacancy.create(input={'id': self.id})
-        if self.status == VacancyStatusChoices.PUBLIC:
+        if self.status == VacancyProcessStatusChoices.PUBLIC:
             request = get_current_request()
             demand = Demand.objects.create(
                 vacancy=self,
