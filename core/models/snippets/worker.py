@@ -348,6 +348,9 @@ class Worker(index.Indexed, ClusterableModel):
     def get_specialization(self):
         return ", ".join([item.value.title for item in self.specialization])
 
+    def get_type(self):
+        return self.get_type_display()
+
     def get_telegram_nickname(self):
         return mark_safe(
             f"<a href='https://t.me/{self.telegram_nickname}'>{self.telegram_nickname}</a>"
@@ -364,3 +367,6 @@ class Worker(index.Indexed, ClusterableModel):
 
     get_status.admin_order_field = "Статус"
     get_status.short_description = "Статус"
+
+    get_type.admin_order_field = "Тип отношений"
+    get_type.short_description = "Тип отношений"

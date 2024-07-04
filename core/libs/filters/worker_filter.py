@@ -19,7 +19,7 @@ class WorkerFilterSet(WagtailFilterSet):
 
     class Meta:
         model = Worker
-        fields = ['grade', 'specialization']
+        fields = ['grade', 'specialization', 'type']
 
     def filter_by_grade(self, queryset, name, value):
         if not value:
