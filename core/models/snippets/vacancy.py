@@ -2,6 +2,7 @@ import uuid
 
 from botmanager.models import Task
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
@@ -72,7 +73,8 @@ class Vacancy(ClusterableModel):
     grades = StreamField(
         GradeStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name="Грейды"
     )
-    status = models.IntegerField(choices=VacancyProcessStatusChoices, default=VacancyProcessStatusChoices.AWAITING_APPROVE)
+    status = models.IntegerField(choices=VacancyProcessStatusChoices,
+                                 default=VacancyProcessStatusChoices.AWAITING_APPROVE)
     is_active = models.BooleanField(
         default=True,
         verbose_name='Активный',
@@ -108,7 +110,7 @@ class Vacancy(ClusterableModel):
         FieldPanel("updated_at", read_only=True),
         FieldPanel("channel", read_only=True),
         FieldPanel("full_vacancy_text_from_tg_chat"),
-        InlinePanel("demands", max_num=1),
+        InlinePanel("demands", max_num=1, label=_("Request")),
     ]
 
     def __str__(self):

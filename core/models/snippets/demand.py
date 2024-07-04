@@ -1,5 +1,3 @@
-from datetime import datetime, timedelta
-
 from django.db import models
 from modelcluster.fields import ParentalKey
 from wagtail.admin.panels import FieldPanel
@@ -7,8 +5,6 @@ from wagtail.blocks import StreamBlock
 from wagtail.fields import StreamField
 from wagtail.models import Orderable
 from wagtail.snippets.blocks import SnippetChooserBlock
-
-from core.models.snippets.steps_in_board import StepsInBoard
 
 
 class WorkersStreamBlock(StreamBlock):
@@ -27,6 +23,12 @@ class Demand(Orderable):
         blank=True,
         null=True,
     )
+    partner = models.CharField(
+        max_length=255,
+        verbose_name="Партнер",
+        blank=True,
+        null=True
+    )
     manager = models.ForeignKey(
         'auth.User',
         on_delete=models.SET_NULL,
@@ -44,6 +46,7 @@ class Demand(Orderable):
     panels = [
         FieldPanel('workers'),
         FieldPanel('company_name'),
+        FieldPanel('partner'),
         FieldPanel('manager'),
         FieldPanel('duration'),
         FieldPanel('is_active'),
