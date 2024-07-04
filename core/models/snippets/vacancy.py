@@ -13,6 +13,7 @@ from wagtail.blocks import StreamBlock
 from wagtail.fields import StreamField
 from wagtail.snippets.blocks import SnippetChooserBlock
 
+from core.choices.vacancy import VacancyStatusChoices
 from core.middleware import get_current_request
 from core.models.snippets.demand import Demand
 from core.tasks.vacancy_task import SendVacancy, ProcessVacancy
@@ -46,17 +47,6 @@ class ResponsibilitiesStreamField(StreamBlock):
 
 
 class Vacancy(ClusterableModel):
-    STATUSES = (
-        (-1, "Обработка с помощью ИИ не удалась"),
-        (0, "Ожидает одобрения"),
-        (1, "Обработка с помощью ИИ"),
-        (2, "Модерация"),
-        (3, "Готов к отправке"),
-        (4, "Отправлен"),
-        (5, "Найден исполнитель"),
-        (6, "В исполнении"),
-        (7, "В архиве"),
-    )
     uuid = models.UUIDField(
         default=uuid.uuid4,
         verbose_name='UUID Вакансии',
@@ -82,7 +72,7 @@ class Vacancy(ClusterableModel):
     grades = StreamField(
         GradeStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name="Грейды"
     )
-    status = models.IntegerField(choices=STATUSES, default=0)
+    status = models.IntegerField(choices=VacancyStatusChoices, default=VacancyStatusChoices.AWAITING_APPROVE)
     is_active = models.BooleanField(
         default=True,
         verbose_name='Активный',
@@ -126,18 +116,18 @@ class Vacancy(ClusterableModel):
 
     def save(self, **kwargs):
         super().save(**kwargs)
-        if self.status == 1 and self.full_vacancy_text_from_tg_chat:
+        if self.status == VacancyStatusChoices.PROCESS and self.full_vacancy_text_from_tg_chat:
             for task in Task.objects.filter(name="process_vacancy"):
                 if task.input.get("id", None) == self.id:
                     return
             ProcessVacancy.create(input={'id': self.id})
             return
-        if self.status == 3:
+        if self.status == VacancyStatusChoices.READY_TO_PUBLIC:
             for task in Task.objects.filter(name="send_vacancy"):
                 if task.input.get("id", None) == self.id:
                     return
             SendVacancy.create(input={'id': self.id})
-        if self.status == 4:
+        if self.status == VacancyStatusChoices.PUBLIC:
             request = get_current_request()
             demand = Demand.objects.create(
                 vacancy=self,

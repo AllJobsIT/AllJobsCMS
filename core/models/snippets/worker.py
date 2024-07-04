@@ -12,6 +12,7 @@ from wagtail.documents.models import Document
 from wagtail.fields import RichTextField, StreamField
 from wagtail.snippets.blocks import SnippetChooserBlock
 
+from core.choices.worker import WorkerStatusChoice
 from core.models.snippets.base import Status, Type
 
 
@@ -90,13 +91,6 @@ class GradeStreamBlock(StreamBlock):
 
 
 class Worker(ClusterableModel):
-    STATUSES = (
-        (-1, "Обработка с помощью ИИ не удалась"),
-        (0, "Обработка с помощью ИИ"),
-        (1, "Модерация"),
-        (2, "Загружен"),
-        (3, "В архиве"),
-    )
     code = models.UUIDField(
         verbose_name='Код работника',
         blank=True,
@@ -262,7 +256,8 @@ class Worker(ClusterableModel):
         verbose_name='Публиковать',
         blank=True
     )
-    process_status = models.IntegerField(choices=STATUSES, default=0, verbose_name=_("Process status"))
+    process_status = models.IntegerField(choices=WorkerStatusChoice, default=WorkerStatusChoice.PROCESS,
+                                         verbose_name=_("Process status"))
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
