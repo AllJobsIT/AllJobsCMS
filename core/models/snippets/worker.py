@@ -10,10 +10,12 @@ from wagtail.admin.panels import FieldPanel, InlinePanel, TabbedInterface, Objec
 from wagtail.blocks import StreamBlock, StructBlock
 from wagtail.documents.models import Document
 from wagtail.fields import RichTextField, StreamField
+from wagtail.search import index
 from wagtail.snippets.blocks import SnippetChooserBlock
 
+from core.choices.relationship_type import RelationshipTypeChoice
 from core.choices.worker import WorkerProcessStatusChoice
-from core.models.snippets.base import Status, Type
+from core.models.snippets.base import Status
 
 
 # from core.views import generate_docx
@@ -90,7 +92,7 @@ class GradeStreamBlock(StreamBlock):
     grade = SnippetChooserBlock("core.Grade", label=_("Grade"))
 
 
-class Worker(ClusterableModel):
+class Worker(index.Indexed, ClusterableModel):
     code = models.UUIDField(
         verbose_name='Код работника',
         blank=True,
@@ -138,12 +140,8 @@ class Worker(ClusterableModel):
         blank=True,
         null=True,
     )
-    type = models.ForeignKey(
-        Type,
-        on_delete=models.SET_NULL,
-        verbose_name='Тип отношений',
-        blank=True,
-        null=True
+    type = models.IntegerField(
+        choices=RelationshipTypeChoice, default=RelationshipTypeChoice.UNSPECIFIED, verbose_name="Тип отношений"
     )
     employer = models.CharField(
         max_length=255,
@@ -323,6 +321,16 @@ class Worker(ClusterableModel):
         ObjectList(projects_panels, heading='Проекты работника'),
         ObjectList(work_experience_panels, heading='Опыт работы'),
     ])
+
+    search_fields = [
+        index.SearchField('name'),
+        index.SearchField('last_name'),
+        index.SearchField('surname'),
+
+        index.AutocompleteField('name'),
+        index.AutocompleteField('last_name'),
+        index.AutocompleteField('surname'),
+    ]
 
     def __str__(self):
         return f'{self.name} {self.last_name}'

@@ -8,7 +8,7 @@ from wagtail.snippets.views.snippets import SnippetViewSet
 from wagtail.snippets.widgets import SnippetListingButton
 
 from core.libs.filters import WorkerFilterSet, VacancyFilterSet
-from core.models.snippets import Worker, Status, Type, Rank
+from core.models.snippets import Worker, Status, Rank
 from core.models.snippets.base import Specialization, Grade
 from core.models.snippets.steps_in_board import StepsInBoard
 from core.models.snippets.vacancy import Vacancy
@@ -46,16 +46,6 @@ class VacancySnippetViewSet(SnippetViewSet):
 class StatusSnippetViewSet(SnippetViewSet):
     model = Status
     menu_label = _('Status')
-    menu_order = 200
-    add_to_settings_menu = False
-    exclude_from_explorer = False
-    list_display = ('title',)
-
-
-@register_snippet
-class TypeSnippetViewSet(SnippetViewSet):
-    model = Type
-    menu_label = _('Type')
     menu_order = 200
     add_to_settings_menu = False
     exclude_from_explorer = False

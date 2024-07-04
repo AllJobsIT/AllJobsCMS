@@ -2,6 +2,7 @@ from django.apps import apps
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from wagtail.search import index
 
 
 class BaseSnippet(models.Model):
@@ -17,23 +18,17 @@ class BaseSnippet(models.Model):
             raise ValidationError(_(f"Может быть только {max_instances} экземпляр(ов) сниппета {self.__str__()}."))
 
 
-class Status(models.Model):
+class Status(index.Indexed, models.Model):
     title = models.CharField(max_length=255, verbose_name='Заголовок')
+
+    search_fields = [
+        index.SearchField('title'),
+        index.AutocompleteField('title'),
+    ]
 
     class Meta:
         verbose_name = 'Статус'
         verbose_name_plural = 'Статусы'
-
-    def __str__(self):
-        return self.title
-
-
-class Type(models.Model):
-    title = models.CharField(max_length=255, verbose_name='Заголовок')
-
-    class Meta:
-        verbose_name = 'Тип отношений'
-        verbose_name_plural = 'Типы отношений'
 
     def __str__(self):
         return self.title

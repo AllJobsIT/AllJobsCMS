@@ -9,7 +9,7 @@ from modelcluster.models import ClusterableModel
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 from wagtail import blocks
-from wagtail.admin.panels import FieldPanel, InlinePanel
+from wagtail.admin.panels import FieldPanel, InlinePanel, TabbedInterface, ObjectList
 from wagtail.blocks import StreamBlock
 from wagtail.fields import StreamField
 from wagtail.snippets.blocks import SnippetChooserBlock
@@ -93,7 +93,7 @@ class Vacancy(ClusterableModel):
     full_vacancy_text_from_tg_chat = models.TextField(blank=True,
                                                       verbose_name="Полный текст скопированной из тг вакансии")
 
-    panels = [
+    main_panels = [
         FieldPanel("title"),
         FieldPanel("status"),
         FieldPanel("specialization"),
@@ -110,8 +110,16 @@ class Vacancy(ClusterableModel):
         FieldPanel("updated_at", read_only=True),
         FieldPanel("channel", read_only=True),
         FieldPanel("full_vacancy_text_from_tg_chat"),
+    ]
+
+    demand_panels = [
         InlinePanel("demands", max_num=1, label=_("Request")),
     ]
+
+    edit_handler = TabbedInterface([
+        ObjectList(main_panels, heading='Главная'),
+        ObjectList(demand_panels, heading='Запросы'),
+    ])
 
     def __str__(self):
         return f"{self.title} from {self.channel if self.channel else 'Manager'}"
