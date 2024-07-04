@@ -53,16 +53,6 @@ class StatusSnippetViewSet(SnippetViewSet):
 
 
 @register_snippet
-class RankSnippetViewSet(SnippetViewSet):
-    model = Rank
-    menu_label = _('Rank')
-    menu_order = 200
-    add_to_settings_menu = False
-    exclude_from_explorer = False
-    list_display = ('name',)
-
-
-@register_snippet
 class SpecializationSnippetViewSet(SnippetViewSet):
     model = Specialization
     menu_label = _('Specialization')
@@ -80,16 +70,6 @@ class GradeSnippetViewSet(SnippetViewSet):
     add_to_settings_menu = False
     exclude_from_explorer = False
     list_display = ('title',)
-
-
-@register_snippet
-class StepsInBoardSnippetViewSet(SnippetViewSet):
-    model = StepsInBoard
-    menu_label = _('Steps In Board')
-    menu_order = 200
-    add_to_settings_menu = False
-    exclude_from_explorer = False
-    list_display = ('name',)
 
 
 @hooks.register('insert_global_admin_css')
