@@ -3,3 +3,8 @@
         padding: calc(0.2em* var(--w-density-factor)) 1em;
     }
 }
+
+.w-panel {
+    --header-gap: 0;
+    margin-bottom: calc(-1rem + 1.25rem* var(--w-density-factor));
+}
