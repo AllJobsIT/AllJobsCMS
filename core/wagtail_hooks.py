@@ -133,3 +133,5 @@ def register_snippet_listing_buttons(snippet, user, next):
                 icon_name="draft"
             ),
         ]
+    return []
+
