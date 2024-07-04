@@ -6,6 +6,8 @@ from wagtail.fields import StreamField
 from wagtail.models import Orderable
 from wagtail.snippets.blocks import SnippetChooserBlock
 
+from core.choices.worker import WorkerProcessStatusChoice
+
 
 class WorkersStreamBlock(StreamBlock):
     worker = SnippetChooserBlock("core.Worker")
@@ -54,3 +56,9 @@ class Demand(Orderable):
 
     def __str__(self):
         return f"Запрос {self.id}"
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        super().save(force_insert, force_update, using, update_fields)
+        for block in self.workers:
+            block.value.process_status = WorkerProcessStatusChoice.SUBMIT
+            block.value.save()

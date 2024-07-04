@@ -8,9 +8,8 @@ from wagtail.snippets.views.snippets import SnippetViewSet
 from wagtail.snippets.widgets import SnippetListingButton
 
 from core.libs.filters import WorkerFilterSet, VacancyFilterSet
-from core.models.snippets import Worker, Status, Rank
+from core.models.snippets import Worker, Status
 from core.models.snippets.base import Specialization, Grade
-from core.models.snippets.steps_in_board import StepsInBoard
 from core.models.snippets.vacancy import Vacancy
 
 
@@ -24,8 +23,8 @@ class WorkersSnippetViewSet(SnippetViewSet):
     add_to_admin_menu = True
     filterset_class = WorkerFilterSet
     list_display = (
-        'full_name', 'get_type', 'employer', 'purchase_rate', 'specialization', 'get_grade_display', 'experience', 'city',
-        'get_telegram_nickname', "get_status")
+        'full_name', 'get_type', 'employer', 'purchase_rate', 'specialization', 'get_grade_display', 'experience',
+        'city', 'get_telegram_nickname', "get_status")
 
 
 @register_snippet
