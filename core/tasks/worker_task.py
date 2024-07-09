@@ -19,49 +19,55 @@ class ProcessWorker(AllJobsBaseTask):
 
     def get_prompt(self, file_data):
         template = """{
-            "name": Имя,
-            "last_name": Фамилия,
-            "surname": Отчество,
-            "telegram_nickname": telegram,
-            "employer": Работодатель,
-            "grade": [Грейды работника, например Junior, Middle],
-            "specialization": [Специализация работника]
-            "stack": [Стэк работника],
-            "skills": [Навыки работника],
-            "programming_languages": [Языки программирования],
-            "technologies": [Используемые технологии],
-            "databases": [Базы данных],
-            "software_development": [Средства разработки ПО(IDE)],
-            "other_technologies": [Остальные технологии, которые не относятся к прошлым],
-            "about_worker": О работнике,
-            "experience": Стаж в виже float числа,
+            "name": "Имя",
+            "last_name": "Фамилия",
+            "surname": "Отчество",
+            "telegram_nickname": "telegram",
+            "employer": "Работодатель",
+            "grade": ["Грейды работника, например Junior, Middle"],
+            "specialization": ["Специализация работника"]
+            "stack": ["Стэк работника"],
+            "skills": ["Навыки работника"],
+            "programming_languages": ["Языки программирования"],
+            "technologies": ["Используемые технологии"],
+            "databases": ["Базы данных"],
+            "software_development": ["Средства разработки ПО(IDE)"],
+            "other_technologies": ["Остальные технологии, которые не относятся к прошлым"],
+            "about_worker": "О работнике",
+            "experience": Стаж в виде float числа, например 4.5,
             "city": "Город",
-            "citizenship": Гражданство в виде кода страны, например RU,
-            "english_grade": [{Язык, в формате char_code, то есть RU/ENG: уровень владения. Подходит как уровень
+            "citizenship": "Гражданство в виде кода страны, например RU",
+            "english_grade": [{"Язык, в формате char_code, то есть RU/ENG": "уровень владения". Подходит как уровень
              владения, так и числовое представление}],
              например будут валидны варианты как {RU: B2}, так и {RU: родной},
-            "education": Образование,
-            "certificates": [Сертификаты],
-            "employer_contact": Контакт работодателя,
-            "worker_contact": [{тип: контакт}] например [{"email": "example@example.com"}, {"tel": "+7999999999999"}],
-            "example_of_work": [Ссылки на примеры работ],
+            "education": "Образование",
+            "certificates": ["Сертификаты"],
+            "employer_contact": "Контакт работодателя",
+            "worker_contact": [{тип: "контакт"}] например [{"email": "example@example.com"}, {"tel": "+7999999999999"}],
+            "example_of_work": ["Ссылки на примеры работ"],
             "work_experience": [{
-                "company_name": Название компании,
-                "start_year": Начало работы год числом,
-                "end_year": Окончание работы год числом. Если работает по сей день, то текущий год,
-                "duration": Срок работы в виде float числа, например 4.2,
-                "position": Позиция в компании,
-                "description": Описание,
-            }],
-            "links": [
-                {тип ссылки: ссылка}
+                "company_name": "Название компании",
+                "start_year": "Начало работы в формате месяц.год, например 09.2022. Если нет данных о месяце, 
+                указывай первый месяц.",
+                "end_year": "Окончание работы в формате месяц.год, например 09.2023. Если нет данных о месяце, 
+                указывай первый месяц. Если работает по настоящее время, указывай текущую дату. Дата окончания
+                работы не может быть раньше даты начала.",
+                "position": "Позиция в компании",
+                "description": "Описание",
+            }]. В тексте этот блок может называться по разному, например "Опыт работы", "Проекты", "Предыдущие места 
+            работы" и тд,
+            "links": list(dict) [
+                {тип ссылки: str ссылка}
             ],
         }
         """
         prompt = (
             "Выдели из содержимого этого текста, только следующую информацию и оформи эти данные в JSON, "
-            f"где данные в скобках это ключи для JSON с, если каких-то значений не хватает, то заполни их null, если же"
-            f" отсутствуют данные там, где должен был быть список, то оставь пустой список. Следуй "
+            f"где данные в скобках это ключи для JSON с, если каких-то значений не хватает, то заполни их нулевым "
+            f"значением их типа данных, которые я указал. Например, если тип str, то его пустое значение - '', если"
+            f" это список, то [], если float, то 0.0, если int, то 0. "
+            f"Текущая дата - {datetime.now().strftime('%m.%Y')}"
+            f"Следуй "
             f"строго по шаблону, без лишних слов:\n"
             f"Шаблон:\n{template}\n\nСодержимое файла: {file_data}"
         )
@@ -82,13 +88,19 @@ class ProcessWorker(AllJobsBaseTask):
         items = model.objects.filter(title__in=titles)
         return [{"type": item_type, "value": item.id} for item in items]
 
+    def _date_to_months(self, date):
+        month, year = map(int, date.split('.'))
+        return year * 12 + month
+
     def _update_work_experience(self, work_experience, instance):
         for item in work_experience:
             item.update({"worker": instance})
             if item.get("end_year"):
-                item["end_year"] = datetime.strptime(str(item["end_year"]), "%Y")
+                item["end_year"] = datetime.strptime(str(item["end_year"]), "%m.%Y")
             if item.get("start_year"):
-                item["start_year"] = datetime.strptime(str(item["start_year"]), "%Y")
+                item["start_year"] = datetime.strptime(str(item["start_year"]), "%m.%Y")
+            total_days = item['end_year'] - item['start_year']
+            item['duration'] = round(total_days.days / 365, 2)
             WorkExperience(**item).save()
 
     def process_worker(self):
@@ -105,7 +117,8 @@ class ProcessWorker(AllJobsBaseTask):
                 model="gpt-4o",
                 messages=[
                     {"role": "system",
-                     "content": "Ты продвинутый анализатор текста"
+                     "content": "Ты опытный анализатор текста резюме, способный выделить из него всю необходимую "
+                                "информацию"
                      },
                     {"role": "user",
                      "content": self.get_prompt(data[0].page_content)}
