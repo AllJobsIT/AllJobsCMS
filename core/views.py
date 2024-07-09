@@ -115,9 +115,9 @@ def add_work_experience_section(doc, jobs):
         add_heading(doc,
                     f"{job.company_name} ({format_date(job.start_year, format='d MMMM y', locale='ru')} - {format_date(job.end_year, format='d MMMM y', locale='ru')})",
                     3)
-        soup = BeautifulSoup(job.description, 'html.parser')
+        soup = BeautifulSoup(job.description, 'html.parser') if job.description else '-'
         add_table(doc, ["Роль в проекте", "Описание проекта", "Применяемые технологии"],
-                  [job.position, soup.get_text(), ", ".join(
+                  [job.position, soup.get_text() if isinstance(soup, BeautifulSoup) else soup, ", ".join(
                       [other_technologies.value if other_technologies.value else '-' for other_technologies in
                        job.technologies])], True)
 
