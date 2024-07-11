@@ -1,5 +1,6 @@
 import uuid
 
+from dirtyfields import DirtyFieldsMixin
 from django.db import models
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
@@ -92,7 +93,7 @@ class GradeStreamBlock(StreamBlock):
     grade = SnippetChooserBlock("core.Grade", label=_("Grade"))
 
 
-class Worker(index.Indexed, ClusterableModel):
+class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
     code = models.UUIDField(
         verbose_name='Код работника',
         blank=True,
@@ -254,6 +255,11 @@ class Worker(index.Indexed, ClusterableModel):
         verbose_name='Публиковать',
         blank=True
     )
+    birthday = models.DateField(
+        verbose_name='День рождения',
+        blank=True,
+        null=True,
+    )
     process_status = models.IntegerField(choices=WorkerProcessStatusChoice, default=WorkerProcessStatusChoice.PROCESS,
                                          verbose_name=_("Process status"))
     created_at = models.DateTimeField(auto_now_add=True)
@@ -265,9 +271,10 @@ class Worker(index.Indexed, ClusterableModel):
         FieldPanel("last_name"),
         FieldPanel("name"),
         FieldPanel("surname"),
+        FieldPanel("birthday"),
         FieldPanel("file"),
         FieldPanel("status"),
-        FieldPanel("status_date"),
+        FieldPanel("status_date", read_only=True),
         FieldPanel("type"),
         FieldPanel("employer"),
         FieldPanel("sales_rate"),
