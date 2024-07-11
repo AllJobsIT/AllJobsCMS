@@ -17,6 +17,7 @@ from wagtail.snippets.blocks import SnippetChooserBlock
 from core.choices.relationship_type import RelationshipTypeChoice
 from core.choices.worker import WorkerProcessStatusChoice
 from core.models.snippets.base import Status
+from core.panels.worker_panel import SimilarWorkersPanel
 
 
 # from core.views import generate_docx
@@ -321,12 +322,17 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
         FieldPanel("example_of_work"),
     ]
 
+    similar_worker_panel = [
+        SimilarWorkersPanel(),
+    ]
+
     edit_handler = TabbedInterface([
         ObjectList(personal_panels, heading='Личные данные'),
         ObjectList(about_worker_panels, heading='О кандидате'),
         ObjectList(skills_panels, heading='Навыки и стэк'),
         ObjectList(projects_panels, heading='Проекты работника'),
         ObjectList(work_experience_panels, heading='Опыт работы'),
+        ObjectList(similar_worker_panel, heading='Клоны текущей записи'),
     ])
 
     search_fields = [

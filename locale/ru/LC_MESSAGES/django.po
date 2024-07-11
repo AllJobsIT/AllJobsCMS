@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-04 12:11+0000\n"
+"POT-Creation-Date: 2024-07-11 12:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,38 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: core/choices/grades.py:6
+msgid "Intern"
+msgstr ""
+
+#: core/choices/grades.py:7
+msgid "Junior"
+msgstr ""
+
+#: core/choices/grades.py:8
+msgid "Middle"
+msgstr ""
+
+#: core/choices/grades.py:9
+msgid "Senior"
+msgstr ""
+
+#: core/choices/grades.py:10
+msgid "Lead"
+msgstr ""
+
+#: core/choices/relationship_type.py:7
+msgid "Наемный"
+msgstr ""
+
+#: core/choices/relationship_type.py:8
+msgid "Штатный"
+msgstr ""
+
+#: core/choices/relationship_type.py:9
+msgid "От партнера"
+msgstr ""
 
 #: core/choices/vacancy.py:6 core/choices/worker.py:6
 msgid "Обработка с помощью ИИ не удалась"
@@ -92,68 +124,56 @@ msgstr ""
 msgid "Работает на проекте"
 msgstr ""
 
-#: core/models/snippets/base.py:17
+#: core/models/snippets/base.py:18
 msgid ""
 "Может быть только {max_instances} экземпляр(ов) сниппета {self.__str__()}."
 msgstr ""
 
-#: core/models/snippets/vacancy.py:113
+#: core/models/snippets/vacancy.py:116
 msgid "Request"
 msgstr "Запрос"
 
-#: core/models/snippets/worker.py:86 core/wagtail_hooks.py:78
+#: core/models/snippets/worker.py:90 core/wagtail_hooks.py:57
 msgid "Specialization"
 msgstr "Специализации"
 
-#: core/models/snippets/worker.py:90 core/wagtail_hooks.py:88
+#: core/models/snippets/worker.py:94 core/wagtail_hooks.py:67
 msgid "Grade"
 msgstr "Грейды"
 
-#: core/models/snippets/worker.py:260
+#: core/models/snippets/worker.py:265
 msgid "Process status"
 msgstr "Системный статус кандидата"
 
-#: core/models/snippets/worker.py:300
+#: core/models/snippets/worker.py:308
 msgid "Work Experience"
 msgstr "Опыт работы"
 
-#: core/models/snippets/worker.py:306
+#: core/models/snippets/worker.py:314
 msgid "Projects"
 msgstr "Проекты"
 
-#: core/wagtail_hooks.py:20
+#: core/wagtail_hooks.py:19
 msgid "Workers"
 msgstr "Кандидаты"
 
-#: core/wagtail_hooks.py:34
+#: core/wagtail_hooks.py:33
 msgid "Vacancies"
 msgstr "Вакансии"
 
-#: core/wagtail_hooks.py:48
+#: core/wagtail_hooks.py:47
 msgid "Status"
 msgstr "Статус"
 
-#: core/wagtail_hooks.py:58
-msgid "Type"
-msgstr "Тип"
-
-#: core/wagtail_hooks.py:68
-msgid "Rank"
-msgstr "Ранг заявки"
-
-#: core/wagtail_hooks.py:98
-msgid "Steps In Board"
-msgstr "Шаги на доске"
-
-#: core/wagtail_hooks.py:118
+#: core/wagtail_hooks.py:87
 msgid "Download DOCX"
 msgstr "Скачать DOCX"
 
-#: core/wagtail_hooks.py:124
+#: core/wagtail_hooks.py:93
 msgid "Download PDF"
 msgstr "Скачать PDF"
 
-#: core/wagtail_hooks.py:130
+#: core/wagtail_hooks.py:99
 msgid "Check template"
 msgstr "Посмотреть шаблон"
 
@@ -1936,3 +1956,20 @@ msgstr ""
 msgctxt "stick"
 msgid "club"
 msgstr ""
+
+#: web/templates/similar_worker_panel.html:3
+msgid "Similar Workers"
+msgstr "Похожие работники"
+
+#: web/templates/similar_worker_panel.html:8
+msgid "No similar workers found."
+msgstr "Не найдено похожих работников"
+
+#~ msgid "Type"
+#~ msgstr "Тип"
+
+#~ msgid "Rank"
+#~ msgstr "Ранг заявки"
+
+#~ msgid "Steps In Board"
+#~ msgstr "Шаги на доске"

@@ -1,0 +1,11 @@
+{% load i18n %}
+<div class="help-block">
+    <h2>{% trans "Similar Workers" %}</h2>
+    <ul class="w-field__textoutput">
+        {% for worker in similar_workers %}
+            <li><a href="{% url 'wagtailsnippets_core_worker:edit' worker.pk %}">{{ worker.full_name }}</a></li>
+        {% empty %}
+            <li>{% trans "No similar workers found." %}</li>
+        {% endfor %}
+    </ul>
+</div>
