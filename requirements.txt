@@ -45,6 +45,7 @@ Django==5.0.6
 django-botmanager==0.2.21
 django-countries==7.6.1
 django-debug-toolbar==4.4.2
+django-dirtyfields==1.9.3
 django-filter==24.2
 django-modelcluster==6.3
 django-permissionedforms==0.1
