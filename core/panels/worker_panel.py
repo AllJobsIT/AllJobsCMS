@@ -34,17 +34,3 @@ class SimilarWorkersPanel(Panel):
                 'similar_workers': similar_workers,
             })
             return context
-
-    def clone(self):
-        return self.__class__()
-
-    def render_html(self, parent_context):
-        instance = parent_context['instance']
-        similar_workers = instance.similar_workers.all()
-
-        context = {
-            'instance': instance,
-            'similar_workers': similar_workers,
-        }
-
-        return format_html(render_to_string('similar_worker_panel.html', context))

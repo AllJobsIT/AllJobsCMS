@@ -22,7 +22,6 @@ class ProcessWorker(AllJobsBaseTask):
             "name": "Имя",
             "last_name": "Фамилия",
             "surname": "Отчество",
-            "birthday": "Дата рождения в формате 01.01.2024(ДД.ММ.ГГГГ) строкой. Если отсутствует, то текущая дата",
             "telegram_nickname": "telegram",
             "employer": "Работодатель",
             "grade": ["Грейды работника, например Junior, Middle"],
@@ -131,7 +130,6 @@ class ProcessWorker(AllJobsBaseTask):
                 instance.name = result_dict.get('name')
                 instance.last_name = result_dict.get('last_name')
                 instance.surname = result_dict.get('surname')
-                instance.birthday = datetime.strptime(result_dict.get('birthday'), "%d.%m.%Y")
                 instance.telegram_nickname = result_dict.get('telegram_nickname')
                 instance.employer = result_dict.get('employer')
                 instance.stack = self._get_items(result_dict, "stack", "stack_item")
