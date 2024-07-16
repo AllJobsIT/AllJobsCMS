@@ -54,6 +54,7 @@ class ProcessWorker(AllJobsBaseTask):
                 работы не может быть раньше даты начала.",
                 "position": "Позиция в компании",
                 "description": "Описание",
+                "technologies": ["Используемые технологии"]
             }]. В тексте этот блок может называться по разному, например "Опыт работы", "Проекты", "Предыдущие места 
             работы" и тд,
             "links": list(dict) [
@@ -101,6 +102,7 @@ class ProcessWorker(AllJobsBaseTask):
                 item["start_year"] = datetime.strptime(str(item["start_year"]), "%m.%Y")
             total_days = item['end_year'] - item['start_year']
             item['duration'] = round(total_days.days / 365, 2)
+            item["technologies"] = self._get_items(item, "technologies", "technology_item")
             WorkExperience(**item).save()
 
     def process_worker(self):
