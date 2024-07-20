@@ -22,6 +22,10 @@ from .models import Worker, WorkExperience
 
 def get_worker_context(worker_id):
     worker = get_object_or_404(Worker, id=worker_id)
+    try:
+        salary = f"{worker.salary[0].value['salary_size']}{worker.salary[0].value['salary_currency'].symbol}"
+    except IndexError:
+        salary = "-"
     return {
         'worker': worker,
         "grade": ", ".join([grade.value.title for grade in worker.grade]),
@@ -29,6 +33,7 @@ def get_worker_context(worker_id):
         "stack": ", ".join([stack.value for stack in worker.stack]),
         "skills": ", ".join([skills.value for skills in worker.skills]),
         "technologies": ", ".join([technologies.value for technologies in worker.technologies]),
+        "salary": salary,
         "databases": ", ".join([databases.value for databases in worker.databases]),
         "development_tools": ", ".join(
             [software_development.value for software_development in worker.software_development]),
@@ -49,6 +54,7 @@ def generate_docx(context):
     add_paragraph(doc, '', context['worker'].get_specialization())
     add_paragraph(doc, 'Грейд:', context.get('grade', '-'))
     add_paragraph(doc, 'Стаж:', context.get('experience', '-'))
+    add_paragraph(doc, 'Зарплата:', context.get('salary', '-'))
     add_skills_and_stack_section(doc, context)
     add_personal_info_section(doc, context)
     add_work_experience_section(doc, context['jobs'])

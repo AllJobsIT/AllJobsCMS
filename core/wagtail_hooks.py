@@ -8,7 +8,7 @@ from wagtail.snippets.views.snippets import SnippetViewSet
 from wagtail.snippets.widgets import SnippetListingButton
 
 from core.libs.filters import WorkerFilterSet, VacancyFilterSet
-from core.models.snippets import Worker, Status
+from core.models.snippets import Worker, Status, CurrencySnippet
 from core.models.snippets.base import Specialization, Grade
 from core.models.snippets.vacancy import Vacancy
 
@@ -69,6 +69,16 @@ class GradeSnippetViewSet(SnippetViewSet):
     add_to_settings_menu = False
     exclude_from_explorer = False
     list_display = ('title',)
+
+
+@register_snippet
+class CurrencySnippetViewSet(SnippetViewSet):
+    model = CurrencySnippet
+    menu_label = _("Currency")
+    menu_order = 10
+    add_to_settings_menu = False
+    exclude_from_explorer = False
+    list_display = ("char_code", "name", "symbol")
 
 
 @hooks.register('insert_global_admin_css')

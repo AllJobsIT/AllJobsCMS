@@ -16,6 +16,7 @@ from wagtail.snippets.blocks import SnippetChooserBlock
 
 from core.choices.relationship_type import RelationshipTypeChoice
 from core.choices.worker import WorkerProcessStatusChoice
+from core.models.snippets.currency import CurrencySnippet
 from core.models.snippets.base import Status
 from core.panels.worker_panel import SimilarWorkersPanel
 
@@ -23,67 +24,76 @@ from core.panels.worker_panel import SimilarWorkersPanel
 # from core.views import generate_docx
 
 
+class SalaryStructBlock(StructBlock):
+    salary_size = blocks.IntegerBlock()
+    salary_currency = SnippetChooserBlock(CurrencySnippet)
+
+
+class SalaryStreamBlock(StreamBlock):
+    salary_item = SalaryStructBlock(label=_("Salary item"))
+
+
 class EnglishGradeStructBlock(StructBlock):
-    language = blocks.CharBlock(label="Язык")
-    grade = blocks.CharBlock(label="Знание языка")
+    language = blocks.CharBlock(label=_("Language item"))
+    grade = blocks.CharBlock(label=_("Language grade"))
 
 
 class EnglishGradeStreamBlock(StreamBlock):
-    language = EnglishGradeStructBlock(label="Элемент языка")
+    language = EnglishGradeStructBlock(label=_("Language"))
 
 
 class StackStreamBlock(StreamBlock):
-    stack_item = blocks.CharBlock(label="Элемент стэка")
+    stack_item = blocks.CharBlock(label=_("Stack item"))
 
 
 class SkillStreamBlock(StreamBlock):
-    skill_item = blocks.CharBlock(label="Элемент навыка")
+    skill_item = blocks.CharBlock(label=_("Skill item"))
 
 
 class ProgrammingLanguageStreamBlock(StreamBlock):
-    language_item = blocks.CharBlock(label="Язык программирования")
+    language_item = blocks.CharBlock(label=_("Programming language"))
 
 
 class TechnologiesStreamBlock(StreamBlock):
-    technology_item = blocks.CharBlock(label="Элемент технологии")
+    technology_item = blocks.CharBlock(label=_("Technology item"))
 
 
 class DatabasesStreamBlock(StreamBlock):
-    database_item = blocks.CharBlock(label="Элемент базы данных")
+    database_item = blocks.CharBlock(label=_("Database item"))
 
 
 class SoftwareDevelopmentStreamBlock(StreamBlock):
-    software_development_item = blocks.CharBlock(label="Элемент средства разработки")
+    software_development_item = blocks.CharBlock(label=_("Software development item"))
 
 
 class OtherTechnologiesStreamBlock(StreamBlock):
-    other_technology_item = blocks.CharBlock(label="Элемент другой технологии")
+    other_technology_item = blocks.CharBlock(label=_("Other technology item"))
 
 
 class CertificatesStreamBlock(StreamBlock):
-    certificate_item = blocks.CharBlock(label="Элемент сертификата")
+    certificate_item = blocks.CharBlock(label=_("Certificate item"))
 
 
 class ExampleOfWorkStreamBlock(StreamBlock):
-    example_of_work_item = blocks.URLBlock(label="Элемент примера работы")
+    example_of_work_item = blocks.URLBlock(label=_("Work example item"))
 
 
 class ContactsStructBlock(StructBlock):
-    name = blocks.CharBlock(label="Тип контакта")
-    value = blocks.CharBlock(label="Значение")
+    name = blocks.CharBlock(label=_("Contact type"))
+    value = blocks.CharBlock(label=_("Contact value"))
 
 
 class ContactsStreamBlock(StreamBlock):
-    contact = ContactsStructBlock(label="Элемент контакта")
+    contact = ContactsStructBlock(label=_("Contact item"))
 
 
 class LinksStructBlock(StructBlock):
-    type = blocks.CharBlock(label="Тип ссылки")
-    link = blocks.URLBlock(label="Ссылка")
+    type = blocks.CharBlock(label=_("Link type"))
+    link = blocks.URLBlock(label=_("Link value"))
 
 
 class LinksStreamBlock(StreamBlock):
-    link = LinksStructBlock(label="Элемент ссылки")
+    link = LinksStructBlock(label=_("Link item"))
 
 
 class SpecializationStreamBlock(StreamBlock):
@@ -96,23 +106,23 @@ class GradeStreamBlock(StreamBlock):
 
 class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
     code = models.UUIDField(
-        verbose_name='Код работника',
+        verbose_name=_("Worker unique code"),
         blank=True,
         default=uuid.uuid4,
     )
     name = models.CharField(
         max_length=255,
-        verbose_name='Имя',
+        verbose_name=_("First name"),
         null=True
     )
     last_name = models.CharField(
         max_length=255,
-        verbose_name='Фамилия',
+        verbose_name=_("Last name"),
         null=True
     )
     surname = models.CharField(
         max_length=255,
-        verbose_name='Отчество',
+        verbose_name=_("Surname"),
         blank=True,
         null=True
     )
@@ -122,142 +132,145 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
-        verbose_name="Резюме"
+        verbose_name=_("File CV")
     )
     telegram_nickname = models.CharField(
         max_length=255,
-        verbose_name='Никнейм TG',
+        verbose_name=_("Telegram nickname"),
         blank=True,
         null=True
     )
     status = models.ForeignKey(
         Status,
         on_delete=models.SET_NULL,
-        verbose_name='Статус кандидата',
+        verbose_name=_("Worker status"),
         blank=True,
         null=True
     )
     status_date = models.DateField(
-        verbose_name='Дата изменения статуса',
+        verbose_name=_("Changed date status"),
         blank=True,
         null=True,
     )
     type = models.IntegerField(
-        choices=RelationshipTypeChoice, default=RelationshipTypeChoice.UNSPECIFIED, verbose_name="Тип отношений"
+        choices=RelationshipTypeChoice, default=RelationshipTypeChoice.UNSPECIFIED, verbose_name=_("Relationship type")
     )
     employer = models.CharField(
         max_length=255,
-        verbose_name='Работодатель сотрудника',
+        verbose_name=_("Worker employer"),
         blank=True,
         null=True
     )
     sales_rate = models.IntegerField(
-        verbose_name='Рейт продажи',
+        verbose_name=_("Sales rate"),
         blank=True,
         null=True,
     )
     purchase_rate = models.IntegerField(
-        verbose_name='Рейт покупки',
+        verbose_name=_("Purchase rate"),
         blank=True,
         null=True,
     )
+    salary = StreamField(
+        SalaryStreamBlock(max_num=1), blank=True, null=True, use_json_field=True, verbose_name=_("Worker salary")
+    )
     specialization = StreamField(
-        SpecializationStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name="Специализация"
+        SpecializationStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name=_("Worker specialization")
     )
     grade = StreamField(
-        GradeStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name="Грейд"
+        GradeStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name=_("Worker grade")
     )
     stack = StreamField(
-        StackStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name="Стэк"
+        StackStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name=_("Worker stacks")
     )
     skills = StreamField(
-        SkillStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name="Навыки"
+        SkillStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name=_("Worker skills")
     )
     programming_languages = StreamField(
         ProgrammingLanguageStreamBlock(), blank=True, null=True, use_json_field=True,
-        verbose_name="Опыт работы с языками"
+        verbose_name=_("Worker programming languages")
     )
     technologies = StreamField(
         TechnologiesStreamBlock(), blank=True, null=True, use_json_field=True,
-        verbose_name="Технологии"
+        verbose_name=_("Worker technologies")
     )
     databases = StreamField(
         DatabasesStreamBlock(), blank=True, null=True, use_json_field=True,
-        verbose_name="Базы данных"
+        verbose_name=_("Worker databases")
     )
     software_development = StreamField(
         SoftwareDevelopmentStreamBlock(), blank=True, null=True, use_json_field=True,
-        verbose_name="Средства разработки ПО"
+        verbose_name=_("Worker software developments")
     )
     other_technologies = StreamField(
         OtherTechnologiesStreamBlock(), blank=True, null=True, use_json_field=True,
-        verbose_name="Другие технологии"
+        verbose_name=_("Worker other technologies")
     )
     about_worker = RichTextField(
-        verbose_name='О себе',
+        verbose_name=_("About worker"),
         blank=True,
         null=True
     )
     experience = models.FloatField(
-        verbose_name='Стаж',
+        verbose_name=_("Worker years of experience"),
         blank=True,
         null=True,
         default=0.0
     )
     city = models.CharField(
         max_length=255,
-        verbose_name='Город проживания',
+        verbose_name=_("Worker city"),
         blank=True,
         null=True
     )
     citizenship = CountryField(
-        verbose_name='Гражданство',
+        verbose_name=_("Worker citizenship"),
         blank=True,
         null=True
     )
     english_grade = StreamField(
         EnglishGradeStreamBlock(), blank=True, null=True, use_json_field=True,
-        verbose_name="Языки"
+        verbose_name=_("Worker languages")
     )
     education = RichTextField(
-        verbose_name='Образование',
+        verbose_name=_("Worker education"),
         blank=True,
         null=True
     )
     certificates = StreamField(
         CertificatesStreamBlock(), blank=True, null=True, use_json_field=True,
-        verbose_name="Сертификаты"
+        verbose_name=_("Worker certificates")
     )
     employer_contact = models.CharField(
         max_length=255,
-        verbose_name='Контакт работодателя',
+        verbose_name=_("Worker employer contacts"),
         blank=True,
         null=True
     )
     worker_contact = StreamField(
         ContactsStreamBlock(), blank=True, null=True, use_json_field=True,
-        verbose_name="Контакты сотрудника"
+        verbose_name=_("Worker contacts")
     )
     example_of_work = StreamField(
         ExampleOfWorkStreamBlock(), blank=True, null=True, use_json_field=True,
-        verbose_name="Пример работ"
+        verbose_name=_("Worker example of work")
     )
     links = StreamField(
         LinksStreamBlock(), blank=True, null=True, use_json_field=True,
-        verbose_name="Ссылки"
+        verbose_name=_("Worker links")
     )
     comment = RichTextField(
-        verbose_name='Комментарий',
+        verbose_name=_("Manager comment about worker"),
         blank=True,
         null=True
     )
     is_published = models.BooleanField(
         default=True,
-        verbose_name='Публиковать',
+        verbose_name=_("Is published"),
         blank=True
     )
     birthday = models.DateField(
-        verbose_name='День рождения',
+        verbose_name=_("Worker birthday"),
         blank=True,
         null=True,
     )
@@ -280,6 +293,7 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
         FieldPanel("employer"),
         FieldPanel("sales_rate"),
         FieldPanel("purchase_rate"),
+        FieldPanel("salary"),
         FieldPanel("about_worker"),
         FieldPanel("experience"),
         FieldPanel("city"),
