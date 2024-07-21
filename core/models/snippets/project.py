@@ -2,16 +2,28 @@ from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from modelcluster.fields import ParentalKey
+from wagtail import blocks
 from wagtail.admin.panels import FieldPanel
+from wagtail.blocks import StreamBlock, StructBlock
 from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Orderable
 
+from core.choices.worker import WorkerProjectFeedback
 from core.models.snippets.blocks import CostStreamBlock
-from core.models.snippets.worker import Worker, TechnologiesStreamBlock
+from core.models.snippets.worker import TechnologiesStreamBlock
+
+
+class FeedbackStructBlock(StructBlock):
+    type = blocks.ChoiceBlock(WorkerProjectFeedback.choices, label=_("Type feedback"))
+    value = blocks.RichTextBlock(label=_("Feedback text"))
+
+
+class FeedbackStreamField(StreamBlock):
+    feedback_item = FeedbackStructBlock(label=_("Feedback item"))
 
 
 class WorkExperience(Orderable):
-    worker = ParentalKey(Worker, on_delete=models.CASCADE, related_name='work_experiences')
+    worker = ParentalKey("core.Worker", on_delete=models.CASCADE, related_name='work_experiences')
     company_name = models.CharField(
         max_length=255,
         blank=True,
@@ -64,7 +76,7 @@ class WorkExperience(Orderable):
 
 
 class Project(Orderable):
-    worker = ParentalKey(Worker, on_delete=models.CASCADE, related_name='projects')
+    worker = ParentalKey("core.Worker", on_delete=models.CASCADE, related_name='projects')
     vacancy = models.ForeignKey(
         "core.Vacancy",
         on_delete=models.CASCADE, verbose_name=_("Vacancy for project"), null=True, default=None
@@ -95,6 +107,10 @@ class Project(Orderable):
         verbose_name=_("Date of application"), default=now
     )
 
+    feedback = StreamField(
+        FeedbackStreamField(max_num=1), use_json_field=True, null=True, blank=True, verbose_name=_("Feedback")
+    )
+
     panels = [
         FieldPanel("vacancy"),
         FieldPanel("date_start"),
@@ -103,7 +119,8 @@ class Project(Orderable):
         FieldPanel("role"),
         FieldPanel("team"),
         FieldPanel("date_of_application"),
+        FieldPanel("feedback"),
     ]
 
     def __str__(self):
-        return self.title
+        return self.vacancy.title

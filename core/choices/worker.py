@@ -16,3 +16,9 @@ class WorkerProcessStatusChoice(models.IntegerChoices):
     NOT_ACTIVE = 9, _("Не активен")
     WORK_IN_PROJECT = 10, _("Работает на проекте")
     IN_ARCHIVE = 11, _("В архиве")
+
+
+class WorkerProjectFeedback(models.IntegerChoices):
+    NEGATIVE = 0, _("Negative")
+    NORMAL = 1, _("Normal")
+    POSITIVE = 2, _("Positive")
