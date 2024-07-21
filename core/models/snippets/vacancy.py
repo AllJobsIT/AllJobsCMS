@@ -36,42 +36,42 @@ class SpecializationStreamBlock(StreamBlock):
 
 
 class StackStreamField(StreamBlock):
-    stack_item = blocks.CharBlock(label="Элемент стэка")
+    stack_item = blocks.CharBlock(label=_("Stack item"))
 
 
 class RequirementsStreamField(StreamBlock):
-    requirements_item = blocks.CharBlock(label="Элемент требования")
+    requirements_item = blocks.CharBlock(label=_("Requirements item"))
 
 
 class ResponsibilitiesStreamField(StreamBlock):
-    responsibilities_item = blocks.CharBlock(label="Элемент обязанности")
+    responsibilities_item = blocks.CharBlock(label=_("Responsibilities item"))
 
 
 class Vacancy(ClusterableModel):
     uuid = models.UUIDField(
         default=uuid.uuid4,
-        verbose_name='UUID Вакансии',
+        verbose_name=_("UUID vacancy"),
     )
-    title = models.CharField(max_length=255, verbose_name="Название вакансии", blank=True, null=True)
+    title = models.CharField(max_length=255, verbose_name=_("Title"), blank=True, null=True)
     specialization = StreamField(
-        SpecializationStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name="Специализация"
+        SpecializationStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name=_("Specializations")
     )
     stack = StreamField(
-        StackStreamField(), blank=True, null=True, use_json_field=True, verbose_name="Стэк"
+        StackStreamField(), blank=True, null=True, use_json_field=True, verbose_name=_("Stacks")
     )
     requirements = StreamField(
-        RequirementsStreamField(), blank=True, null=True, use_json_field=True, verbose_name="Требования к кандидату"
+        RequirementsStreamField(), blank=True, null=True, use_json_field=True, verbose_name=_("Requirements")
     )
     responsibilities = StreamField(
-        ResponsibilitiesStreamField(), blank=True, null=True, use_json_field=True, verbose_name="Обязанности кандидата"
+        ResponsibilitiesStreamField(), blank=True, null=True, use_json_field=True, verbose_name=_("Responsibilities")
     )
-    cost = models.IntegerField(verbose_name="Рейт вакансии", blank=True, null=True)
-    location = CountryField(verbose_name="Локация вакансии", blank=True, null=True)
-    load = models.CharField(verbose_name="Загрузка вакансии", max_length=255, blank=True, null=True)
+    cost = models.IntegerField(verbose_name=_("Cost"), blank=True, null=True)
+    location = CountryField(verbose_name=_("Location"), blank=True, null=True)
+    load = models.CharField(verbose_name=_("Load"), max_length=255, blank=True, null=True)
 
     tags = TaggableManager(through='VacancyTags', blank=True, related_name='vacancy_tags')
     grades = StreamField(
-        GradeStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name="Грейды"
+        GradeStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name=_("Grades")
     )
     status = models.IntegerField(choices=VacancyProcessStatusChoices,
                                  default=VacancyProcessStatusChoices.AWAITING_APPROVE)
@@ -91,11 +91,18 @@ class Vacancy(ClusterableModel):
     is_send = models.BooleanField(default=False)
     channel = models.CharField(max_length=255, blank=True, null=True)
     full_vacancy_text_from_tg_chat = models.TextField(blank=True,
-                                                      verbose_name="Полный текст скопированной из тг вакансии")
+                                                      verbose_name=_("Full vacancy text"))
 
     main_panels = [
         FieldPanel("title"),
         FieldPanel("status"),
+        FieldPanel("created_at", read_only=True),
+        FieldPanel("updated_at", read_only=True),
+        FieldPanel("channel", read_only=True),
+        FieldPanel("full_vacancy_text_from_tg_chat"),
+    ]
+
+    about_vacancy_panels = [
         FieldPanel("specialization"),
         FieldPanel("stack"),
         FieldPanel("requirements"),
@@ -106,10 +113,6 @@ class Vacancy(ClusterableModel):
         FieldPanel("tags"),
         FieldPanel("grades"),
         FieldPanel("is_active"),
-        FieldPanel("created_at", read_only=True),
-        FieldPanel("updated_at", read_only=True),
-        FieldPanel("channel", read_only=True),
-        FieldPanel("full_vacancy_text_from_tg_chat"),
     ]
 
     demand_panels = [
@@ -117,8 +120,9 @@ class Vacancy(ClusterableModel):
     ]
 
     edit_handler = TabbedInterface([
-        ObjectList(main_panels, heading='Главная'),
-        ObjectList(demand_panels, heading='Запросы'),
+        ObjectList(main_panels, heading=_("Main")),
+        ObjectList(about_vacancy_panels, heading=_("About vacancy")),
+        ObjectList(demand_panels, heading=_("Demands")),
     ])
 
     def __str__(self):
@@ -152,8 +156,8 @@ class Vacancy(ClusterableModel):
         # Возвращает строковое представление грейда
         return ", ".join([str(item.value) for item in self.stack])[:80] + '...'
 
-    get_stack_display.admin_order_field = "Стэк"
-    get_stack_display.short_description = "Стэк"
+    get_stack_display.admin_order_field = _("Stack")
+    get_stack_display.short_description = _("Stack")
 
-    get_status.admin_order_field = "Статус"
-    get_status.short_description = "Статус"
+    get_status.admin_order_field = _("Status")
+    get_status.short_description = _("Status")
