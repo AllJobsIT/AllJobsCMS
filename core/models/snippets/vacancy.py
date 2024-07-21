@@ -17,6 +17,7 @@ from wagtail.snippets.blocks import SnippetChooserBlock
 from core.choices.vacancy import VacancyProcessStatusChoices
 from core.middleware import get_current_request
 from core.models.snippets.demand import Demand
+from core.panels.vacancy_panels import EligibleWorkersPanel
 from core.tasks.vacancy_task import SendVacancy, ProcessVacancy
 
 
@@ -119,10 +120,15 @@ class Vacancy(ClusterableModel):
         InlinePanel("demands", max_num=1, label=_("Candidate")),
     ]
 
+    eligible_workers_panels = [
+        EligibleWorkersPanel()
+    ]
+
     edit_handler = TabbedInterface([
         ObjectList(main_panels, heading=_("Main")),
         ObjectList(about_vacancy_panels, heading=_("About vacancy")),
-        ObjectList(demand_panels, heading=_("Submitted candidates")),
+        ObjectList(demand_panels, heading=_("Submitted workers")),
+        ObjectList(eligible_workers_panels, heading=_("Eligible workers")),
     ])
 
     def __str__(self):

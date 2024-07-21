@@ -1,0 +1,11 @@
+{% load i18n %}
+<div class="help-block">
+    <h2>{% trans "Eligible workers" %}</h2>
+    <ul class="w-field__textoutput">
+        {% for worker in eligible_workers %}
+            <li><a href="{% url 'wagtailsnippets_core_worker:edit' worker.pk %}">{{ worker.full_name }}</a></li>
+        {% empty %}
+            <li>{% trans "Not found projects." %}</li>
+        {% endfor %}
+    </ul>
+</div>
