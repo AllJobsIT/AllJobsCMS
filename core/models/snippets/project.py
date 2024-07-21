@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils.timezone import now
+from django.utils.translation import gettext_lazy as _
 from modelcluster.fields import ParentalKey
 from wagtail.admin.panels import FieldPanel
 from wagtail.fields import RichTextField, StreamField
@@ -13,37 +15,37 @@ class WorkExperience(Orderable):
         max_length=255,
         blank=True,
         null=True,
-        verbose_name='Название компании'
+        verbose_name=_('Company name')
     )
     start_year = models.DateField(
-        verbose_name='Начало работы',
+        verbose_name=_('Start work'),
         blank=True,
         null=True,
     )
     end_year = models.DateField(
-        verbose_name='Конец работы',
+        verbose_name=_('End work'),
         blank=True,
         null=True,
     )
     duration = models.FloatField(
-        verbose_name="Срок работы",
+        verbose_name=_("Work duration"),
         blank=True,
         null=True,
     )
     position = models.CharField(
         max_length=255,
-        verbose_name='Позиция',
+        verbose_name=_('Position'),
         blank=True,
         null=True,
     )
     description = RichTextField(
-        verbose_name='Описание проекта',
+        verbose_name=_('Project description'),
         blank=True,
         null=True,
     )
     technologies = StreamField(
         TechnologiesStreamBlock(), blank=True, null=True, use_json_field=True,
-        verbose_name="Технологии"
+        verbose_name=_("Project technologies")
     )
 
     panels = [
@@ -64,38 +66,42 @@ class Project(Orderable):
     worker = ParentalKey(Worker, on_delete=models.CASCADE, related_name='projects')
     title = models.CharField(
         max_length=255,
-        verbose_name='Наименование проекта'
+        verbose_name=_('Title project')
     )
     date_start = models.DateField(
-        verbose_name='Начало работы',
+        verbose_name=_('Start work'),
         blank=True,
         null=True,
     )
     date_end = models.DateField(
-        verbose_name='Конец работы',
+        verbose_name=_('End work'),
         blank=True,
         null=True,
     )
     role = models.CharField(
         max_length=255,
-        verbose_name='Роль в проекте',
+        verbose_name=_('Role in project'),
         blank=True
     )
     responsibilities = RichTextField(
-        verbose_name='Обязанности на проекте',
+        verbose_name=_('Responsibilities on project'),
         blank=True,
     )
     description = RichTextField(
-        verbose_name='Описание проекта',
+        verbose_name=_('Project description'),
         blank=True
     )
     technologies = RichTextField(
-        verbose_name='Технологии проекта',
+        verbose_name=_("Project technologies"),
         blank=True
     )
     team = RichTextField(
-        verbose_name='Состав команды',
+        verbose_name=_("Project team"),
         blank=True
+    )
+
+    date_of_application = models.DateField(
+        verbose_name=_("Date of application"), default=now
     )
 
     panels = [
@@ -107,6 +113,7 @@ class Project(Orderable):
         FieldPanel("description"),
         FieldPanel("technologies"),
         FieldPanel("team"),
+        FieldPanel("date_of_application"),
     ]
 
     def __str__(self):
