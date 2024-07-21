@@ -2,7 +2,6 @@ import graphene
 from graphene_django import DjangoObjectType
 
 from core.models.snippets.vacancy import Vacancy
-from core.tasks.vacancy_task import ProcessVacancy
 
 
 class VacancyNode(DjangoObjectType):

@@ -1,7 +1,7 @@
 import django_filters
 from wagtail.admin.filters import WagtailFilterSet
 
-from core.models.snippets import Worker, Vacancy
+from core.models.snippets import Vacancy
 from core.models.snippets.base import Grade, Specialization
 
 
