@@ -4,6 +4,10 @@
     }
 }
 
+.listing .title .title-wrapper, .listing .title h2 {
+    font-size: 0.8rem;
+}
+
 .listing td {
     font-size: 0.8rem;
 }
