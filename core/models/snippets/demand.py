@@ -27,16 +27,16 @@ class WorkersStreamBlock(StreamBlock):
 
 class Demand(Orderable, ClusterableModel):
     vacancy = ParentalKey("core.Vacancy", on_delete=models.SET_NULL, related_name="demands", null=True, blank=True)
-    deadline = models.DateField(verbose_name="Дедлайн проекта", blank=True, null=True)
-    company_name = models.CharField(
+    deadline = models.DateField(verbose_name=_("Project deadline"), blank=True, null=True)
+    customer = models.CharField(
         max_length=255,
-        verbose_name='Заказчик',
+        verbose_name=_("Customer"),
         blank=True,
         null=True,
     )
     partner = models.CharField(
         max_length=255,
-        verbose_name="Партнер",
+        verbose_name=_("Partner"),
         blank=True,
         null=True
     )
@@ -46,17 +46,17 @@ class Demand(Orderable, ClusterableModel):
         related_name='demands',
         null=True,
         blank=True,
-        verbose_name='Менеджер',
+        verbose_name=_("Manager"),
     )
     is_active = models.BooleanField(
         default=True,
-        verbose_name='Активный',
+        verbose_name=_("Is active"),
         blank=True
     )
 
     panels = [
         InlinePanel("projects", label=_("Worker")),
-        FieldPanel('company_name'),
+        FieldPanel('customer'),
         FieldPanel('partner'),
         FieldPanel('manager'),
         FieldPanel('deadline'),
@@ -64,22 +64,4 @@ class Demand(Orderable, ClusterableModel):
     ]
 
     def __str__(self):
-        return f"Запрос {self.id}"
-
-    # def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-    #     super().save(force_insert, force_update, using, update_fields)
-    #     for block in self.workers:
-    #         worker = block.value
-    #         worker['worker'].process_status = WorkerProcessStatusChoice.SUBMIT
-    #         today = now().date()
-    #         project = Project.objects.create(
-    #             worker=worker['worker'],
-    #             vacancy=self.vacancy,
-    #             date_start=today,
-    #             date_end=self.deadline,
-    #             sales_rate=worker['sales_rate'],
-    #             role=worker['role'],
-    #             date_of_application=today
-    #         )
-    #         worker['worker'].projects.add(project)
-    #         worker['worker'].save()
+        return _(f"Запрос {self.id}")

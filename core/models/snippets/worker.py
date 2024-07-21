@@ -321,12 +321,12 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
     ]
 
     edit_handler = TabbedInterface([
-        ObjectList(personal_panels, heading='Личные данные'),
-        ObjectList(about_worker_panels, heading='О кандидате'),
-        ObjectList(skills_panels, heading='Навыки и стэк'),
-        ObjectList(projects_panels, heading='Запросы'),
-        ObjectList(work_experience_panels, heading='Опыт работы'),
-        ObjectList(similar_worker_panel, heading='Клоны текущей записи'),
+        ObjectList(personal_panels, heading=_("Personal data")),
+        ObjectList(about_worker_panels, heading=_("About worker")),
+        ObjectList(skills_panels, heading=_("Skills and stack")),
+        ObjectList(projects_panels, heading=_("Requests")),
+        ObjectList(work_experience_panels, heading=_("Work experience")),
+        ObjectList(similar_worker_panel, heading=_("Similar workers")),
     ])
 
     search_fields = [

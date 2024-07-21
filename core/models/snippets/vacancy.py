@@ -77,16 +77,16 @@ class Vacancy(ClusterableModel):
                                  default=VacancyProcessStatusChoices.AWAITING_APPROVE)
     is_active = models.BooleanField(
         default=True,
-        verbose_name='Активный',
+        verbose_name=_("Is active"),
         blank=True
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
-        verbose_name='Создано',
+        verbose_name=_("Created at"),
     )
     updated_at = models.DateTimeField(
         auto_now=True,
-        verbose_name='Изменено',
+        verbose_name=_("Updated at"),
     )
     is_send = models.BooleanField(default=False)
     channel = models.CharField(max_length=255, blank=True, null=True)

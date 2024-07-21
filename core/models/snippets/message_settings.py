@@ -1,4 +1,5 @@
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext_lazy as _
 from wagtail.admin.panels import FieldPanel
 from wagtail.contrib.settings.models import BaseGenericSetting
 from wagtail.contrib.settings.registry import register_setting
@@ -52,4 +53,4 @@ class MessageSettings(BaseGenericSetting):
     ]
 
     class Meta:
-        verbose_name = "Шаблон сообщения"
+        verbose_name = _("Message template")
