@@ -94,12 +94,12 @@ class Vacancy(ClusterableModel):
                                                       verbose_name=_("Full vacancy text"))
 
     main_panels = [
+        FieldPanel("full_vacancy_text_from_tg_chat"),
         FieldPanel("title"),
         FieldPanel("status"),
         FieldPanel("created_at", read_only=True),
         FieldPanel("updated_at", read_only=True),
         FieldPanel("channel", read_only=True),
-        FieldPanel("full_vacancy_text_from_tg_chat"),
     ]
 
     about_vacancy_panels = [
