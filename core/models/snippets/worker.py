@@ -16,21 +16,9 @@ from wagtail.snippets.blocks import SnippetChooserBlock
 
 from core.choices.relationship_type import RelationshipTypeChoice
 from core.choices.worker import WorkerProcessStatusChoice
-from core.models.snippets.currency import CurrencySnippet
+from core.models.snippets.blocks import CostStreamBlock
 from core.models.snippets.base import Status
 from core.panels.worker_panel import SimilarWorkersPanel
-
-
-# from core.views import generate_docx
-
-
-class SalaryStructBlock(StructBlock):
-    salary_size = blocks.IntegerBlock()
-    salary_currency = SnippetChooserBlock(CurrencySnippet)
-
-
-class SalaryStreamBlock(StreamBlock):
-    salary_item = SalaryStructBlock(label=_("Salary item"))
 
 
 class EnglishGradeStructBlock(StructBlock):
@@ -167,7 +155,7 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
         null=True,
     )
     salary = StreamField(
-        SalaryStreamBlock(max_num=1), blank=True, null=True, use_json_field=True, verbose_name=_("Worker salary")
+        CostStreamBlock(max_num=1), blank=True, null=True, use_json_field=True, verbose_name=_("Worker salary")
     )
     specialization = StreamField(
         SpecializationStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name=_("Worker specialization")

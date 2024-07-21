@@ -6,7 +6,8 @@ from wagtail.admin.panels import FieldPanel
 from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Orderable
 
-from core.models.snippets.worker import Worker, TechnologiesStreamBlock, SalaryStreamBlock
+from core.models.snippets.blocks import CostStreamBlock
+from core.models.snippets.worker import Worker, TechnologiesStreamBlock
 
 
 class WorkExperience(Orderable):
@@ -64,9 +65,9 @@ class WorkExperience(Orderable):
 
 class Project(Orderable):
     worker = ParentalKey(Worker, on_delete=models.CASCADE, related_name='projects')
-    title = models.CharField(
-        max_length=255,
-        verbose_name=_('Title project')
+    vacancy = models.ForeignKey(
+        "core.Vacancy",
+        on_delete=models.CASCADE, verbose_name=_("Vacancy for project"), null=True, default=None
     )
     date_start = models.DateField(
         verbose_name=_('Start work'),
@@ -79,43 +80,27 @@ class Project(Orderable):
         null=True,
     )
     sales_rate = StreamField(
-        SalaryStreamBlock(max_num=1), blank=True, null=True, use_json_field=True, verbose_name=_("Sales rate")
+        CostStreamBlock(max_num=1), blank=True, null=True, use_json_field=True, verbose_name=_("Sales rate")
     )
     role = models.CharField(
         max_length=255,
         verbose_name=_('Role in project'),
         blank=True
     )
-    responsibilities = RichTextField(
-        verbose_name=_('Responsibilities on project'),
-        blank=True,
-    )
-    description = RichTextField(
-        verbose_name=_('Project description'),
-        blank=True
-    )
-    technologies = RichTextField(
-        verbose_name=_("Project technologies"),
-        blank=True
-    )
     team = RichTextField(
         verbose_name=_("Project team"),
         blank=True
     )
-
     date_of_application = models.DateField(
         verbose_name=_("Date of application"), default=now
     )
 
     panels = [
-        FieldPanel("title"),
+        FieldPanel("vacancy"),
         FieldPanel("date_start"),
         FieldPanel("date_end"),
         FieldPanel("sales_rate"),
         FieldPanel("role"),
-        FieldPanel("responsibilities"),
-        FieldPanel("description"),
-        FieldPanel("technologies"),
         FieldPanel("team"),
         FieldPanel("date_of_application"),
     ]
