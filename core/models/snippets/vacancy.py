@@ -116,7 +116,7 @@ class Vacancy(ClusterableModel):
     ]
 
     demand_panels = [
-        InlinePanel("demands", max_num=1, label=_("Request")),
+        InlinePanel("demands", max_num=1, label=_("Submitted candidates")),
     ]
 
     edit_handler = TabbedInterface([

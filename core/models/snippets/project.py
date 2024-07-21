@@ -64,7 +64,6 @@ class WorkExperience(Orderable):
     panels = [
         FieldPanel("company_name"),
         FieldPanel("start_year"),
-        FieldPanel("end_year"),
         FieldPanel("duration"),
         FieldPanel("position"),
         FieldPanel("description"),
@@ -76,20 +75,18 @@ class WorkExperience(Orderable):
 
 
 class Project(Orderable):
-    worker = ParentalKey("core.Worker", on_delete=models.CASCADE, related_name='projects')
-    vacancy = models.ForeignKey(
-        "core.Vacancy",
-        on_delete=models.CASCADE, verbose_name=_("Vacancy for project"), null=True, default=None
+    demand = ParentalKey(
+        "core.Demand", on_delete=models.CASCADE, related_name='projects', null=True, blank=True
+    )
+    worker = models.ForeignKey(
+        "core.Worker",
+        on_delete=models.CASCADE, verbose_name=_("Worker for project"), null=True, default=None
     )
     date_start = models.DateField(
         verbose_name=_('Start work'),
         blank=True,
         null=True,
-    )
-    date_end = models.DateField(
-        verbose_name=_('End work'),
-        blank=True,
-        null=True,
+        default=now
     )
     sales_rate = StreamField(
         CostStreamBlock(max_num=1), blank=True, null=True, use_json_field=True, verbose_name=_("Sales rate")
@@ -103,24 +100,19 @@ class Project(Orderable):
         verbose_name=_("Project team"),
         blank=True
     )
-    date_of_application = models.DateField(
-        verbose_name=_("Date of application"), default=now
-    )
 
     feedback = StreamField(
         FeedbackStreamField(max_num=1), use_json_field=True, null=True, blank=True, verbose_name=_("Feedback")
     )
 
     panels = [
-        FieldPanel("vacancy"),
+        FieldPanel("worker"),
         FieldPanel("date_start"),
-        FieldPanel("date_end"),
         FieldPanel("sales_rate"),
         FieldPanel("role"),
         FieldPanel("team"),
-        FieldPanel("date_of_application"),
         FieldPanel("feedback"),
     ]
 
     def __str__(self):
-        return self.vacancy.title
+        return self.worker.full_name()

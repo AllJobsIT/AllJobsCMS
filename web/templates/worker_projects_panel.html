@@ -1,0 +1,11 @@
+{% load i18n %}
+<div class="help-block">
+    <h2>{% trans "Requests" %}</h2>
+    <ul class="w-field__textoutput">
+        {% for project in projects %}
+            <li><a href="{% url 'wagtailsnippets_core_vacancy:edit' project.vacancy.pk %}">{{ project.vacancy.title }}</a></li>
+        {% empty %}
+            <li>{% trans "Not found projects." %}</li>
+        {% endfor %}
+    </ul>
+</div>

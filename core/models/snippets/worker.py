@@ -18,7 +18,7 @@ from core.choices.relationship_type import RelationshipTypeChoice
 from core.choices.worker import WorkerProcessStatusChoice
 from core.models.snippets.blocks import CostStreamBlock
 from core.models.snippets.base import Status
-from core.panels.worker_panel import SimilarWorkersPanel
+from core.panels.worker_panel import SimilarWorkersPanel, ProjectsWorkersPanel
 
 
 class EnglishGradeStructBlock(StructBlock):
@@ -304,9 +304,7 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
     ]
 
     projects_panels = [
-        InlinePanel(
-            'projects', label=_("Projects")
-        )
+        ProjectsWorkersPanel()
     ]
 
     about_worker_panels = [
@@ -326,7 +324,7 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
         ObjectList(personal_panels, heading='Личные данные'),
         ObjectList(about_worker_panels, heading='О кандидате'),
         ObjectList(skills_panels, heading='Навыки и стэк'),
-        ObjectList(projects_panels, heading='Проекты работника'),
+        ObjectList(projects_panels, heading='Запросы'),
         ObjectList(work_experience_panels, heading='Опыт работы'),
         ObjectList(similar_worker_panel, heading='Клоны текущей записи'),
     ])

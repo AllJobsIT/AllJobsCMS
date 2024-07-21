@@ -2,8 +2,9 @@ from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from modelcluster.fields import ParentalKey
+from modelcluster.models import ClusterableModel
 from wagtail import blocks
-from wagtail.admin.panels import FieldPanel
+from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.blocks import StreamBlock, StructBlock
 from wagtail.fields import StreamField
 from wagtail.models import Orderable
@@ -24,11 +25,8 @@ class WorkersStreamBlock(StreamBlock):
     worker = WorkersStructBlock(label=_("Worker info"))
 
 
-class Demand(Orderable):
+class Demand(Orderable, ClusterableModel):
     vacancy = ParentalKey("core.Vacancy", on_delete=models.SET_NULL, related_name="demands", null=True, blank=True)
-    workers = StreamField(
-        WorkersStreamBlock(), null=True, blank=True, use_json_field=True, verbose_name="Работник"
-    )
     deadline = models.DateField(verbose_name="Дедлайн проекта", blank=True, null=True)
     company_name = models.CharField(
         max_length=255,
@@ -57,7 +55,7 @@ class Demand(Orderable):
     )
 
     panels = [
-        FieldPanel('workers'),
+        InlinePanel("projects", label=_("Worker")),
         FieldPanel('company_name'),
         FieldPanel('partner'),
         FieldPanel('manager'),
@@ -68,20 +66,20 @@ class Demand(Orderable):
     def __str__(self):
         return f"Запрос {self.id}"
 
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        super().save(force_insert, force_update, using, update_fields)
-        for block in self.workers:
-            worker = block.value
-            worker['worker'].process_status = WorkerProcessStatusChoice.SUBMIT
-            today = now().date()
-            project = Project.objects.create(
-                worker=worker['worker'],
-                vacancy=self.vacancy,
-                date_start=today,
-                date_end=self.deadline,
-                sales_rate=worker['sales_rate'],
-                role=worker['role'],
-                date_of_application=today
-            )
-            worker['worker'].projects.add(project)
-            worker['worker'].save()
+    # def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+    #     super().save(force_insert, force_update, using, update_fields)
+    #     for block in self.workers:
+    #         worker = block.value
+    #         worker['worker'].process_status = WorkerProcessStatusChoice.SUBMIT
+    #         today = now().date()
+    #         project = Project.objects.create(
+    #             worker=worker['worker'],
+    #             vacancy=self.vacancy,
+    #             date_start=today,
+    #             date_end=self.deadline,
+    #             sales_rate=worker['sales_rate'],
+    #             role=worker['role'],
+    #             date_of_application=today
+    #         )
+    #         worker['worker'].projects.add(project)
+    #         worker['worker'].save()
