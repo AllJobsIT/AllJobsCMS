@@ -1,17 +1,13 @@
 from django.db import models
-from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail import blocks
 from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.blocks import StreamBlock, StructBlock
-from wagtail.fields import StreamField
 from wagtail.models import Orderable
 from wagtail.snippets.blocks import SnippetChooserBlock
 
-from core.choices.worker import WorkerProcessStatusChoice
-from core.models.snippets.project import Project
 from core.models.snippets.blocks import CostStreamBlock
 
 
@@ -64,4 +60,4 @@ class Demand(Orderable, ClusterableModel):
     ]
 
     def __str__(self):
-        return _(f"Запрос {self.id}")
+        return _(f"Request {self.id}")

@@ -57,7 +57,7 @@ class Vacancy(ClusterableModel):
         SpecializationStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name=_("Specializations")
     )
     stack = StreamField(
-        StackStreamField(), blank=True, null=True, use_json_field=True, verbose_name=_("Stacks")
+        StackStreamField(), blank=True, null=True, use_json_field=True, verbose_name=_("Stack")
     )
     requirements = StreamField(
         RequirementsStreamField(), blank=True, null=True, use_json_field=True, verbose_name=_("Requirements")

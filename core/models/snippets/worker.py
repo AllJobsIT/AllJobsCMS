@@ -94,7 +94,7 @@ class GradeStreamBlock(StreamBlock):
 
 class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
     code = models.UUIDField(
-        verbose_name=_("Worker unique code"),
+        verbose_name=_("UUID worker"),
         blank=True,
         default=uuid.uuid4,
     )
@@ -128,24 +128,12 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
         blank=True,
         null=True
     )
-    status = models.ForeignKey(
-        Status,
-        on_delete=models.SET_NULL,
-        verbose_name=_("Worker status"),
-        blank=True,
-        null=True
-    )
-    status_date = models.DateField(
-        verbose_name=_("Changed date status"),
-        blank=True,
-        null=True,
-    )
     type = models.IntegerField(
         choices=RelationshipTypeChoice, default=RelationshipTypeChoice.UNSPECIFIED, verbose_name=_("Relationship type")
     )
     employer = models.CharField(
         max_length=255,
-        verbose_name=_("Worker employer"),
+        verbose_name=_("Employer"),
         blank=True,
         null=True
     )
@@ -155,39 +143,39 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
         null=True,
     )
     salary = StreamField(
-        CostStreamBlock(max_num=1), blank=True, null=True, use_json_field=True, verbose_name=_("Worker salary")
+        CostStreamBlock(max_num=1), blank=True, null=True, use_json_field=True, verbose_name=_("Salary")
     )
     specialization = StreamField(
-        SpecializationStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name=_("Worker specialization")
+        SpecializationStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name=_("Specialization")
     )
     grade = StreamField(
-        GradeStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name=_("Worker grade")
+        GradeStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name=_("Grade")
     )
     stack = StreamField(
-        StackStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name=_("Worker stacks")
+        StackStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name=_("Stack")
     )
     skills = StreamField(
-        SkillStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name=_("Worker skills")
+        SkillStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name=_("Skills")
     )
     programming_languages = StreamField(
         ProgrammingLanguageStreamBlock(), blank=True, null=True, use_json_field=True,
-        verbose_name=_("Worker programming languages")
+        verbose_name=_("Programming languages")
     )
     technologies = StreamField(
         TechnologiesStreamBlock(), blank=True, null=True, use_json_field=True,
-        verbose_name=_("Worker technologies")
+        verbose_name=_("Technologies")
     )
     databases = StreamField(
         DatabasesStreamBlock(), blank=True, null=True, use_json_field=True,
-        verbose_name=_("Worker databases")
+        verbose_name=_("Databases")
     )
     software_development = StreamField(
         SoftwareDevelopmentStreamBlock(), blank=True, null=True, use_json_field=True,
-        verbose_name=_("Worker software developments")
+        verbose_name=_("Software developments")
     )
     other_technologies = StreamField(
         OtherTechnologiesStreamBlock(), blank=True, null=True, use_json_field=True,
-        verbose_name=_("Worker other technologies")
+        verbose_name=_("Other technologies")
     )
     about_worker = RichTextField(
         verbose_name=_("About worker"),
@@ -195,52 +183,52 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
         null=True
     )
     experience = models.FloatField(
-        verbose_name=_("Worker years of experience"),
+        verbose_name=_("Years of experience"),
         blank=True,
         null=True,
         default=0.0
     )
     city = models.CharField(
         max_length=255,
-        verbose_name=_("Worker city"),
+        verbose_name=_("City"),
         blank=True,
         null=True
     )
     citizenship = CountryField(
-        verbose_name=_("Worker citizenship"),
+        verbose_name=_("Citizenship"),
         blank=True,
         null=True
     )
     english_grade = StreamField(
         EnglishGradeStreamBlock(), blank=True, null=True, use_json_field=True,
-        verbose_name=_("Worker languages")
+        verbose_name=_("Languages")
     )
     education = RichTextField(
-        verbose_name=_("Worker education"),
+        verbose_name=_("Education"),
         blank=True,
         null=True
     )
     certificates = StreamField(
         CertificatesStreamBlock(), blank=True, null=True, use_json_field=True,
-        verbose_name=_("Worker certificates")
+        verbose_name=_("Certificates")
     )
     employer_contact = models.CharField(
         max_length=255,
-        verbose_name=_("Worker employer contacts"),
+        verbose_name=_("Employer contacts"),
         blank=True,
         null=True
     )
     worker_contact = StreamField(
         ContactsStreamBlock(), blank=True, null=True, use_json_field=True,
-        verbose_name=_("Worker contacts")
+        verbose_name=_("Contacts")
     )
     example_of_work = StreamField(
         ExampleOfWorkStreamBlock(), blank=True, null=True, use_json_field=True,
-        verbose_name=_("Worker example of work")
+        verbose_name=_("Example of work")
     )
     links = StreamField(
         LinksStreamBlock(), blank=True, null=True, use_json_field=True,
-        verbose_name=_("Worker links")
+        verbose_name=_("Links")
     )
     comment = RichTextField(
         verbose_name=_("Manager comment about worker"),
@@ -253,7 +241,7 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
         blank=True
     )
     birthday = models.DateField(
-        verbose_name=_("Worker birthday"),
+        verbose_name=_("Birthday"),
         blank=True,
         null=True,
     )
