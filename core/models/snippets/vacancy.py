@@ -116,13 +116,13 @@ class Vacancy(ClusterableModel):
     ]
 
     demand_panels = [
-        InlinePanel("demands", max_num=1, label=_("Submitted candidates")),
+        InlinePanel("demands", max_num=1, label=_("Candidate")),
     ]
 
     edit_handler = TabbedInterface([
         ObjectList(main_panels, heading=_("Main")),
         ObjectList(about_vacancy_panels, heading=_("About vacancy")),
-        ObjectList(demand_panels, heading=_("Demands")),
+        ObjectList(demand_panels, heading=_("Submitted candidates")),
     ])
 
     def __str__(self):
