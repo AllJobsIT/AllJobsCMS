@@ -6,7 +6,7 @@ from wagtail.admin.panels import FieldPanel
 from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Orderable
 
-from core.models.snippets.worker import Worker, TechnologiesStreamBlock
+from core.models.snippets.worker import Worker, TechnologiesStreamBlock, SalaryStreamBlock
 
 
 class WorkExperience(Orderable):
@@ -78,6 +78,9 @@ class Project(Orderable):
         blank=True,
         null=True,
     )
+    sales_rate = StreamField(
+        SalaryStreamBlock(max_num=1), blank=True, null=True, use_json_field=True, verbose_name=_("Sales rate")
+    )
     role = models.CharField(
         max_length=255,
         verbose_name=_('Role in project'),
@@ -108,6 +111,7 @@ class Project(Orderable):
         FieldPanel("title"),
         FieldPanel("date_start"),
         FieldPanel("date_end"),
+        FieldPanel("sales_rate"),
         FieldPanel("role"),
         FieldPanel("responsibilities"),
         FieldPanel("description"),

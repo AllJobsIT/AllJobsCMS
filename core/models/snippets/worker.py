@@ -161,11 +161,6 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
         blank=True,
         null=True
     )
-    sales_rate = models.IntegerField(
-        verbose_name=_("Sales rate"),
-        blank=True,
-        null=True,
-    )
     purchase_rate = models.IntegerField(
         verbose_name=_("Purchase rate"),
         blank=True,
@@ -291,7 +286,6 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
         FieldPanel("status_date", read_only=True),
         FieldPanel("type"),
         FieldPanel("employer"),
-        FieldPanel("sales_rate"),
         FieldPanel("purchase_rate"),
         FieldPanel("salary"),
         FieldPanel("about_worker"),
