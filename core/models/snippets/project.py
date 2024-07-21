@@ -64,6 +64,7 @@ class WorkExperience(Orderable):
     panels = [
         FieldPanel("company_name"),
         FieldPanel("start_year"),
+        FieldPanel("end_year"),
         FieldPanel("duration"),
         FieldPanel("position"),
         FieldPanel("description"),
