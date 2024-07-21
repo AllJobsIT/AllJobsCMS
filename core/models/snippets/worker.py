@@ -258,7 +258,6 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
         FieldPanel("surname"),
         FieldPanel("birthday"),
         FieldPanel("file"),
-        FieldPanel("status"),
         FieldPanel("status_date", read_only=True),
         FieldPanel("type"),
         FieldPanel("employer"),
