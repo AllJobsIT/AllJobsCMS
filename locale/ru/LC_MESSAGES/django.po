@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-26 09:36+0000\n"
+"POT-Creation-Date: 2024-07-26 09:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,7 +41,7 @@ msgid "Lead"
 msgstr "Ведущий"
 
 #: core/choices/relationship_type.py:7
-msgid "Employed"
+msgid "Employee"
 msgstr "Наемный"
 
 #: core/choices/relationship_type.py:8
@@ -477,7 +477,7 @@ msgstr "Тип отношений"
 
 #: core/models/snippets/worker.py:136
 msgid "Employer"
-msgstr "Наемный"
+msgstr "=Работодатель"
 
 #: core/models/snippets/worker.py:141
 msgid "Purchase rate"
