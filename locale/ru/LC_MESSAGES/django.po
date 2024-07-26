@@ -477,7 +477,7 @@ msgstr "Тип отношений"
 
 #: core/models/snippets/worker.py:136
 msgid "Employer"
-msgstr "=Работодатель"
+msgstr "Работодатель"
 
 #: core/models/snippets/worker.py:141
 msgid "Purchase rate"
