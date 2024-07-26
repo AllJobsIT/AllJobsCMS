@@ -122,7 +122,7 @@ class Vacancy(ClusterableModel):
     ]
 
     demand_panels = [
-        InlinePanel("demands", max_num=1, label=_("Candidate")),
+        InlinePanel("demands", max_num=1, label=_("Project")),
     ]
 
     eligible_workers_panels = [

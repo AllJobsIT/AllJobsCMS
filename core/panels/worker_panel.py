@@ -1,5 +1,3 @@
-from django.template.loader import render_to_string
-from django.utils.html import format_html
 from wagtail.admin.panels import Panel
 
 from core.libs.worker import get_similar_workers, get_projects_worker
