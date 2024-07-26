@@ -91,7 +91,7 @@ def add_heading(doc, title, level=1):
 def add_paragraph(doc, title, text):
     if text != '-':
         paragraph = doc.add_paragraph()
-        paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+        paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
         title_run = paragraph.add_run(title)
         title_run.bold = True
         title_run.font.color.rgb = RGBColor(102, 0, 0)

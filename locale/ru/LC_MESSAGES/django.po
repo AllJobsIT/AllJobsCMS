@@ -362,7 +362,7 @@ msgstr "Поданные кандидаты"
 #: core/models/snippets/vacancy.py:136
 #: web/templates/eligible_workers_pamel.html:3
 msgid "Eligible workers"
-msgstr "Похожие кандидаты"
+msgstr "Подходящие кандидаты"
 
 #: core/models/snippets/vacancy.py:173 core/models/snippets/vacancy.py:174
 #: core/wagtail_hooks.py:47
