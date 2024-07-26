@@ -41,6 +41,7 @@ class MessageSettings(BaseGenericSetting):
             "{{ requirements }} - Требования к кандидату<br/>"
             "{{ responsibilities }} - Обязанности кандидата<br/>"
             "{{ cost }} - Рейт вакансии<br>"
+            "{{ salary }} - ЗП вакансии в формате [число][символ валюты]. Пример - 5000 $<br>"
             "{{ location }} - Локация<br>"
             "{{ load }} - Загруженность<br>"
             "{{ tags }} - Тэги. Будут выводиться в формате тг, то есть с #<br>"

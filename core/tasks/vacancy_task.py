@@ -59,18 +59,20 @@ class SendVacancy(AllJobsBaseTask):
         self.init_bot()
         vacancy_id = self.task.input.get('id')
         try:
-            vacancy = apps.get_model("core.Vacancy").objects.get(id=vacancy_id, status=2)
+            vacancy = apps.get_model("core.Vacancy").objects.get(id=vacancy_id, status=3)
         except apps.get_model("core.Vacancy").DoesNotExist:
             self.task.delete()
             return
         try:
             template_message = MessageSettings.objects.all().first().text
+            salary_item = vacancy.salary[0].value
             data = {
                 "title": vacancy.title,
                 "requirements": [item.value for item in vacancy.requirements],
                 "responsibilities": [item.value for item in vacancy.responsibilities],
                 "stack": [item.value for item in vacancy.stack],
                 "cost": vacancy.cost,
+                "salary": f"{salary_item['size']} {salary_item['currency'].symbol}",
                 "location": vacancy.location.name,
                 "load": vacancy.load,
                 "tags": " ".join([f"#{tag.name}" for tag in vacancy.tags.all()]),

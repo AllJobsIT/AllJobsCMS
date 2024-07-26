@@ -16,6 +16,7 @@ from wagtail.snippets.blocks import SnippetChooserBlock
 
 from core.choices.vacancy import VacancyProcessStatusChoices
 from core.middleware import get_current_request
+from core.models.snippets.blocks import CostStreamBlock
 from core.models.snippets.demand import Demand
 from core.panels.vacancy_panels import EligibleWorkersPanel
 from core.tasks.vacancy_task import SendVacancy, ProcessVacancy
@@ -67,6 +68,9 @@ class Vacancy(ClusterableModel):
         ResponsibilitiesStreamField(), blank=True, null=True, use_json_field=True, verbose_name=_("Responsibilities")
     )
     cost = models.IntegerField(verbose_name=_("Cost"), blank=True, null=True)
+    salary = StreamField(
+        CostStreamBlock(max_num=1), blank=True, null=True, use_json_field=True, verbose_name=_("Salary")
+    )
     location = CountryField(verbose_name=_("Location"), blank=True, null=True)
     load = models.CharField(verbose_name=_("Load"), max_length=255, blank=True, null=True)
 
@@ -109,6 +113,7 @@ class Vacancy(ClusterableModel):
         FieldPanel("requirements"),
         FieldPanel("responsibilities"),
         FieldPanel("cost"),
+        FieldPanel("salary"),
         FieldPanel("location"),
         FieldPanel("load"),
         FieldPanel("tags"),
