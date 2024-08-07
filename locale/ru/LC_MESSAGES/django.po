@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-26 09:47+0000\n"
+"POT-Creation-Date: 2024-08-07 15:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -299,7 +299,7 @@ msgid "Specializations"
 msgstr "Специализации"
 
 #: core/models/snippets/vacancy.py:62 core/models/snippets/vacancy.py:170
-#: core/models/snippets/vacancy.py:171 core/models/snippets/worker.py:155
+#: core/models/snippets/vacancy.py:171 core/models/snippets/worker.py:156
 msgid "Stack"
 msgstr "Стек"
 
@@ -315,7 +315,7 @@ msgstr "Обязанности"
 msgid "Cost"
 msgstr "Стоимость"
 
-#: core/models/snippets/vacancy.py:72 core/models/snippets/worker.py:146
+#: core/models/snippets/vacancy.py:72 core/models/snippets/worker.py:147
 msgid "Salary"
 msgstr "Зарплата"
 
@@ -437,12 +437,12 @@ msgstr "Значение ссылки"
 msgid "Link item"
 msgstr "Элемент ссылки"
 
-#: core/models/snippets/worker.py:88 core/models/snippets/worker.py:149
+#: core/models/snippets/worker.py:88 core/models/snippets/worker.py:150
 #: core/wagtail_hooks.py:57
 msgid "Specialization"
 msgstr "Специализации"
 
-#: core/models/snippets/worker.py:92 core/models/snippets/worker.py:152
+#: core/models/snippets/worker.py:92 core/models/snippets/worker.py:153
 #: core/wagtail_hooks.py:67
 msgid "Grade"
 msgstr "Оценка"
@@ -459,136 +459,136 @@ msgstr "Имя"
 msgid "Last name"
 msgstr "Фамилия"
 
-#: core/models/snippets/worker.py:113
+#: core/models/snippets/worker.py:114
 msgid "Surname"
 msgstr "Отчество"
 
-#: core/models/snippets/worker.py:123
+#: core/models/snippets/worker.py:124
 msgid "File CV"
 msgstr "Файл резюме"
 
-#: core/models/snippets/worker.py:127
+#: core/models/snippets/worker.py:128
 msgid "Telegram nickname"
 msgstr "Ник в телеграмме"
 
-#: core/models/snippets/worker.py:132
+#: core/models/snippets/worker.py:133
 msgid "Relationship type"
 msgstr "Тип отношений"
 
-#: core/models/snippets/worker.py:136
+#: core/models/snippets/worker.py:137
 msgid "Employer"
 msgstr "Работодатель"
 
-#: core/models/snippets/worker.py:141
+#: core/models/snippets/worker.py:142
 msgid "Purchase rate"
 msgstr "Рейт покупки"
 
-#: core/models/snippets/worker.py:158
+#: core/models/snippets/worker.py:159
 msgid "Skills"
 msgstr "Навыки"
 
-#: core/models/snippets/worker.py:162
+#: core/models/snippets/worker.py:163
 msgid "Programming languages"
 msgstr "Языки программирования"
 
-#: core/models/snippets/worker.py:166
+#: core/models/snippets/worker.py:167
 msgid "Technologies"
 msgstr "Технологии"
 
-#: core/models/snippets/worker.py:170
+#: core/models/snippets/worker.py:171
 msgid "Databases"
 msgstr "Базы данных"
 
-#: core/models/snippets/worker.py:174
+#: core/models/snippets/worker.py:175
 msgid "Software developments"
 msgstr "Разработка программного обеспечения"
 
-#: core/models/snippets/worker.py:178
+#: core/models/snippets/worker.py:179
 msgid "Other technologies"
 msgstr "Другие технологии"
 
-#: core/models/snippets/worker.py:181 core/models/snippets/worker.py:311
+#: core/models/snippets/worker.py:182 core/models/snippets/worker.py:312
 msgid "About worker"
 msgstr "О кандидате"
 
-#: core/models/snippets/worker.py:186
+#: core/models/snippets/worker.py:187
 msgid "Years of experience"
 msgstr "Опыт работы"
 
-#: core/models/snippets/worker.py:193
+#: core/models/snippets/worker.py:194
 msgid "City"
 msgstr "Город"
 
-#: core/models/snippets/worker.py:198
+#: core/models/snippets/worker.py:199
 msgid "Citizenship"
 msgstr "Гражданство"
 
-#: core/models/snippets/worker.py:204
+#: core/models/snippets/worker.py:205
 msgid "Languages"
 msgstr "Языки"
 
-#: core/models/snippets/worker.py:207
+#: core/models/snippets/worker.py:208
 msgid "Education"
 msgstr "Образование"
 
-#: core/models/snippets/worker.py:213
+#: core/models/snippets/worker.py:214
 msgid "Certificates"
 msgstr "Сертификаты"
 
-#: core/models/snippets/worker.py:217
+#: core/models/snippets/worker.py:218
 msgid "Employer contacts"
 msgstr "Контакты работодателя"
 
-#: core/models/snippets/worker.py:223
+#: core/models/snippets/worker.py:224
 msgid "Contacts"
 msgstr "Контакты"
 
-#: core/models/snippets/worker.py:227
+#: core/models/snippets/worker.py:228
 msgid "Example of work"
 msgstr "Опыт работы"
 
-#: core/models/snippets/worker.py:231
+#: core/models/snippets/worker.py:232
 msgid "Links"
 msgstr "Ссылки"
 
-#: core/models/snippets/worker.py:234
+#: core/models/snippets/worker.py:235
 msgid "Manager comment about worker"
 msgstr "Комментарий менеджера о кандидате"
 
-#: core/models/snippets/worker.py:240
+#: core/models/snippets/worker.py:241
 msgid "Is published"
 msgstr "Опубликовано"
 
-#: core/models/snippets/worker.py:244
+#: core/models/snippets/worker.py:245
 msgid "Birthday"
 msgstr "День рождения"
 
-#: core/models/snippets/worker.py:249
+#: core/models/snippets/worker.py:250
 msgid "Process status"
 msgstr "Системный статус кандидата"
 
-#: core/models/snippets/worker.py:288
+#: core/models/snippets/worker.py:289
 msgid "Work Experience"
 msgstr "Опыт работы"
 
-#: core/models/snippets/worker.py:310
+#: core/models/snippets/worker.py:311
 msgid "Personal data"
 msgstr "Личные данные"
 
-#: core/models/snippets/worker.py:312
+#: core/models/snippets/worker.py:313
 msgid "Skills and stack"
 msgstr "Навыки и стек"
 
-#: core/models/snippets/worker.py:313
+#: core/models/snippets/worker.py:314
 #: web/templates/worker_projects_panel.html:3
 msgid "Requests"
 msgstr "Запросы"
 
-#: core/models/snippets/worker.py:314
+#: core/models/snippets/worker.py:315
 msgid "Work experience"
 msgstr "Опыт работы"
 
-#: core/models/snippets/worker.py:315
+#: core/models/snippets/worker.py:316
 msgid "Similar workers"
 msgstr "Похожие работники"
 
@@ -611,6 +611,30 @@ msgstr "Скачать PDF"
 #: core/wagtail_hooks.py:109
 msgid "Check template"
 msgstr "Посмотреть шаблон"
+
+#: parser_ai/choices/prompts.py:6
+msgid "Replace"
+msgstr "Замена"
+
+#: parser_ai/choices/prompts.py:7
+msgid "Append"
+msgstr "Добавление"
+
+#: parser_ai/models.py:15
+msgid "Prompt label"
+msgstr "Заголовок подсказки(промпта)"
+
+#: parser_ai/models.py:16
+msgid "Prompt"
+msgstr "Подсказка(промпт)"
+
+#: parser_ai/models.py:17
+msgid "Prompt description"
+msgstr "Описание подсказки(промпта)"
+
+#: parser_ai/models.py:28
+msgid "Prompts"
+msgstr "Подсказки(промпты)"
 
 #: venv/lib/python3.10/site-packages/botmanager/admin.py:40
 msgid "Ошибка"
