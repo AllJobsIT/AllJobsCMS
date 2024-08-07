@@ -330,7 +330,7 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
         return f'{self.name} {self.last_name}'
 
     def full_name(self):
-        return f'{self.last_name} {self.name} {self.surname if self.surname else ""}'
+        return f'{self.last_name if self.last_name else ""} {self.name if self.name else ""} {self.surname if self.surname else ""}'
 
     def get_status(self):
         return self.get_process_status_display()
