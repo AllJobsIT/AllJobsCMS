@@ -186,6 +186,8 @@ WAGTAILSEARCH_BACKENDS = {
     }
 }
 
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 5000
+
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 WAGTAILADMIN_BASE_URL = "http://example.com"
