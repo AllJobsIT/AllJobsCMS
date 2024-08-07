@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import sys
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -67,6 +66,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     "core",
     "wagtailmarkdown",
+    "parser_ai"
 ]
 
 MIDDLEWARE = [
@@ -220,5 +220,42 @@ BOTMANAGER_CONFIG = {
         'level': 'INFO',
         'mail_admins': False,
         'sentry_enabled': False
+    }
+}
+
+# WAGTAIL_AI
+
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+
+WAGTAIL_AI_PROMPTS = [
+    {
+        "label": "AI Коррекция текста",
+        "description": "Правильная грамматика и орфография",
+        "prompt": """Вы помогаете пользователю в написании контента для его сайта.
+                     Пользователь предоставил некоторый текст (после двоеточия).
+                     Верните предоставленный текст, но с исправленными грамматикой, орфографией и пунктуацией.
+                     Не добавляйте дополнительные знаки препинания, кавычки и не меняйте слова:""",
+        "method": "replace",
+    },
+    {
+        "label": "AI Изменение текста",
+        "description": "Получите помощь в написании большего контента на основе того, что вы написали.",
+        "prompt": """Вы помогаете пользователю в написании контента для его сайта.
+                     Пользователь предоставил исходный текст (после двоеточия).
+                     Помогите пользователю написать оставшийся контент:""",
+        "method": "append",
+    },
+]
+
+WAGTAIL_AI = {
+    "BACKENDS": {
+        "default": {
+            "CLASS": "parser_ai.ai.openai.OpenAIBackend",
+            "CONFIG": {
+                # Model ID recognizable by the llm library.
+                "MODEL_ID": "gpt-4o",
+            },
+        },
+        "TEXT_COMPLETION_BACKEND": "gpt4",
     }
 }
