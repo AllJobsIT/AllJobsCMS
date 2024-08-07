@@ -106,6 +106,7 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
     last_name = models.CharField(
         max_length=255,
         verbose_name=_("Last name"),
+        blank=True,
         null=True
     )
     surname = models.CharField(
