@@ -241,7 +241,3 @@ WAGTAIL_AI = {
         "TEXT_COMPLETION_BACKEND": "gpt4",
     }
 }
-
-WAGTAIL_DATE_FORMAT = '%d.%m.%Y.'
-WAGTAIL_DATETIME_FORMAT = '%d.%m.%Y. %H:%M'
-WAGTAIL_TIME_FORMAT = '%H:%M'

@@ -24,12 +24,6 @@ class WorkersStreamBlock(StreamBlock):
 class Demand(Orderable, ClusterableModel):
     vacancy = ParentalKey("core.Vacancy", on_delete=models.SET_NULL, related_name="demands", null=True, blank=True)
     deadline = models.DateField(verbose_name=_("Project deadline"), blank=True, null=True)
-    customer = models.CharField(
-        max_length=255,
-        verbose_name=_("Customer"),
-        blank=True,
-        null=True,
-    )
     partner = models.CharField(
         max_length=255,
         verbose_name=_("Partner"),
@@ -52,7 +46,6 @@ class Demand(Orderable, ClusterableModel):
 
     panels = [
         InlinePanel("projects", label=_("Worker")),
-        FieldPanel('customer'),
         FieldPanel('partner'),
         FieldPanel('manager'),
         FieldPanel('deadline'),

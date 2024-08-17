@@ -85,6 +85,12 @@ class Vacancy(ClusterableModel):
         verbose_name=_("Is active"),
         blank=True
     )
+    customer = models.CharField(
+        max_length=255,
+        verbose_name=_("Customer"),
+        blank=True,
+        null=True,
+    )
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name=_("Created at"),
@@ -108,6 +114,7 @@ class Vacancy(ClusterableModel):
     ]
 
     about_vacancy_panels = [
+        FieldPanel("customer"),
         FieldPanel("specialization"),
         FieldPanel("stack"),
         FieldPanel("requirements"),

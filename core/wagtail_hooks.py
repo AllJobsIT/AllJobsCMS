@@ -38,7 +38,7 @@ class VacancySnippetViewSet(SnippetViewSet):
     exclude_from_explorer = False
     filterset_class = VacancyFilterSet
     list_display = (
-        'title', 'created_at', 'specialization', 'grades', 'cost', 'get_status', 'get_stack_display', "uuid")
+        'title', 'created_at', 'customer', 'specialization', 'grades', 'cost', 'get_status', 'get_stack_display', "uuid")
 
 
 @register_snippet
