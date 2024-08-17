@@ -85,6 +85,13 @@ class CurrencySnippetViewSet(SnippetViewSet):
 def global_admin_css():
     return format_html('<link rel="stylesheet" href="{}">', static('css/index.css'))
 
+@hooks.register("insert_global_admin_js")
+def global_admin_js():
+    return format_html(
+        '<script src="{}"></script>',
+        static("js/listing.js")
+    )
+
 
 @hooks.register('register_snippet_listing_buttons')
 def register_snippet_listing_buttons(snippet, user, next):
