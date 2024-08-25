@@ -1,13 +1,13 @@
 from contextlib import contextmanager
 
-from fabric.api import env, cd, roles, execute
-from fabric.context_managers import settings
+from fabric.api import env, roles, execute
+from fabric.context_managers import settings, cd
 from fabric.decorators import task
-from fabric.operations import sudo
+from fabric.operations import run
 
 env.roledefs = {
     "dev": {
-        'hosts': ['157.90.183.254:522'],
+        'hosts': ['157.90.183.254'],
         'branch': 'master',
         'user': 'deploy',
         'compose_file': './docker-compose.yml',
@@ -19,15 +19,11 @@ env.roledefs = {
 
 def deploy_process(role_config, rebuild=''):
     with project_context(role_config):
-        sudo(
+        run(
             "git checkout -f && git checkout {branch} && git pull origin {branch}".format(branch=role_config['branch']))
-        if rebuild == 'rebuild':
-            sudo('docker compose -f {} build -q'.format(role_config['compose_file']))
-        sudo('docker compose -f {} down 2>/dev/null'.format(role_config['compose_file']))
-        sudo('docker compose -f {} up -d --build 2>/dev/null'.format(role_config['compose_file']))
-        sudo('docker system prune -a -f')
-        # sudo('docker compose -f {} exec {} python manage.py collectstatic --noinput --clear'.format(role_config['compose_file'], role_config['compose_service']))
-        # sudo('docker compose -f {} exec {} python manage.py migrate'.format(role_config['compose_file'], role_config['compose_service']))
+        run('docker compose -f {} down 2>/dev/null'.format(role_config['compose_file']))
+        run('docker compose -f {} up -d --build 2>/dev/null'.format(role_config['compose_file']))
+        run('docker system prune -a -f')
 
 
 @roles('dev')
