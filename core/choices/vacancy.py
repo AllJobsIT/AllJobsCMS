@@ -12,3 +12,9 @@ class VacancyProcessStatusChoices(models.IntegerChoices):
     WORKER_FOUND = 5, _("Worker found")
     IN_PROGRESS = 6, _("In progress")
     IN_ARCHIVE = 7, _("In archive")
+
+
+class VacancyTypeChoices(models.IntegerChoices):
+    A = 0, "A"
+    B = 1, "B"
+    C = 2, "C"

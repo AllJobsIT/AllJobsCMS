@@ -16,7 +16,7 @@ from wagtail.fields import StreamField
 from wagtail.models import Page
 from wagtail.snippets.blocks import SnippetChooserBlock
 
-from core.choices.vacancy import VacancyProcessStatusChoices
+from core.choices.vacancy import VacancyProcessStatusChoices, VacancyTypeChoices
 from core.middleware import get_current_request
 from core.models.snippets.blocks import CostStreamBlock
 from core.models.snippets.demand import Demand
@@ -106,6 +106,7 @@ class Vacancy(ClusterableModel):
     channel = models.CharField(max_length=255, blank=True, null=True)
     full_vacancy_text_from_tg_chat = models.TextField(blank=True,
                                                       verbose_name=_("Full vacancy text"))
+    type = models.SmallIntegerField(verbose_name=_("Type vacancy"), choices=VacancyTypeChoices.choices, default=VacancyTypeChoices.A)
 
     main_panels = [
         FieldPanel("full_vacancy_text_from_tg_chat"),
@@ -119,6 +120,7 @@ class Vacancy(ClusterableModel):
     about_vacancy_panels = [
         FieldPanel("customer"),
         FieldPanel("deadline"),
+        FieldPanel("type"),
         FieldPanel("specialization"),
         FieldPanel("stack"),
         FieldPanel("requirements"),
@@ -171,8 +173,14 @@ class Vacancy(ClusterableModel):
         # Возвращает строковое представление грейда
         return ", ".join([str(item.value) for item in self.stack])[:80] + '...'
 
+    def get_type(self):
+        return self.get_type_display()
+
     get_stack_display.admin_order_field = "stack"
     get_stack_display.short_description = _("Stack")
+
+    get_type.admin_order_field = "type"
+    get_type.short_description = _("Type vacancy")
 
     get_status.admin_order_field = "status"
     get_status.short_description = _("Status")
