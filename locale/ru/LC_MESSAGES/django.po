@@ -329,7 +329,7 @@ msgstr "Загруженность"
 
 #: core/models/snippets/vacancy.py:79
 msgid "Grades"
-msgstr "Оценки"
+msgstr "Грейды"
 
 #: core/models/snippets/vacancy.py:90
 msgid "Created at"
@@ -445,7 +445,7 @@ msgstr "Специализации"
 #: core/models/snippets/worker.py:92 core/models/snippets/worker.py:153
 #: core/wagtail_hooks.py:67
 msgid "Grade"
-msgstr "Оценка"
+msgstr "Грейд"
 
 #: core/models/snippets/worker.py:97
 msgid "UUID worker"
