@@ -2,6 +2,7 @@ import uuid
 
 from botmanager.models import Task
 from django.db import models
+from django.forms import BaseInlineFormSet
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
 from modelcluster.fields import ParentalKey
@@ -12,6 +13,7 @@ from wagtail import blocks
 from wagtail.admin.panels import FieldPanel, InlinePanel, TabbedInterface, ObjectList
 from wagtail.blocks import StreamBlock
 from wagtail.fields import StreamField
+from wagtail.models import Page
 from wagtail.snippets.blocks import SnippetChooserBlock
 
 from core.choices.vacancy import VacancyProcessStatusChoices
@@ -91,6 +93,7 @@ class Vacancy(ClusterableModel):
         blank=True,
         null=True,
     )
+    deadline = models.DateField(verbose_name=_("Project deadline"), blank=True, null=True)
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name=_("Created at"),
@@ -115,6 +118,7 @@ class Vacancy(ClusterableModel):
 
     about_vacancy_panels = [
         FieldPanel("customer"),
+        FieldPanel("deadline"),
         FieldPanel("specialization"),
         FieldPanel("stack"),
         FieldPanel("requirements"),
@@ -129,7 +133,7 @@ class Vacancy(ClusterableModel):
     ]
 
     demand_panels = [
-        InlinePanel("demands", max_num=1, label=_("Project")),
+        InlinePanel("demands", label=_("Demand"), max_num=1),
     ]
 
     eligible_workers_panels = [
@@ -159,13 +163,6 @@ class Vacancy(ClusterableModel):
                 if task.input.get("id", None) == self.id:
                     return
             SendVacancy.create(input={'id': self.id})
-        if self.status == VacancyProcessStatusChoices.PUBLIC:
-            request = get_current_request()
-            demand = Demand.objects.create(
-                vacancy=self,
-                manager=request.user
-            )
-            demand.save()
 
     def get_status(self):
         return self.get_status_display()
@@ -174,8 +171,8 @@ class Vacancy(ClusterableModel):
         # Возвращает строковое представление грейда
         return ", ".join([str(item.value) for item in self.stack])[:80] + '...'
 
-    get_stack_display.admin_order_field = _("Stack")
+    get_stack_display.admin_order_field = "stack"
     get_stack_display.short_description = _("Stack")
 
-    get_status.admin_order_field = _("Status")
+    get_status.admin_order_field = "status"
     get_status.short_description = _("Status")

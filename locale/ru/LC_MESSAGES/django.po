@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-17 12:34+0000\n"
+"POT-Creation-Date: 2024-08-25 13:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -169,7 +169,7 @@ msgstr "Название"
 msgid "Currency symbol"
 msgstr "Символ валюты"
 
-#: core/models/snippets/currency.py:18 core/wagtail_hooks.py:77
+#: core/models/snippets/currency.py:18 core/wagtail_hooks.py:79
 msgid "Currency"
 msgstr "Валюта"
 
@@ -189,33 +189,26 @@ msgstr "Стоимость продажи"
 msgid "Worker info"
 msgstr "Информация о подаваемом кандидате"
 
-#: core/models/snippets/demand.py:26
-msgid "Project deadline"
-msgstr "Крайний срок проекта"
-
-#: core/models/snippets/demand.py:29
-msgid "Customer"
-msgstr "Заказчик"
-
-#: core/models/snippets/demand.py:35
+#: core/models/snippets/demand.py:28
 msgid "Partner"
 msgstr "Партнер"
 
-#: core/models/snippets/demand.py:45
+#: core/models/snippets/demand.py:38
 msgid "Manager"
 msgstr "Менеджер"
 
-#: core/models/snippets/demand.py:49 core/models/snippets/vacancy.py:85
+#: core/models/snippets/demand.py:42 core/models/snippets/vacancy.py:85
 msgid "Is active"
 msgstr "Активен"
 
-#: core/models/snippets/demand.py:54
+#: core/models/snippets/demand.py:47
 msgid "Worker"
 msgstr "Кандидат"
 
-#: core/models/snippets/demand.py:63
-#, python-brace-format
-msgid "Request {self.id}"
+#: core/models/snippets/demand.py:54
+#, fuzzy, python-brace-format
+#| msgid "Request {self.id}"
+msgid "Worker {self.id}"
 msgstr "Запрос {self.id}"
 
 #: core/models/snippets/message_settings.py:57
@@ -298,8 +291,8 @@ msgstr "Название"
 msgid "Specializations"
 msgstr "Специализации"
 
-#: core/models/snippets/vacancy.py:62 core/models/snippets/vacancy.py:170
-#: core/models/snippets/vacancy.py:171 core/models/snippets/worker.py:156
+#: core/models/snippets/vacancy.py:62 core/models/snippets/vacancy.py:180
+#: core/models/snippets/worker.py:156
 msgid "Stack"
 msgstr "Стек"
 
@@ -332,40 +325,47 @@ msgid "Grades"
 msgstr "Грейды"
 
 #: core/models/snippets/vacancy.py:90
+msgid "Customer"
+msgstr "Заказчик"
+
+#: core/models/snippets/vacancy.py:94
+msgid "Project deadline"
+msgstr "Крайний срок проекта"
+
+#: core/models/snippets/vacancy.py:97 core/models/snippets/worker.py:251
 msgid "Created at"
 msgstr "Создан"
 
-#: core/models/snippets/vacancy.py:94
+#: core/models/snippets/vacancy.py:101 core/models/snippets/worker.py:252
 msgid "Updated at"
 msgstr "Обновлен"
 
-#: core/models/snippets/vacancy.py:99
+#: core/models/snippets/vacancy.py:106
 msgid "Full vacancy text"
 msgstr "Полный текст вакансии"
 
-#: core/models/snippets/vacancy.py:125
-msgid "Project"
-msgstr "Проект"
+#: core/models/snippets/vacancy.py:134
+msgid "Demand"
+msgstr "Запрос"
 
-#: core/models/snippets/vacancy.py:133
+#: core/models/snippets/vacancy.py:142
 msgid "Main"
 msgstr "Главная"
 
-#: core/models/snippets/vacancy.py:134
+#: core/models/snippets/vacancy.py:143
 msgid "About vacancy"
 msgstr "О вакансии"
 
-#: core/models/snippets/vacancy.py:135
+#: core/models/snippets/vacancy.py:144
 msgid "Submitted workers"
 msgstr "Поданные кандидаты"
 
-#: core/models/snippets/vacancy.py:136
+#: core/models/snippets/vacancy.py:145
 #: web/templates/eligible_workers_pamel.html:3
 msgid "Eligible workers"
 msgstr "Подходящие кандидаты"
 
-#: core/models/snippets/vacancy.py:173 core/models/snippets/vacancy.py:174
-#: core/wagtail_hooks.py:47
+#: core/models/snippets/vacancy.py:183 core/wagtail_hooks.py:49
 msgid "Status"
 msgstr "Статус"
 
@@ -438,12 +438,12 @@ msgid "Link item"
 msgstr "Элемент ссылки"
 
 #: core/models/snippets/worker.py:88 core/models/snippets/worker.py:150
-#: core/wagtail_hooks.py:57
+#: core/wagtail_hooks.py:59
 msgid "Specialization"
 msgstr "Специализации"
 
 #: core/models/snippets/worker.py:92 core/models/snippets/worker.py:153
-#: core/wagtail_hooks.py:67
+#: core/wagtail_hooks.py:69
 msgid "Grade"
 msgstr "Грейд"
 
@@ -596,19 +596,19 @@ msgstr "Похожие работники"
 msgid "Workers"
 msgstr "Кандидаты"
 
-#: core/wagtail_hooks.py:33
+#: core/wagtail_hooks.py:34
 msgid "Vacancies"
 msgstr "Вакансии"
 
-#: core/wagtail_hooks.py:97
+#: core/wagtail_hooks.py:107
 msgid "Download DOCX"
 msgstr "Скачать DOCX"
 
-#: core/wagtail_hooks.py:103
+#: core/wagtail_hooks.py:113
 msgid "Download PDF"
 msgstr "Скачать PDF"
 
-#: core/wagtail_hooks.py:109
+#: core/wagtail_hooks.py:119
 msgid "Check template"
 msgstr "Посмотреть шаблон"
 
@@ -648,6 +648,9 @@ msgstr "Похожие работники"
 #: web/templates/similar_worker_panel.html:8
 msgid "No similar workers found."
 msgstr "Не найдено похожих работников"
+
+#~ msgid "Project"
+#~ msgstr "Проект"
 
 #~ msgid "Candidate"
 #~ msgstr "Кандидаты"
