@@ -350,17 +350,17 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
             f"<a href='https://t.me/{self.telegram_nickname}'>{self.telegram_nickname}</a>"
             if self.telegram_nickname and self.telegram_nickname != 'null' else "")
 
-    get_telegram_nickname.admin_order_field = "Telegram"
+    get_telegram_nickname.admin_order_field = "telegram_nickname"
     get_telegram_nickname.short_description = "Telegram"
 
-    get_grade_display.admin_order_field = "Грейд"
+    get_grade_display.admin_order_field = "grade"
     get_grade_display.short_description = "Грейд"
 
-    full_name.admin_order_field = "Полное имя"
+    full_name.admin_order_field = "name"
     full_name.short_description = "Полное имя"
 
-    get_status.admin_order_field = "Статус"
+    get_status.admin_order_field = "status"
     get_status.short_description = "Статус"
 
-    get_type.admin_order_field = "Тип отношений"
+    get_type.admin_order_field = "type"
     get_type.short_description = "Тип отношений"

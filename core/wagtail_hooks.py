@@ -23,7 +23,8 @@ class WorkersSnippetViewSet(SnippetViewSet):
     add_to_admin_menu = True
     filterset_class = WorkerFilterSet
     list_display = (
-        'full_name', "created_at", 'get_type', 'employer', 'purchase_rate', 'specialization', 'get_grade_display', 'experience',
+        'full_name', "created_at", 'get_type', 'employer', 'purchase_rate', 'specialization', 'get_grade_display',
+        'experience',
         'city', 'get_telegram_nickname', "get_status")
 
 
@@ -38,7 +39,9 @@ class VacancySnippetViewSet(SnippetViewSet):
     exclude_from_explorer = False
     filterset_class = VacancyFilterSet
     list_display = (
-        'title', 'created_at', 'customer', 'specialization', 'grades', 'cost', 'get_status', 'get_stack_display', "uuid")
+        'full_name', 'created_at', 'customer', 'specialization', 'get_grade_display', 'cost', 'get_status',
+        'get_stack_display',
+        "uuid")
 
 
 @register_snippet
@@ -84,6 +87,7 @@ class CurrencySnippetViewSet(SnippetViewSet):
 @hooks.register('insert_global_admin_css')
 def global_admin_css():
     return format_html('<link rel="stylesheet" href="{}">', static('css/index.css'))
+
 
 @hooks.register("insert_global_admin_js")
 def global_admin_js():
