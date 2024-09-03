@@ -71,7 +71,7 @@ class Vacancy(ClusterableModel):
     )
     cost = models.IntegerField(verbose_name=_("Cost"), blank=True, null=True)
     salary = StreamField(
-        CostStreamBlock(max_num=1), blank=True, null=True, use_json_field=True, verbose_name=_("Salary")
+        CostStreamBlock(max_num=1), blank=False, null=True, use_json_field=True, verbose_name=_("Salary")
     )
     location = CountryField(verbose_name=_("Location"), blank=True, null=True)
     load = models.CharField(verbose_name=_("Load"), max_length=255, blank=True, null=True)
