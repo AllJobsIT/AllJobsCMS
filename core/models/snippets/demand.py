@@ -8,7 +8,7 @@ from wagtail.models import Orderable
 
 
 class Demand(Orderable, ClusterableModel):
-    vacancy = ParentalKey("core.Vacancy", on_delete=models.SET_NULL, related_name="demands", null=True, blank=False)
+    vacancy = ParentalKey("core.Vacancy", on_delete=models.CASCADE, related_name="demands", null=True, blank=True)
     partner = models.CharField(
         max_length=255,
         verbose_name=_("Partner"),
