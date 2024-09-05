@@ -233,7 +233,7 @@ msgstr "Название компании"
 
 #: core/models/snippets/project.py:34 core/models/snippets/project.py:87
 msgid "Start work"
-msgstr "Начал работать"
+msgstr "Дата подачи на проект"
 
 #: core/models/snippets/project.py:39
 msgid "End work"

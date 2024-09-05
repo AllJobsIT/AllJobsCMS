@@ -2,7 +2,6 @@ import uuid
 
 from botmanager.models import Task
 from django.db import models
-from django.forms import BaseInlineFormSet
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
 from modelcluster.fields import ParentalKey
@@ -13,13 +12,10 @@ from wagtail import blocks
 from wagtail.admin.panels import FieldPanel, InlinePanel, TabbedInterface, ObjectList
 from wagtail.blocks import StreamBlock
 from wagtail.fields import StreamField
-from wagtail.models import Page
 from wagtail.snippets.blocks import SnippetChooserBlock
 
 from core.choices.vacancy import VacancyProcessStatusChoices, VacancyTypeChoices
-from core.middleware import get_current_request
 from core.models.snippets.blocks import CostStreamBlock
-from core.models.snippets.demand import Demand
 from core.panels.vacancy_panels import EligibleWorkersPanel
 from core.tasks.vacancy_task import SendVacancy, ProcessVacancy
 
@@ -104,9 +100,11 @@ class Vacancy(ClusterableModel):
     )
     is_send = models.BooleanField(default=False)
     channel = models.CharField(max_length=255, blank=True, null=True)
+    source = models.CharField(max_length=255, blank=True, null=True)
     full_vacancy_text_from_tg_chat = models.TextField(blank=True,
                                                       verbose_name=_("Full vacancy text"))
-    type = models.SmallIntegerField(verbose_name=_("Type vacancy"), choices=VacancyTypeChoices.choices, default=VacancyTypeChoices.A)
+    type = models.SmallIntegerField(verbose_name=_("Type vacancy"), choices=VacancyTypeChoices.choices,
+                                    default=VacancyTypeChoices.A)
 
     main_panels = [
         FieldPanel("full_vacancy_text_from_tg_chat"),
@@ -114,7 +112,8 @@ class Vacancy(ClusterableModel):
         FieldPanel("status"),
         FieldPanel("created_at", read_only=True),
         FieldPanel("updated_at", read_only=True),
-        FieldPanel("channel", read_only=True),
+        FieldPanel("channel"),
+        FieldPanel("source"),
     ]
 
     about_vacancy_panels = [

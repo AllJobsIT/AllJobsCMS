@@ -2,7 +2,7 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
 from core.middleware import get_current_request
-from core.models import Demand
+from core.models.snippets.demand import Demand
 
 
 @receiver(pre_save, sender=Demand)

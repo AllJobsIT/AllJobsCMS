@@ -92,15 +92,6 @@ class Project(Orderable):
     sales_rate = StreamField(
         CostStreamBlock(max_num=1), blank=True, null=True, use_json_field=True, verbose_name=_("Sales rate")
     )
-    role = models.CharField(
-        max_length=255,
-        verbose_name=_('Role in project'),
-        blank=True
-    )
-    team = RichTextField(
-        verbose_name=_("Project team"),
-        blank=True
-    )
 
     feedback = StreamField(
         FeedbackStreamField(max_num=1), use_json_field=True, null=True, blank=True, verbose_name=_("Feedback")
@@ -110,8 +101,6 @@ class Project(Orderable):
         FieldPanel("worker"),
         FieldPanel("date_start"),
         FieldPanel("sales_rate"),
-        FieldPanel("role"),
-        FieldPanel("team"),
         FieldPanel("feedback"),
     ]
 
