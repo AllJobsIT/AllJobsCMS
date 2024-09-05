@@ -133,9 +133,9 @@ class Vacancy(ClusterableModel):
         FieldPanel("is_active"),
     ]
 
-    demand_panels = [
-        InlinePanel("demands", label=_("Demand"), max_num=1),
-    ]
+    # demand_panels = [
+    #     InlinePanel("demands", label=_("Demand"), max_num=1),
+    # ]
 
     eligible_workers_panels = [
         EligibleWorkersPanel()
@@ -144,7 +144,7 @@ class Vacancy(ClusterableModel):
     edit_handler = TabbedInterface([
         ObjectList(main_panels, heading=_("Main")),
         ObjectList(about_vacancy_panels, heading=_("About vacancy")),
-        ObjectList(demand_panels, heading=_("Submitted workers")),
+        # ObjectList(demand_panels, heading=_("Submitted workers")),
         ObjectList(eligible_workers_panels, heading=_("Eligible workers")),
     ])
 
