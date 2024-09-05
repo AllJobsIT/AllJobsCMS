@@ -28,6 +28,10 @@ document.addEventListener('DOMContentLoaded', function () {
                             const validValuesSilver = ['Не активен', 'В архиве'];
                             const validValuesDarkGreenSea = ['Согласован выход', 'Работает на проекте'];
 
+                            const validValuesGreen = ['A'];
+                            const validValuesYellow = ['B'];
+                            const validValuesRed = ['C'];
+
                             // Проверка, что значение в lastCell равно одному из значений из списка
                             if (validValuesOrangePeach.includes(cellValue)) {
                                 row.style.backgroundColor = '#ffd699'; // Оранжево-персиковый цвет фона
@@ -39,6 +43,40 @@ document.addEventListener('DOMContentLoaded', function () {
                                 row.cells[1].children[0].style.color = '#000000'; // Темно-желтый текста
                             } else if (validValuesDarkGreenSea.includes(cellValue)) {
                                 row.style.backgroundColor = '#90a690'; // Тёмно-зелёный цвет фона
+                                row.style.color = '#FFFFFF'; // Белый цвет текста
+                                row.cells[1].children[0].style.color = '#000000'; // Темно-желтый текста
+                                row.cells[1].children[0].children[0].addEventListener('mouseout', function () {
+                                    row.cells[1].children[0].children[0].style.color = '#000000';
+                                });
+
+                                row.cells[1].children[0].children[0].addEventListener('mouseover', function () {
+                                    row.cells[1].children[0].children[0].style.color = '#ffffff';
+                                });
+                            }
+                            if (validValuesGreen.includes(cellValue)) {
+                                row.style.backgroundColor = '#ff0000'; // Оранжево-персиковый цвет фона
+                                row.style.color = '#ffffff'; // Черный цвет текста
+                                row.cells[1].children[0].style.color = '#ffffff'; // Темно-желтый текста
+                                row.cells[1].children[0].children[0].addEventListener('mouseout', function () {
+                                    row.cells[1].children[0].children[0].style.color = '#ffffff';
+                                });
+
+                                row.cells[1].children[0].children[0].addEventListener('mouseover', function () {
+                                    row.cells[1].children[0].children[0].style.color = '#000000';
+                                });
+                            } else if (validValuesYellow.includes(cellValue)) {
+                                row.style.backgroundColor = '#FFFF00'; // Желтый цвет фона
+                                row.style.color = '#000000'; // Черный цвет текста
+                                row.cells[1].children[0].style.color = '#000000'; // Темно-желтый текста
+                                row.cells[1].children[0].children[0].addEventListener('mouseout', function () {
+                                    row.cells[1].children[0].children[0].style.color = '#000000';
+                                });
+
+                                row.cells[1].children[0].children[0].addEventListener('mouseover', function () {
+                                    row.cells[1].children[0].children[0].style.color = '#0000FF';
+                                });
+                            } else if (validValuesRed.includes(cellValue)) {
+                                row.style.backgroundColor = 'Green'; // Зелёный цвет фона
                                 row.style.color = '#FFFFFF'; // Белый цвет текста
                                 row.cells[1].children[0].style.color = '#000000'; // Темно-желтый текста
                                 row.cells[1].children[0].children[0].addEventListener('mouseout', function () {
