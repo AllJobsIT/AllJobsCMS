@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 });
                             }
                             if (validValuesGreen.includes(cellValue)) {
-                                row.style.backgroundColor = '#ff0000'; // Оранжево-персиковый цвет фона
+                                row.style.backgroundColor = 'Green'; // Оранжево-персиковый цвет фона
                                 row.style.color = '#ffffff'; // Черный цвет текста
                                 row.cells[1].children[0].style.color = '#ffffff'; // Темно-желтый текста
                                 row.cells[1].children[0].children[0].addEventListener('mouseout', function () {
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     row.cells[1].children[0].children[0].style.color = '#000000';
                                 });
                             } else if (validValuesYellow.includes(cellValue)) {
-                                row.style.backgroundColor = '#FFFF00'; // Желтый цвет фона
+                                row.style.backgroundColor = 'Yellow'; // Желтый цвет фона
                                 row.style.color = '#000000'; // Черный цвет текста
                                 row.cells[1].children[0].style.color = '#000000'; // Темно-желтый текста
                                 row.cells[1].children[0].children[0].addEventListener('mouseout', function () {
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     row.cells[1].children[0].children[0].style.color = '#0000FF';
                                 });
                             } else if (validValuesRed.includes(cellValue)) {
-                                row.style.backgroundColor = 'Green'; // Зелёный цвет фона
+                                row.style.backgroundColor = 'Red'; // Зелёный цвет фона
                                 row.style.color = '#FFFFFF'; // Белый цвет текста
                                 row.cells[1].children[0].style.color = '#000000'; // Темно-желтый текста
                                 row.cells[1].children[0].children[0].addEventListener('mouseout', function () {
