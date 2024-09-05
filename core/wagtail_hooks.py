@@ -8,8 +8,10 @@ from wagtail.snippets.views.snippets import SnippetViewSet
 from wagtail.snippets.widgets import SnippetListingButton
 
 from core.libs.filters import WorkerFilterSet, VacancyFilterSet
+from core.models import Project
 from core.models.snippets import Worker, Status, CurrencySnippet
 from core.models.snippets.base import Specialization, Grade
+from core.models.snippets.demand import Demand
 from core.models.snippets.vacancy import Vacancy
 
 
@@ -41,6 +43,18 @@ class VacancySnippetViewSet(SnippetViewSet):
     list_display = (
         'title', 'created_at', 'customer', 'specialization', 'grades', 'cost', 'get_status', 'get_stack_display',
         'channel', "uuid", 'get_type')
+
+
+@register_snippet
+class DemandSnippetViewSet(SnippetViewSet):
+    model = Demand
+    menu_label = _('Demands')
+
+
+@register_snippet
+class ProjectSnippetViewSet(SnippetViewSet):
+    model = Project
+    menu_label = _('Projects')
 
 
 @register_snippet
