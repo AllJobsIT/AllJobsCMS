@@ -1,9 +1,8 @@
 import uuid
 
 from botmanager.models import Task
-from django import forms
+from django.conf import settings
 from django.db import models
-from django.forms.formsets import DELETION_FIELD_NAME, ORDERING_FIELD_NAME
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
 from modelcluster.fields import ParentalKey
@@ -11,67 +10,16 @@ from modelcluster.models import ClusterableModel
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 from wagtail import blocks
-from wagtail.admin.panels import FieldPanel, InlinePanel, TabbedInterface, ObjectList, Panel
-from wagtail.blocks import StreamBlock
+from wagtail.admin.panels import FieldPanel, TabbedInterface, ObjectList
+from wagtail.blocks import StreamBlock, StructBlock
 from wagtail.fields import StreamField
 from wagtail.snippets.blocks import SnippetChooserBlock
 
 from core.choices.vacancy import VacancyProcessStatusChoices, VacancyTypeChoices
+from core.choices.worker import WorkerProjectFeedback
 from core.models.snippets.blocks import CostStreamBlock
 from core.panels.vacancy_panels import EligibleWorkersPanel
 from core.tasks.vacancy_task import SendVacancy, ProcessVacancy
-
-class MyInlinePanel(InlinePanel):
-    class BoundPanel(Panel.BoundPanel):
-        template_name = "wagtailadmin/panels/inline_panel.html"
-
-        def __init__(self, **kwargs):
-            super().__init__(**kwargs)
-
-            self.label = self.panel.label
-
-            if self.form is None:
-                return
-
-            self.formset = self.form.formsets.get(self.panel.relation_name, None)
-            self.child_edit_handler = self.panel.child_edit_handler
-
-            self.children = []
-            for index, subform in enumerate(self.formset.forms):
-                # override the DELETE field to have a hidden input
-                subform.fields[DELETION_FIELD_NAME].widget = forms.HiddenInput()
-
-                # ditto for the ORDER field, if present
-                if self.formset.can_order:
-                    subform.fields[ORDERING_FIELD_NAME].widget = forms.HiddenInput()
-
-                self.children.append(
-                    self.child_edit_handler.get_bound_panel(
-                        instance=subform.instance,
-                        request=self.request,
-                        form=subform,
-                        prefix=("%s-%d" % (self.prefix, index)),
-                    )
-                )
-
-            # if this formset is valid, it may have been re-ordered; respect that
-            # in case the parent form errored and we need to re-render
-            if self.formset.can_order and self.formset.is_valid():
-                self.children.sort(
-                    key=lambda child: child.form.cleaned_data[ORDERING_FIELD_NAME] or 1
-                )
-
-            empty_form = self.formset.empty_form
-            empty_form.fields[DELETION_FIELD_NAME].widget = forms.HiddenInput()
-            if self.formset.can_order:
-                empty_form.fields[ORDERING_FIELD_NAME].widget = forms.HiddenInput()
-
-            self.empty_child = self.child_edit_handler.get_bound_panel(
-                instance=empty_form.instance,
-                request=self.request,
-                form=empty_form,
-                prefix=("%s-__prefix__" % self.prefix),
-            )
 
 
 class VacancyTags(TaggedItemBase):
@@ -99,6 +47,52 @@ class RequirementsStreamField(StreamBlock):
 
 class ResponsibilitiesStreamField(StreamBlock):
     responsibilities_item = blocks.CharBlock(label=_("Responsibilities item"))
+
+
+class FeedbackStructBlock(StructBlock):
+    type = blocks.ChoiceBlock(WorkerProjectFeedback.choices, label=_("Type feedback"))
+    value = blocks.RichTextBlock(label=_("Feedback text"))
+
+
+class FeedbackStreamField(StreamBlock):
+    feedback_item = FeedbackStructBlock(label=_("Feedback item"))
+
+
+class ProjectStructBlock(StructBlock):
+    worker = SnippetChooserBlock(
+        "core.Worker", label=_("Worker for project")
+    )
+    date_start = blocks.DateBlock(
+        label=_('Project submission date'),
+        blank=True,
+        null=True,
+    )
+    sales_rate = CostStreamBlock(label=_("Cost item"))
+
+    feedback = FeedbackStreamField(label=_("Feedback item"))
+
+
+class ProjectStreamBlock(StreamBlock):
+    project = ProjectStructBlock()
+
+
+class DemandStructBlock(StructBlock):
+    projects = ProjectStreamBlock()
+    partner = blocks.CharBlock(
+        max_length=255,
+        label=_("Partner"),
+        blank=True,
+        null=True
+    )
+    is_active = blocks.BooleanBlock(
+        default=True,
+        label=_("Is active"),
+        blank=True
+    )
+
+
+class DemandStreamBlock(StreamBlock):
+    demand = DemandStructBlock()
 
 
 class Vacancy(ClusterableModel):
@@ -159,6 +153,18 @@ class Vacancy(ClusterableModel):
                                                       verbose_name=_("Full vacancy text"))
     type = models.SmallIntegerField(verbose_name=_("Type vacancy"), choices=VacancyTypeChoices.choices,
                                     default=VacancyTypeChoices.A)
+    manager = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='managers',
+        null=True,
+        blank=True,
+        editable=True,
+        on_delete=models.SET_NULL,
+        verbose_name=_("Manager"),
+    )
+    demands = StreamField(
+        DemandStreamBlock(max_num=1), verbose_name=_("Demand"), use_json_field=True, blank=True
+    )
 
     main_panels = [
         FieldPanel("full_vacancy_text_from_tg_chat"),
@@ -188,7 +194,8 @@ class Vacancy(ClusterableModel):
     ]
 
     demand_panels = [
-        MyInlinePanel("vacancy_demands", label=_("Demand"), max_num=1),
+        FieldPanel("demands"),
+        FieldPanel("manager", read_only=True),
     ]
 
     eligible_workers_panels = [

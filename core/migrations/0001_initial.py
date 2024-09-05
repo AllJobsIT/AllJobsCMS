@@ -8,7 +8,6 @@ import uuid
 import wagtail.blocks
 import wagtail.fields
 import wagtail.snippets.blocks
-import wagtail_color_panel.fields
 import wagtailmarkdown.fields
 from django.conf import settings
 from django.db import migrations, models
@@ -52,7 +51,6 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('sort_order', models.IntegerField(blank=True, editable=False, null=True)),
                 ('name', models.CharField(max_length=255, verbose_name='Название ранга заявки')),
-                ('color', wagtail_color_panel.fields.ColorField(max_length=7)),
                 ('is_default', models.BooleanField(blank=True, default=False, help_text='Новым заявкам будет проставляться данный ранг (если не указан какой-либо другой)', verbose_name='Является рангом по-умолчанию')),
             ],
             options={

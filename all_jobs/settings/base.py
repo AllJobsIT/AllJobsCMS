@@ -53,7 +53,6 @@ INSTALLED_APPS = [
     "wagtail.search",
     "wagtail.admin",
     "wagtail",
-    "wagtail_color_panel",
     "modelcluster",
     "taggit",
     "django.contrib.admin",
@@ -68,6 +67,8 @@ INSTALLED_APPS = [
     "wagtailmarkdown",
     "parser_ai"
 ]
+
+AUTH_USER_MODEL = "auth.User"
 
 MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",

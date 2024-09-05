@@ -17,7 +17,6 @@ from wagtail.snippets.blocks import SnippetChooserBlock
 from core.choices.relationship_type import RelationshipTypeChoice
 from core.choices.worker import WorkerProcessStatusChoice
 from core.models.snippets.blocks import CostStreamBlock
-from core.models.snippets.base import Status
 from core.panels.worker_panel import SimilarWorkersPanel, ProjectsWorkersPanel
 
 
@@ -248,8 +247,8 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
     )
     process_status = models.IntegerField(choices=WorkerProcessStatusChoice, default=WorkerProcessStatusChoice.PROCESS,
                                          verbose_name=_("Process status"))
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"),)
-    updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated at"),)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"), )
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated at"), )
 
     personal_panels = [
         FieldPanel("code", read_only=True),

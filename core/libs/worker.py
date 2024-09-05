@@ -9,8 +9,17 @@ def get_similar_workers(instance):
 
 
 def get_projects_worker(instance):
-    Demand = apps.get_model("core", "Demand")
-    return Demand.objects.filter(projects__worker=instance)
+    Vacancy = apps.get_model("core", "Vacancy")
+    return Vacancy.objects.filter(demands__contains=[{
+        'type': 'demand',
+        'value': {
+            'projects': [{
+                'value': {
+                    'worker': instance.id
+                }
+            }]
+        }
+    }])
 
 
 def get_eligible_workers(instance):

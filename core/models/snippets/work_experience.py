@@ -1,25 +1,11 @@
 from django.db import models
-from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from modelcluster.fields import ParentalKey
-from wagtail import blocks
 from wagtail.admin.panels import FieldPanel
-from wagtail.blocks import StreamBlock, StructBlock
 from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Orderable
 
-from core.choices.worker import WorkerProjectFeedback
-from core.models.snippets.blocks import CostStreamBlock
 from core.models.snippets.worker import TechnologiesStreamBlock
-
-
-class FeedbackStructBlock(StructBlock):
-    type = blocks.ChoiceBlock(WorkerProjectFeedback.choices, label=_("Type feedback"))
-    value = blocks.RichTextBlock(label=_("Feedback text"))
-
-
-class FeedbackStreamField(StreamBlock):
-    feedback_item = FeedbackStructBlock(label=_("Feedback item"))
 
 
 class WorkExperience(Orderable):
@@ -73,36 +59,3 @@ class WorkExperience(Orderable):
 
     def __str__(self):
         return self.company_name
-
-
-class Project(Orderable):
-    demand = ParentalKey(
-        "core.Demand", on_delete=models.CASCADE, related_name='projects', null=True, blank=True
-    )
-    worker = models.ForeignKey(
-        "core.Worker",
-        on_delete=models.CASCADE, verbose_name=_("Worker for project"), null=True, default=None
-    )
-    date_start = models.DateField(
-        verbose_name=_('Project submission date'),
-        blank=True,
-        null=True,
-        default=now
-    )
-    sales_rate = StreamField(
-        CostStreamBlock(max_num=1), blank=True, null=True, use_json_field=True, verbose_name=_("Sales rate")
-    )
-
-    feedback = StreamField(
-        FeedbackStreamField(max_num=1), use_json_field=True, null=True, blank=True, verbose_name=_("Feedback")
-    )
-
-    panels = [
-        FieldPanel("worker"),
-        FieldPanel("date_start"),
-        FieldPanel("sales_rate"),
-        FieldPanel("feedback"),
-    ]
-
-    def __str__(self):
-        return self.worker.full_name()

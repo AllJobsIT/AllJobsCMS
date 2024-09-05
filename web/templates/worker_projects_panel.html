@@ -3,7 +3,7 @@
     <h2>{% trans "Requests" %}</h2>
     <ul class="w-field__textoutput">
         {% for project in projects %}
-            <li><a href="{% url 'wagtailsnippets_core_vacancy:edit' project.vacancy.pk %}">{{ project.vacancy.title }}</a></li>
+            <li><a href="{% url 'wagtailsnippets_core_vacancy:edit' project.pk %}">{{ project.title }}</a></li>
         {% empty %}
             <li>{% trans "Not found projects." %}</li>
         {% endfor %}

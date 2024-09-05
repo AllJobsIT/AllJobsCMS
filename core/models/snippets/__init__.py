@@ -1,4 +1,5 @@
+from .base import *
 from .currency import *
-from .project import *
+from .work_experience import *
 from .vacancy import *
 from .worker import *
