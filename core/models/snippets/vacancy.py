@@ -33,8 +33,7 @@ class MyInlinePanel(InlinePanel):
             if self.form is None:
                 return
 
-            breakpoint()
-            self.formset = self.form.formsets[self.panel.relation_name]
+            self.formset = self.form.formsets.get(self.panel.relation_name, None)
             self.child_edit_handler = self.panel.child_edit_handler
 
             self.children = []
