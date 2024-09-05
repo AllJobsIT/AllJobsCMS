@@ -84,7 +84,7 @@ class Project(Orderable):
         on_delete=models.CASCADE, verbose_name=_("Worker for project"), null=True, default=None
     )
     date_start = models.DateField(
-        verbose_name=_('Start work'),
+        verbose_name=_('Project submission date'),
         blank=True,
         null=True,
         default=now
