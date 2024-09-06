@@ -8,5 +8,5 @@ from core.models import Vacancy
 @receiver(pre_save, sender=Vacancy)
 def pre_save_manager(sender, instance, **kwargs):
     request = get_current_request()
-    if not instance.manager:
+    if not instance.manager and not request.user.is_anonymous:
         instance.manager = request.user
