@@ -152,7 +152,7 @@ class Vacancy(ClusterableModel):
     full_vacancy_text_from_tg_chat = models.TextField(blank=True,
                                                       verbose_name=_("Full vacancy text"))
     type = models.SmallIntegerField(verbose_name=_("Type vacancy"), choices=VacancyTypeChoices.choices,
-                                    default=VacancyTypeChoices.A)
+                                    default=VacancyTypeChoices.B)
     manager = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         related_name='managers',
