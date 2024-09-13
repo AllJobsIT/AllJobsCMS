@@ -39,8 +39,8 @@ class VacancySnippetViewSet(SnippetViewSet):
     exclude_from_explorer = False
     filterset_class = VacancyFilterSet
     list_display = (
-        'title', 'created_at', 'source', 'customer', 'specialization', 'grades', 'cost', 'get_status', 'get_stack_display',
-        'channel', "uuid", 'get_type')
+        'title', "id", 'created_at', 'source', 'customer', 'specialization', 'grades', 'cost', 'get_status', 'get_stack_display',
+        'channel' , 'get_type')
 
 
 

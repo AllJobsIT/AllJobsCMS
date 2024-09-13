@@ -121,3 +121,5 @@ webencodings==0.5.1
 Willow==1.8.0
 wrapt==1.16.0
 yarl==1.9.11
+
+fabric==3.2.2

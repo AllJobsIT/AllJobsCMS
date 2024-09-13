@@ -1,5 +1,3 @@
-import uuid
-
 from botmanager.models import Task
 from django.conf import settings
 from django.db import models
@@ -96,10 +94,6 @@ class DemandStreamBlock(StreamBlock):
 
 
 class Vacancy(ClusterableModel):
-    uuid = models.UUIDField(
-        default=uuid.uuid4,
-        verbose_name=_("UUID vacancy"),
-    )
     title = models.CharField(max_length=255, verbose_name=_("Title"), blank=True, null=True)
     specialization = StreamField(
         SpecializationStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name=_("Specializations")
