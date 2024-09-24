@@ -43,6 +43,7 @@ def get_worker_context(worker_id):
         "certificates": ", ".join([certificate.value for certificate in worker.certificates]),
         "jobs": WorkExperience.objects.filter(worker_id=worker.id),
         "experience": format_years(int(round(worker.experience))),
+        "education": worker.education,
     }
 
 
