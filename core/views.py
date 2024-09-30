@@ -8,6 +8,7 @@ from babel.dates import format_date
 from bs4 import BeautifulSoup
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404, render
+from django.utils.html import strip_tags
 from docx import Document
 from docx.enum.style import WD_STYLE_TYPE
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
@@ -43,7 +44,7 @@ def get_worker_context(worker_id):
         "certificates": ", ".join([certificate.value for certificate in worker.certificates]),
         "jobs": WorkExperience.objects.filter(worker_id=worker.id),
         "experience": format_years(int(round(worker.experience))),
-        "education": worker.education,
+        "education": strip_tags(worker.education),
     }
 
 
