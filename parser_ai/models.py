@@ -37,3 +37,7 @@ class Prompt(BaseGenericSetting):
             "method": item.value['method'],
         } for item in self.prompts]
         return prompts
+
+    class Meta:
+        verbose_name = _("Prompt")
+        verbose_name_plural = _("Prompts")

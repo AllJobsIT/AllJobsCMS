@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-05 13:07+0000\n"
+"POT-Creation-Date: 2024-10-10 10:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -140,6 +140,30 @@ msgstr "Обычный"
 msgid "Positive"
 msgstr "Положительный"
 
+#: core/models/chats_ids.py:12
+msgid "Chat name"
+msgstr "Название чата"
+
+#: core/models/chats_ids.py:13
+msgid "Chat id"
+msgstr "ID чата"
+
+#: core/models/chats_ids.py:17
+msgid "Chat"
+msgstr "Чат"
+
+#: core/models/chats_ids.py:24
+msgid "Chats"
+msgstr "Чаты"
+
+#: core/models/chats_ids.py:28
+msgid "Chat for mailing"
+msgstr "Чат для рассылки"
+
+#: core/models/chats_ids.py:29
+msgid "Chats for mailing"
+msgstr "Чаты для рассылки"
+
 #: core/models/snippets/base.py:18
 msgid ""
 "Может быть только {max_instances} экземпляр(ов) сниппета {self.__str__()}."
@@ -153,7 +177,7 @@ msgstr "Размер"
 msgid "Cost currency"
 msgstr "Валюта"
 
-#: core/models/snippets/blocks.py:13
+#: core/models/snippets/blocks.py:13 core/models/snippets/vacancy.py:68
 msgid "Cost item"
 msgstr "Элемент стоимости"
 
@@ -169,7 +193,7 @@ msgstr "Название"
 msgid "Currency symbol"
 msgstr "Символ валюты"
 
-#: core/models/snippets/currency.py:18 core/wagtail_hooks.py:79
+#: core/models/snippets/currency.py:18 core/wagtail_hooks.py:80
 msgid "Currency"
 msgstr "Валюта"
 
@@ -177,87 +201,11 @@ msgstr "Валюта"
 msgid "Currencies"
 msgstr "Валюты"
 
-#: core/models/snippets/demand.py:14
-msgid "Partner"
-msgstr "Партнер"
-
-#: core/models/snippets/demand.py:25
-msgid "Manager"
-msgstr "Менеджер"
-
-#: core/models/snippets/demand.py:29 core/models/snippets/vacancy.py:83
-msgid "Is active"
-msgstr "Активен"
-
-#: core/models/snippets/demand.py:34
-msgid "Worker"
-msgstr "Кандидат"
-
-#: core/models/snippets/demand.py:41
-msgid "Worker {self.id}"
-msgstr "Кандидат {self.id}"
-
 #: core/models/snippets/message_settings.py:57
 msgid "Message template"
 msgstr "Шаблон сообщения"
 
-#: core/models/snippets/project.py:17
-msgid "Type feedback"
-msgstr "Тип обратной связи"
-
-#: core/models/snippets/project.py:18
-msgid "Feedback text"
-msgstr "Текст обратной связи"
-
-#: core/models/snippets/project.py:22
-msgid "Feedback item"
-msgstr "Элемент обратной связи"
-
-#: core/models/snippets/project.py:31
-msgid "Company name"
-msgstr "Название компании"
-
-#: core/models/snippets/project.py:34
-msgid "Start work"
-msgstr "Начал работать"
-
-#: core/models/snippets/project.py:39
-msgid "End work"
-msgstr "Закончил работать"
-
-#: core/models/snippets/project.py:44
-msgid "Work duration"
-msgstr "Длительность работы"
-
-#: core/models/snippets/project.py:50
-msgid "Position"
-msgstr "Позиция"
-
-#: core/models/snippets/project.py:55
-msgid "Project description"
-msgstr "Описание проекта"
-
-#: core/models/snippets/project.py:61
-msgid "Project technologies"
-msgstr "Технологии проекта"
-
-#: core/models/snippets/project.py:84
-msgid "Worker for project"
-msgstr "Кандидат в проекте"
-
-#: core/models/snippets/project.py:87
-msgid "Project submission date"
-msgstr "Дата подачи на проект"
-
-#: core/models/snippets/project.py:93
-msgid "Sales rate"
-msgstr "Стоимость продажи"
-
-#: core/models/snippets/project.py:97
-msgid "Feedback"
-msgstr "Обратная связь"
-
-#: core/models/snippets/vacancy.py:39 core/models/snippets/worker.py:34
+#: core/models/snippets/vacancy.py:39 core/models/snippets/worker.py:33
 msgid "Stack item"
 msgstr "Элемент стека"
 
@@ -269,320 +217,376 @@ msgstr "Элемент требований"
 msgid "Responsibilities item"
 msgstr "Элемент обязанностей"
 
-#: core/models/snippets/vacancy.py:53
-msgid "UUID vacancy"
-msgstr "UUID вакансии"
+#: core/models/snippets/vacancy.py:51
+msgid "Type feedback"
+msgstr "Тип обратной связи"
 
-#: core/models/snippets/vacancy.py:55
+#: core/models/snippets/vacancy.py:52
+msgid "Feedback text"
+msgstr "Текст обратной связи"
+
+#: core/models/snippets/vacancy.py:56 core/models/snippets/vacancy.py:70
+msgid "Feedback item"
+msgstr "Элемент обратной связи"
+
+#: core/models/snippets/vacancy.py:61
+msgid "Worker for project"
+msgstr "Кандидат в проекте"
+
+#: core/models/snippets/vacancy.py:64
+msgid "Project submission date"
+msgstr "Дата подачи на проект"
+
+#: core/models/snippets/vacancy.py:81
+msgid "Partner"
+msgstr "Партнер"
+
+#: core/models/snippets/vacancy.py:87 core/models/snippets/vacancy.py:125
+msgid "Is active"
+msgstr "Активен"
+
+#: core/models/snippets/vacancy.py:97
 msgid "Title"
 msgstr "Название"
 
-#: core/models/snippets/vacancy.py:57
+#: core/models/snippets/vacancy.py:99
 msgid "Specializations"
 msgstr "Специализации"
 
-#: core/models/snippets/vacancy.py:60 core/models/snippets/vacancy.py:179
-#: core/models/snippets/worker.py:156
+#: core/models/snippets/vacancy.py:102 core/models/snippets/vacancy.py:234
+#: core/models/snippets/worker.py:155
 msgid "Stack"
 msgstr "Стек"
 
-#: core/models/snippets/vacancy.py:63
+#: core/models/snippets/vacancy.py:105
 msgid "Requirements"
 msgstr "Требования"
 
-#: core/models/snippets/vacancy.py:66
+#: core/models/snippets/vacancy.py:108
 msgid "Responsibilities"
 msgstr "Обязанности"
 
-#: core/models/snippets/vacancy.py:68
+#: core/models/snippets/vacancy.py:110
 msgid "Cost"
 msgstr "Стоимость"
 
-#: core/models/snippets/vacancy.py:70 core/models/snippets/worker.py:147
+#: core/models/snippets/vacancy.py:112 core/models/snippets/worker.py:146
 msgid "Salary"
 msgstr "Зарплата"
 
-#: core/models/snippets/vacancy.py:72
+#: core/models/snippets/vacancy.py:114
 msgid "Location"
 msgstr "Локация"
 
-#: core/models/snippets/vacancy.py:73
+#: core/models/snippets/vacancy.py:115
 msgid "Load"
 msgstr "Загруженность"
 
-#: core/models/snippets/vacancy.py:77
+#: core/models/snippets/vacancy.py:119
 msgid "Grades"
 msgstr "Грейды"
 
-#: core/models/snippets/vacancy.py:88
+#: core/models/snippets/vacancy.py:130
 msgid "Customer"
 msgstr "Заказчик"
 
-#: core/models/snippets/vacancy.py:92
+#: core/models/snippets/vacancy.py:134
 msgid "Project deadline"
 msgstr "Крайний срок проекта"
 
-#: core/models/snippets/vacancy.py:95 core/models/snippets/worker.py:251
+#: core/models/snippets/vacancy.py:137 core/models/snippets/worker.py:250
 msgid "Created at"
 msgstr "Создан"
 
-#: core/models/snippets/vacancy.py:99 core/models/snippets/worker.py:252
+#: core/models/snippets/vacancy.py:141 core/models/snippets/worker.py:251
 msgid "Updated at"
 msgstr "Обновлен"
 
-#: core/models/snippets/vacancy.py:105
+#: core/models/snippets/vacancy.py:147
 msgid "Full vacancy text"
 msgstr "Полный текст вакансии"
 
-#: core/models/snippets/vacancy.py:106 core/models/snippets/vacancy.py:182
+#: core/models/snippets/vacancy.py:148 core/models/snippets/vacancy.py:237
 msgid "Type vacancy"
 msgstr "Тип вакансии"
 
-#: core/models/snippets/vacancy.py:137
+#: core/models/snippets/vacancy.py:157
+msgid "Manager"
+msgstr "Менеджер"
+
+#: core/models/snippets/vacancy.py:160
 msgid "Demand"
 msgstr "Запрос"
 
-#: core/models/snippets/vacancy.py:145
+#: core/models/snippets/vacancy.py:200
 msgid "Main"
 msgstr "Главная"
 
-#: core/models/snippets/vacancy.py:146
+#: core/models/snippets/vacancy.py:201
 msgid "About vacancy"
 msgstr "О вакансии"
 
-#: core/models/snippets/vacancy.py:147
+#: core/models/snippets/vacancy.py:202
 msgid "Submitted workers"
 msgstr "Поданные кандидаты"
 
-#: core/models/snippets/vacancy.py:148
+#: core/models/snippets/vacancy.py:203
 #: web/templates/eligible_workers_pamel.html:3
 msgid "Eligible workers"
 msgstr "Подходящие кандидаты"
 
-#: core/models/snippets/vacancy.py:185 core/wagtail_hooks.py:49
+#: core/models/snippets/vacancy.py:240 core/wagtail_hooks.py:50
 msgid "Status"
 msgstr "Статус"
 
-#: core/models/snippets/worker.py:25
+#: core/models/snippets/work_experience.py:17
+msgid "Company name"
+msgstr "Название компании"
+
+#: core/models/snippets/work_experience.py:20
+msgid "Start work"
+msgstr "Начал работать"
+
+#: core/models/snippets/work_experience.py:25
+msgid "End work"
+msgstr "Закончил работать"
+
+#: core/models/snippets/work_experience.py:30
+msgid "Work duration"
+msgstr "Длительность работы"
+
+#: core/models/snippets/work_experience.py:36
+msgid "Position"
+msgstr "Позиция"
+
+#: core/models/snippets/work_experience.py:41
+msgid "Project description"
+msgstr "Описание проекта"
+
+#: core/models/snippets/work_experience.py:47
+msgid "Project technologies"
+msgstr "Технологии проекта"
+
+#: core/models/snippets/worker.py:24
 msgid "Language item"
 msgstr "Элемент языка"
 
-#: core/models/snippets/worker.py:26
+#: core/models/snippets/worker.py:25
 msgid "Language grade"
 msgstr "Знание языка"
 
-#: core/models/snippets/worker.py:30
+#: core/models/snippets/worker.py:29
 msgid "Language"
 msgstr "Язык"
 
-#: core/models/snippets/worker.py:38
+#: core/models/snippets/worker.py:37
 msgid "Skill item"
 msgstr "Элемент навыка"
 
-#: core/models/snippets/worker.py:42
+#: core/models/snippets/worker.py:41
 msgid "Programming language"
 msgstr "Языки программирования"
 
-#: core/models/snippets/worker.py:46
+#: core/models/snippets/worker.py:45
 msgid "Technology item"
 msgstr "Элемент технологии"
 
-#: core/models/snippets/worker.py:50
+#: core/models/snippets/worker.py:49
 msgid "Database item"
 msgstr "Элемент базы данных"
 
-#: core/models/snippets/worker.py:54
+#: core/models/snippets/worker.py:53
 msgid "Software development item"
 msgstr "Элемент разработки программного обеспечения"
 
-#: core/models/snippets/worker.py:58
+#: core/models/snippets/worker.py:57
 msgid "Other technology item"
 msgstr "Элемент других технологий"
 
-#: core/models/snippets/worker.py:62
+#: core/models/snippets/worker.py:61
 msgid "Certificate item"
 msgstr "Элемент сертификата"
 
-#: core/models/snippets/worker.py:66
+#: core/models/snippets/worker.py:65
 msgid "Work example item"
 msgstr "Элемент опыта работы"
 
-#: core/models/snippets/worker.py:70
+#: core/models/snippets/worker.py:69
 msgid "Contact type"
 msgstr "Тип контакта"
 
-#: core/models/snippets/worker.py:71
+#: core/models/snippets/worker.py:70
 msgid "Contact value"
 msgstr "Значение контакта"
 
-#: core/models/snippets/worker.py:75
+#: core/models/snippets/worker.py:74
 msgid "Contact item"
 msgstr "Элемент контакта"
 
-#: core/models/snippets/worker.py:79
+#: core/models/snippets/worker.py:78
 msgid "Link type"
 msgstr "Тип ссылки"
 
-#: core/models/snippets/worker.py:80
+#: core/models/snippets/worker.py:79
 msgid "Link value"
 msgstr "Значение ссылки"
 
-#: core/models/snippets/worker.py:84
+#: core/models/snippets/worker.py:83
 msgid "Link item"
 msgstr "Элемент ссылки"
 
-#: core/models/snippets/worker.py:88 core/models/snippets/worker.py:150
-#: core/wagtail_hooks.py:59
+#: core/models/snippets/worker.py:87 core/models/snippets/worker.py:149
+#: core/wagtail_hooks.py:60
 msgid "Specialization"
 msgstr "Специализации"
 
-#: core/models/snippets/worker.py:92 core/models/snippets/worker.py:153
-#: core/wagtail_hooks.py:69
+#: core/models/snippets/worker.py:91 core/models/snippets/worker.py:152
+#: core/wagtail_hooks.py:70
 msgid "Grade"
 msgstr "Грейд"
 
-#: core/models/snippets/worker.py:97
+#: core/models/snippets/worker.py:96
 msgid "UUID worker"
 msgstr "UUID кандидата"
 
-#: core/models/snippets/worker.py:103
+#: core/models/snippets/worker.py:102
 msgid "First name"
 msgstr "Имя"
 
-#: core/models/snippets/worker.py:108
+#: core/models/snippets/worker.py:107
 msgid "Last name"
 msgstr "Фамилия"
 
-#: core/models/snippets/worker.py:114
+#: core/models/snippets/worker.py:113
 msgid "Surname"
 msgstr "Отчество"
 
-#: core/models/snippets/worker.py:124
+#: core/models/snippets/worker.py:123
 msgid "File CV"
 msgstr "Файл резюме"
 
-#: core/models/snippets/worker.py:128
+#: core/models/snippets/worker.py:127
 msgid "Telegram nickname"
 msgstr "Ник в телеграмме"
 
-#: core/models/snippets/worker.py:133
+#: core/models/snippets/worker.py:132
 msgid "Relationship type"
 msgstr "Тип отношений"
 
-#: core/models/snippets/worker.py:137
+#: core/models/snippets/worker.py:136
 msgid "Employer"
 msgstr "Работодатель"
 
-#: core/models/snippets/worker.py:142
+#: core/models/snippets/worker.py:141
 msgid "Purchase rate"
 msgstr "Рейт покупки"
 
-#: core/models/snippets/worker.py:159
+#: core/models/snippets/worker.py:158
 msgid "Skills"
 msgstr "Навыки"
 
-#: core/models/snippets/worker.py:163
+#: core/models/snippets/worker.py:162
 msgid "Programming languages"
 msgstr "Языки программирования"
 
-#: core/models/snippets/worker.py:167
+#: core/models/snippets/worker.py:166
 msgid "Technologies"
 msgstr "Технологии"
 
-#: core/models/snippets/worker.py:171
+#: core/models/snippets/worker.py:170
 msgid "Databases"
 msgstr "Базы данных"
 
-#: core/models/snippets/worker.py:175
+#: core/models/snippets/worker.py:174
 msgid "Software developments"
 msgstr "Разработка программного обеспечения"
 
-#: core/models/snippets/worker.py:179
+#: core/models/snippets/worker.py:178
 msgid "Other technologies"
 msgstr "Другие технологии"
 
-#: core/models/snippets/worker.py:182 core/models/snippets/worker.py:312
+#: core/models/snippets/worker.py:181 core/models/snippets/worker.py:311
 msgid "About worker"
 msgstr "О кандидате"
 
-#: core/models/snippets/worker.py:187
+#: core/models/snippets/worker.py:186
 msgid "Years of experience"
 msgstr "Опыт работы"
 
-#: core/models/snippets/worker.py:194
+#: core/models/snippets/worker.py:193
 msgid "City"
 msgstr "Город"
 
-#: core/models/snippets/worker.py:199
+#: core/models/snippets/worker.py:198
 msgid "Citizenship"
 msgstr "Гражданство"
 
-#: core/models/snippets/worker.py:205
+#: core/models/snippets/worker.py:204
 msgid "Languages"
 msgstr "Языки"
 
-#: core/models/snippets/worker.py:208
+#: core/models/snippets/worker.py:207
 msgid "Education"
 msgstr "Образование"
 
-#: core/models/snippets/worker.py:214
+#: core/models/snippets/worker.py:213
 msgid "Certificates"
 msgstr "Сертификаты"
 
-#: core/models/snippets/worker.py:218
+#: core/models/snippets/worker.py:217
 msgid "Employer contacts"
 msgstr "Контакты работодателя"
 
-#: core/models/snippets/worker.py:224
+#: core/models/snippets/worker.py:223
 msgid "Contacts"
 msgstr "Контакты"
 
-#: core/models/snippets/worker.py:228
+#: core/models/snippets/worker.py:227
 msgid "Example of work"
 msgstr "Опыт работы"
 
-#: core/models/snippets/worker.py:232
+#: core/models/snippets/worker.py:231
 msgid "Links"
 msgstr "Ссылки"
 
-#: core/models/snippets/worker.py:235
+#: core/models/snippets/worker.py:234
 msgid "Manager comment about worker"
 msgstr "Комментарий менеджера о кандидате"
 
-#: core/models/snippets/worker.py:241
+#: core/models/snippets/worker.py:240
 msgid "Is published"
 msgstr "Опубликовано"
 
-#: core/models/snippets/worker.py:245
+#: core/models/snippets/worker.py:244
 msgid "Birthday"
 msgstr "День рождения"
 
-#: core/models/snippets/worker.py:250
+#: core/models/snippets/worker.py:249
 msgid "Process status"
 msgstr "Системный статус кандидата"
 
-#: core/models/snippets/worker.py:289
+#: core/models/snippets/worker.py:288
 msgid "Work Experience"
 msgstr "Опыт работы"
 
-#: core/models/snippets/worker.py:311
+#: core/models/snippets/worker.py:310
 msgid "Personal data"
 msgstr "Личные данные"
 
-#: core/models/snippets/worker.py:313
+#: core/models/snippets/worker.py:312
 msgid "Skills and stack"
 msgstr "Навыки и стек"
 
-#: core/models/snippets/worker.py:314
+#: core/models/snippets/worker.py:313
 #: web/templates/worker_projects_panel.html:3
 msgid "Requests"
 msgstr "Запросы"
 
-#: core/models/snippets/worker.py:315
+#: core/models/snippets/worker.py:314
 msgid "Work experience"
 msgstr "Опыт работы"
 
-#: core/models/snippets/worker.py:316
+#: core/models/snippets/worker.py:315
 msgid "Similar workers"
 msgstr "Похожие работники"
 
@@ -594,15 +598,15 @@ msgstr "Кандидаты"
 msgid "Vacancies"
 msgstr "Вакансии"
 
-#: core/wagtail_hooks.py:107
+#: core/wagtail_hooks.py:108
 msgid "Download DOCX"
 msgstr "Скачать DOCX"
 
-#: core/wagtail_hooks.py:113
+#: core/wagtail_hooks.py:114
 msgid "Download PDF"
 msgstr "Скачать PDF"
 
-#: core/wagtail_hooks.py:119
+#: core/wagtail_hooks.py:120
 msgid "Check template"
 msgstr "Посмотреть шаблон"
 
@@ -618,7 +622,7 @@ msgstr "Добавление"
 msgid "Prompt label"
 msgstr "Заголовок подсказки(промпта)"
 
-#: parser_ai/models.py:16
+#: parser_ai/models.py:16 parser_ai/models.py:42
 msgid "Prompt"
 msgstr "Подсказка(промпт)"
 
@@ -626,7 +630,7 @@ msgstr "Подсказка(промпт)"
 msgid "Prompt description"
 msgstr "Описание подсказки(промпта)"
 
-#: parser_ai/models.py:28
+#: parser_ai/models.py:28 parser_ai/models.py:43
 msgid "Prompts"
 msgstr "Подсказки(промпты)"
 
@@ -642,6 +646,21 @@ msgstr "Похожие работники"
 #: web/templates/similar_worker_panel.html:8
 msgid "No similar workers found."
 msgstr "Не найдено похожих работников"
+
+#~ msgid "Worker"
+#~ msgstr "Кандидат"
+
+#~ msgid "Worker {self.id}"
+#~ msgstr "Кандидат {self.id}"
+
+#~ msgid "Sales rate"
+#~ msgstr "Стоимость продажи"
+
+#~ msgid "Feedback"
+#~ msgstr "Обратная связь"
+
+#~ msgid "UUID vacancy"
+#~ msgstr "UUID вакансии"
 
 #~ msgid "Role in project"
 #~ msgstr "Роль в проекте"

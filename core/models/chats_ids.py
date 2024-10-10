@@ -23,3 +23,8 @@ class ChatIds(BaseGenericSetting):
     chats = StreamField(
         ChatsStreamBlock(), blank=True, null=True, use_json_field=True, verbose_name=_("Chats")
     )
+
+    class Meta:
+        verbose_name = _("Chat for mailing")
+        verbose_name_plural = _("Chats for mailing")
+
