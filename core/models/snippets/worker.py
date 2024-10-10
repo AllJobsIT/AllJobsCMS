@@ -15,7 +15,7 @@ from wagtail.search import index
 from wagtail.snippets.blocks import SnippetChooserBlock
 
 from core.choices.relationship_type import RelationshipTypeChoice
-from core.choices.worker import WorkerProcessStatusChoice
+from core.choices.worker import WorkerProcessStatusChoice, WorkerInputMethod
 from core.models.snippets.blocks import CostStreamBlock
 from core.panels.worker_panel import SimilarWorkersPanel, ProjectsWorkersPanel
 
@@ -247,11 +247,14 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
     )
     process_status = models.IntegerField(choices=WorkerProcessStatusChoice, default=WorkerProcessStatusChoice.PROCESS,
                                          verbose_name=_("Process status"))
+    input_method = models.IntegerField(choices=WorkerInputMethod, default=WorkerInputMethod.MANUAL,
+                                       verbose_name=_("Worker input method"))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"), )
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated at"), )
 
     personal_panels = [
         FieldPanel("code", read_only=True),
+        FieldPanel("input_method", read_only=True),
         FieldPanel("process_status"),
         FieldPanel("last_name"),
         FieldPanel("name"),
@@ -346,8 +349,14 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
 
     def get_telegram_nickname(self):
         return mark_safe(
-            f"<a href='https://t.me/{self.telegram_nickname}'>{self.telegram_nickname}</a>"
+            f"<a href='https://t.me/{self.telegram_nickname.replace('@', '')}'>{self.telegram_nickname}</a>"
             if self.telegram_nickname and self.telegram_nickname != 'null' else "")
+
+    def get_input_method(self):
+        return WorkerInputMethod(self.input_method).label
+
+    get_input_method.admin_order_field = "input_method"
+    get_input_method.short_description = "Метод добавления"
 
     get_telegram_nickname.admin_order_field = "telegram_nickname"
     get_telegram_nickname.short_description = "Telegram"

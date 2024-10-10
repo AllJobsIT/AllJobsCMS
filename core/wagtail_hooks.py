@@ -25,7 +25,7 @@ class WorkersSnippetViewSet(SnippetViewSet):
     list_display = (
         'full_name', "created_at", 'get_type', 'employer', 'purchase_rate', 'specialization', 'get_grade_display',
         'experience',
-        'city', 'get_telegram_nickname', "get_status")
+        'city', 'get_telegram_nickname', "get_input_method", "get_status")
 
 
 @register_snippet

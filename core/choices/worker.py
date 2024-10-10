@@ -22,3 +22,9 @@ class WorkerProjectFeedback(models.IntegerChoices):
     NEGATIVE = 0, _("Negative")
     NORMAL = 1, _("Normal")
     POSITIVE = 2, _("Positive")
+
+
+class WorkerInputMethod(models.IntegerChoices):
+    HABR = 0, _("Habr")
+    HEAD_HUNTER = 1, _("Head Hunter")
+    MANUAL = 2, _("Manual")
