@@ -1,6 +1,7 @@
 import graphene
 
 from core.api.quaries import VacancyMutation, VacancyQuery
+from core.api.quaries.get_chats import ChatQuery
 
 
 class Mutation(
@@ -13,7 +14,8 @@ class Mutation(
 
 class Query(
     graphene.ObjectType,
-    VacancyQuery
+    VacancyQuery,
+    ChatQuery
 ):
     class Meta:
         description = "Main Query"
