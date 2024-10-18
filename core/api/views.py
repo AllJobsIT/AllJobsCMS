@@ -52,8 +52,6 @@ class HabrParsingStatus(APIView):
             message = "Запустить парсинг с Habr."
             disable = False
         data = {
-            "is_run": task.in_process,
-            "is_failed": task.is_failed,
             "disable": disable,
             "message": message
         }
