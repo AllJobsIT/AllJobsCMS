@@ -25,14 +25,48 @@ class ParserResumeAPIView(APIView):
         else:
             return JsonResponse({'error': 'No file was uploaded'}, status=400)
 
+
 class HabrParsingStatus(APIView):
     def get(self, request):
-        exists = Task.objects.filter(name='process_habr', in_process=True).exists()
-        return Response(status=200, data=exists)
+        disable = True
+        data = {"is_run": False,
+                "is_failed": True,
+                "disable": disable,
+                "message": "Ошибка получения статуса задачи парсинга!"
+                }
+        try:
+            task = Task.objects.get(name='process_habr')
+        except Task.DoesNotExist:
+            task = None
+        if task:
+            if task.is_failed:
+                message = "Парсинг завершился с ошибкой. Обратитесь к разработчику!"
+            elif task.in_process:
+                message = "Парсинг Habr уже запущен."
+            elif task.is_complete:
+                message = "Парсинг успешно выполнился. Запустить заново?"
+                disable = False
+            else:
+                message = "Задача создана, парсинг скоро начнется!"
+        else:
+            message = "Запустить парсинг с Habr."
+            disable = False
+        data = {
+            "is_run": task.in_process,
+            "is_failed": task.is_failed,
+            "disable": disable,
+            "message": message
+        }
+        return JsonResponse(status=200, data=data)
 
     def post(self, request):
-        if Task.objects.filter(name='process_habr', in_process=True).exists():
-            pass
+        task = Task.objects.filter(name='process_habr').first()
+        if task:
+            if task.in_process:
+                pass
+            elif task.is_complete:
+                task.is_complete = False
+                task.save()
         else:
             ProcessHabr.create(is_unique=True)
         return Response(status=200)
