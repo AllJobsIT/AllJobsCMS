@@ -33,6 +33,27 @@
             align-items: center;
             height: 100vh;
         }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px; /* Отступ между кнопками */
+        }
+
+        .button {
+            background-color: #007bff; /* Цвет фона кнопки */
+            color: white; /* Цвет текста */
+            padding: 10px 20px; /* Отступы внутри кнопки */
+            text-align: center; /* Выравнивание текста */
+            text-decoration: none; /* Убираем подчеркивание ссылки */
+            border-radius: 5px; /* Скругленные углы */
+            transition: background-color 0.3s ease; /* Плавный переход цвета фона */
+        }
+
+        .button:hover {
+            background-color: #0056b3; /* Цвет фона при наведении */
+        }
     </style>
 {% endblock %}
 
@@ -48,6 +69,7 @@
             <button id="submitBtn" class="btn btn-primary submit-btn btn-success" style="display: none;"
                     data-toggle="modal" data-target="#successModal">Отправить
             </button>
+            <button id="parsingHabr" class="btn btn-primary submit-btn btn-success">Запустить парсинг с Habr</button>
         </div>
     </div>
 

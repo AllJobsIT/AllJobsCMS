@@ -25,6 +25,5 @@ class WorkerProjectFeedback(models.IntegerChoices):
 
 
 class WorkerInputMethod(models.IntegerChoices):
-    HABR = 0, _("Habr")
-    HEAD_HUNTER = 1, _("Head Hunter")
-    MANUAL = 2, _("Manual")
+    MANUAL = 0, _("Manual")
+    HABR = 1, _("Habr")

@@ -214,6 +214,7 @@ BOTMANAGER_CONFIG = {
         'core.tasks.vacancy_task.ProcessVacancy': 1,
         'core.tasks.vacancy_task.SendVacancy': 1,
         'core.tasks.worker_task.ProcessWorker': 1,
+        'core.tasks.habr_parser_task.ProcessHabr': 1,
     },
     'logs': {
         'dir': LOGS_DIR,

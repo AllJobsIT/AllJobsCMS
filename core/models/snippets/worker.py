@@ -97,6 +97,11 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
         blank=True,
         default=uuid.uuid4,
     )
+    unique_id = models.CharField(
+        unique=True,
+        blank=True,
+        null=True
+    )
     name = models.CharField(
         max_length=255,
         verbose_name=_("First name"),
@@ -300,6 +305,7 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
         FieldPanel("telegram_nickname"),
         FieldPanel("employer_contact"),
         FieldPanel("worker_contact"),
+        FieldPanel("links"),
         FieldPanel("education"),
         FieldPanel("certificates"),
         FieldPanel("example_of_work"),

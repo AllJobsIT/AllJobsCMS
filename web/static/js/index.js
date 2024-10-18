@@ -23,6 +23,93 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const submitBtn = document.getElementById('submitBtn');
     const modalTitle = document.getElementById('exampleModalLabel');
     const modalBody = document.querySelector('#successModal .modal-body');
+    const headHunterBtn = document.getElementById('parsingHeadHunter');
+    const habrBtn = document.getElementById('parsingHabr');
+
+    function checkHeadHunterStatus() {
+        fetch('/api/head/')
+            .then(response => response.json()) // Преобразуем ответ в JSON
+            .then(data => {
+                if (data === true) {
+                    headHunterBtn.textContent = "Парсинг HeadHunter уже запущен"; // Изменяем текст кнопки
+                    headHunterBtn.disabled = true; // Делаем кнопку неактивной
+                } else {
+                    console.error("Не получен ожидаемый ответ:", data);
+                }
+            })
+            .catch(error => {
+                console.error("Ошибка при выполнении запроса:", error);
+            });
+    }
+
+    // Выполняем проверку статуса сразу при загрузке страницы
+    checkHeadHunterStatus();
+
+    function checkHabrStatus() {
+        fetch('/api/habr/')
+            .then(response => response.json()) // Преобразуем ответ в JSON
+            .then(data => {
+                if (data === true) {
+                    habrBtn.textContent = "Парсинг Habr уже запущен"; // Изменяем текст кнопки
+                    habrBtn.disabled = true; // Делаем кнопку неактивной
+                } else {
+                    console.error("Не получен ожидаемый ответ:", data);
+                }
+            })
+            .catch(error => {
+                console.error("Ошибка при выполнении запроса:", error);
+            });
+    }
+
+    // Выполняем проверку статуса сразу при загрузке страницы
+    checkHabrStatus();
+
+    headHunterBtn.addEventListener("click", function () {
+        fetch('/api/head/', {
+            method: 'POST', // Указываем метод POST
+            headers: {
+                'Content-Type': 'application/json', // Заголовок для JSON
+                'X-CSRFToken': csrftoken // Добавляем CSRF-токен в заголовок запроса
+            },
+            // body: JSON.stringify({}) // Можно указать пустой объект, если требуется
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log("POST запрос успешно выполнен");
+                    // Здесь можно обработать успешный ответ
+                } else {
+                    console.error("Ошибка при выполнении POST запроса:", response.status);
+                }
+            })
+            .catch(error => {
+                console.error("Ошибка при выполнении запроса:", error);
+            });
+        checkHeadHunterStatus();
+    })
+
+    habrBtn.addEventListener("click", function () {
+        fetch('/api/habr/', {
+            method: 'POST', // Указываем метод POST
+            headers: {
+                'Content-Type': 'application/json', // Заголовок для JSON
+                'X-CSRFToken': csrftoken // Добавляем CSRF-токен в заголовок запроса
+            },
+            // body: JSON.stringify({}) // Можно указать пустой объект, если требуется
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log("POST запрос успешно выполнен");
+                    // Здесь можно обработать успешный ответ
+                } else {
+                    console.error("Ошибка при выполнении POST запроса:", response.status);
+                }
+            })
+            .catch(error => {
+                console.error("Ошибка при выполнении запроса:", error);
+            });
+        checkHabrStatus();
+    })
+
 
 // Добавляем слушатель события изменения значения в input
     fileInput.addEventListener('change', function () {

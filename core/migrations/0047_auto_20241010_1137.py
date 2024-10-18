@@ -6,7 +6,7 @@ from django.db import migrations
 def add_input_method(apps, schema):
     Worker = apps.get_model("core", "Worker")
     for worker in Worker.objects.all():
-        worker.input_method = 2
+        worker.input_method = 1
         worker.save()
 
 
