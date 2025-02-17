@@ -63,6 +63,10 @@ class ProcessWorker(AllJobsBaseTask):
             "links": list(dict) [
                 {тип ссылки: str ссылка}
             ],
+            "ai_comment": str 'Твой анализ резюме. Нужно определить его грейд по опыту и описанию, выделить его 
+            основные компетенции и привести рекомендации для роста. Так же если ты найдешь в тексте CV ссылку на его 
+            github, то проанализируй его проекты и выдай краткую выжимку по ним и так же оставь ссылку на github. 
+            Ответ пиши на русском языке!'
         }
         """
         prompt = (
@@ -161,6 +165,7 @@ class ProcessWorker(AllJobsBaseTask):
                 instance.specialization = self._get_filtered_items(Specialization,
                                                                    result_dict.get("specialization", []),
                                                                    "specialization")
+                instance.ai_comment = result_dict.get('ai_comment', None)
                 instance.process_status = WorkerProcessStatusChoice.MODERATION
         except BaseException as err:
             instance.process_status = WorkerProcessStatusChoice.PROCESS_ERROR

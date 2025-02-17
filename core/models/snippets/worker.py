@@ -75,8 +75,8 @@ class ContactsStreamBlock(StreamBlock):
 
 
 class LinksStructBlock(StructBlock):
-    type = blocks.CharBlock(label=_("Link type"))
-    link = blocks.URLBlock(label=_("Link value"))
+    name = blocks.CharBlock(label=_("Link type"))
+    value = blocks.URLBlock(label=_("Link value"))
 
 
 class LinksStreamBlock(StreamBlock):
@@ -240,6 +240,11 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
         blank=True,
         null=True
     )
+    ai_comment = RichTextField(
+        verbose_name=_("AI comment for CV"),
+        blank=True,
+        null=True
+    )
     is_published = models.BooleanField(
         default=True,
         verbose_name=_("Is published"),
@@ -275,7 +280,6 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
         FieldPanel("city"),
         FieldPanel("citizenship"),
         FieldPanel("english_grade"),
-        FieldPanel("comment"),
         FieldPanel("is_published"),
     ]
 
@@ -295,6 +299,11 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
         InlinePanel(
             'work_experiences', label=_("Work Experience")
         ),
+    ]
+
+    comments_panels = [
+        FieldPanel("comment"),
+        FieldPanel('ai_comment')
     ]
 
     projects_panels = [
@@ -322,6 +331,7 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
         ObjectList(projects_panels, heading=_("Requests")),
         ObjectList(work_experience_panels, heading=_("Work experience")),
         ObjectList(similar_worker_panel, heading=_("Similar workers")),
+        ObjectList(comments_panels, heading=_("All comments")),
     ])
 
     search_fields = [
