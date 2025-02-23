@@ -240,7 +240,7 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
         blank=True,
         null=True
     )
-    ai_comment = RichTextField(
+    ai_comment = models.TextField(
         verbose_name=_("AI comment for CV"),
         blank=True,
         null=True
