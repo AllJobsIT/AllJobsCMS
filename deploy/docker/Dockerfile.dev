@@ -2,13 +2,8 @@
 
 FROM python:3.10.8 as final
 
-RUN pip install nltk
-
-# Создаем папку для данных NLTK
-RUN mkdir -p /usr/local/nltk_data
-
 # Загружаем нужные модули
-RUN python -m nltk.downloader -d /usr/local/nltk_data punkt averaged_perceptron_tagger stopwords
+RUN python -m nltk.downloader all
 
 # Указываем NLTK, где искать данные
 ENV NLTK_DATA=/usr/local/nltk_data
