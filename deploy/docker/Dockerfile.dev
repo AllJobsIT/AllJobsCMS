@@ -2,12 +2,6 @@
 
 FROM python:3.10.8 as final
 
-# Загружаем нужные модули
-RUN python -m nltk.downloader all
-
-# Указываем NLTK, где искать данные
-ENV NLTK_DATA=/usr/local/nltk_data
-
 RUN addgroup --gid 1001 --system app && \
   adduser --no-create-home --shell /bin/false --disabled-password --uid 1001 --system --group app
 
@@ -35,6 +29,9 @@ COPY . .
 
 RUN python manage.py collectstatic --noinput --clear
 RUN python manage.py compilemessages -l ru
+
+# Загружаем нужные модули
+RUN python -m nltk.downloader all
 
 # Создайте директорию для медиафайлов, если она не существует
 RUN mkdir -p /app/media && chown -R app:app /app/media
