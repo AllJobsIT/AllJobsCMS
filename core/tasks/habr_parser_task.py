@@ -1,11 +1,8 @@
 import re
 import urllib
 from types import SimpleNamespace
-from urllib.parse import urlparse
 
-import pycountry
 import requests
-from deep_translator import GoogleTranslator
 from fake_useragent import UserAgent
 
 from core.choices.worker import WorkerInputMethod, WorkerProcessStatusChoice
@@ -105,4 +102,5 @@ class ProcessHabr(AllJobsBaseTask):
                     worker.save()
                     self._update_work_experience(item.companiesHistory, worker) if item.companiesHistory else None
             else:
-                print(f"Ошибка: Не удалось получить страницу, статус код: {response.status_code}. Текст ошибки: {response.text}")
+                print(
+                    f"Ошибка: Не удалось получить страницу, статус код: {response.status_code}. Текст ошибки: {response.text}")

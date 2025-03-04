@@ -208,7 +208,7 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
         EnglishGradeStreamBlock(), blank=True, null=True, use_json_field=True,
         verbose_name=_("Languages")
     )
-    education = RichTextField(
+    education = models.TextField(
         verbose_name=_("Education"),
         blank=True,
         null=True
@@ -261,6 +261,7 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
                                        verbose_name=_("Worker input method"))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"), )
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated at"), )
+    ai_comment_json = models.JSONField(null=True, blank=True, default=dict)
 
     personal_panels = [
         FieldPanel("code", read_only=True),
@@ -362,6 +363,10 @@ class Worker(index.Indexed, DirtyFieldsMixin, ClusterableModel):
 
     def get_type(self):
         return self.get_type_display()
+
+    def get_salary(self):
+        item = self.salary[0]
+        return "{} {}".format(item.value['size'], item.value['currency'].symbol)
 
     def get_telegram_nickname(self):
         return mark_safe(

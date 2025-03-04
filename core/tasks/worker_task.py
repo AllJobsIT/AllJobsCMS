@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+from string import Template
 
 from django.db import transaction
 from openai import Client
@@ -68,6 +69,31 @@ class ProcessWorker(AllJobsBaseTask):
         return prompt
 
     def get_ai_comment(self, instance, resume_data):
+        output_data = """
+        {
+          "skills": {
+            "Python": "Middle",
+            "Django": "Senior"
+          },
+          "observations": [
+            "Кандидат уверенно владеет Python и Django, но имеет слабый опыт работы с асинхронными фреймворками.",
+            "Хороший опыт работы с базами данных, но не указан опыт оптимизации сложных запросов."
+          ],
+          "recommendations": [
+            "Углубить знания в асинхронном программировании (FastAPI, Celery).",
+            "Изучить продвинутые техники работы с БД (индексы, партиционирование)."
+          ],
+          "open_projects_analysis": {
+            "repositories": [
+              {
+                "name": "project_name",
+                "url": "https://github.com/username/project_name",
+                "analysis": "Проект демонстрирует хорошие навыки работы с Django, но не хватает тестов."
+              }
+            ]
+          }
+        }
+        """
         prompt = f"""
         Как эксперт по найму, проанализируй следующие данные резюме и оцени уровень кандидата по каждому навыку.  
 
@@ -80,18 +106,12 @@ class ProcessWorker(AllJobsBaseTask):
         1. Оценка уровня владения каждым навыком (например, Python — Middle, Django — Senior).  
         2. Основные сильные и слабые стороны кандидата.  
         3. Рекомендации по улучшению.  
+        4. Анализ открытых проектов.
 
         Формат вывода:  
 
-        - Оценка навыков:  
-          - skill: grade
-          ...  
+        {output_data}
 
-        - Наблюдения:  
-          - Наблюдение или рекомендация  
-          ...  
-
-        Выведи только оценки, наблюдения и рекомендации, а так же анализ открытых проектов и ссылки на их репозитории.
         Без введения, пояснений и комментариев.  
         """
         try:
@@ -106,7 +126,39 @@ class ProcessWorker(AllJobsBaseTask):
                      "content": prompt}
                 ]
             )
-            instance.ai_comment = response.choices[0].message.content
+            data = json_to_dict(json_message=response.choices[0].message.content)
+            template_text = Template(
+"""
+📌 **Оценка навыков:**
+$skills
+
+🔍 **Наблюдения:**
+$observations
+
+💡 **Рекомендации:**
+$recommendations
+
+📂 **Анализ открытых проектов:**
+$projects
+"""
+            )
+            skills_text = "\n".join([f"- {skill}: {level}" for skill, level in data["skills"].items()])
+            observations_text = "\n".join([f"- {obs}" for obs in data["observations"]])
+            recommendations_text = "\n".join([f"- {rec}" for rec in data["recommendations"]])
+
+            projects_list = data["open_projects_analysis"]["repositories"]
+            projects_text = "\n".join(
+                [f"- [{repo['name']}]({repo['url']}): {repo['analysis']}" for repo in projects_list])
+
+            # Подставляем значения в шаблон
+            formatted_text = template_text.substitute(
+                skills=skills_text,
+                observations=observations_text,
+                recommendations=recommendations_text,
+                projects=projects_text
+            )
+            instance.ai_comment = formatted_text
+            instance.ai_comment_json = data
         except BaseException as err:
             raise Exception(f"Error: {err}")
         instance.save()

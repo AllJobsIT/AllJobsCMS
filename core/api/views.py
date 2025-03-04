@@ -21,7 +21,7 @@ class ParserResumeAPIView(APIView):
             )
             worker.save()
             ProcessWorker.create(input={'id': worker.id})
-            return JsonResponse({'message': 'File uploaded successfully'}, status=200)
+            return JsonResponse({'message': 'File uploaded successfully', 'worker_id': worker.code}, status=200)
         else:
             return JsonResponse({'error': 'No file was uploaded'}, status=400)
 
